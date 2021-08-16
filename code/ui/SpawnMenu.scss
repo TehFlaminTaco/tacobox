@@ -266,11 +266,12 @@ entitylist {
         flex-direction: column;
 
         .category {
-            font-size: 32px;
+            font-size: 18px;
             font-weight: bold;
+            padding-top:4px; 
             //background-color: #08f;
             background: linear-gradient(to right, rgba(#08f, 0.5), rgba(#08f, 0.0));
-            height: 48px;
+            height: 32px;
             border-radius: 8px 0px 0px 8px;
             margin-top:5px;
             padding-left:8px;
