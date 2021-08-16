@@ -1,0 +1,36 @@
+﻿using System.Collections.Generic;
+using Sandbox;
+
+[Library( "ent_lamp", Title = "Lamp", Spawnable = true )]
+public partial class LampEntity : SpotLightEntity, IWireEntity
+{
+	[Net]
+	public double toggled {get; set;}
+	public override void Spawn()
+	{
+		base.Spawn();
+
+		SetModel( "models/torch/torch.vmdl" );
+		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
+	}
+
+	[Event.Tick]
+	public void UpdateEnabled(){
+		Enabled = toggled > 0.0d;
+	}
+
+	public void Remove()
+	{
+		PhysicsGroup?.Wake();
+		Delete();
+	}
+
+	public List<WireVal> values;
+	public List<WireVal> Values()
+	{
+		if(values is not null) return values;
+		values = new();
+		values.Add(new WireValNormal("toggled", "Enabled", WireVal.Direction.Input, ()=>toggled, f=>toggled=(float)f));
+		return values;
+	}
+}
