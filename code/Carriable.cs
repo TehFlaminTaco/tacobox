@@ -2,6 +2,8 @@
 
 public partial class Carriable : BaseCarriable, IUse
 {
+	public int HoldSlot => 1;
+
 	public override void CreateViewModel()
 	{
 		Host.AssertClient();
@@ -28,4 +30,6 @@ public partial class Carriable : BaseCarriable, IUse
 	{
 		return Owner == null;
 	}
+
+	public virtual bool OnMouseWheel(int delta){return false;}
 }

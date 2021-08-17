@@ -267,7 +267,7 @@ entitylist {
 
         .category {
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 500;
             padding-top:4px; 
             //background-color: #08f;
             background: linear-gradient(to right, rgba(#08f, 0.5), rgba(#08f, 0.0));
@@ -294,6 +294,7 @@ entitylist {
             }
 
             .icon {
+                border-radius: 8px;
                 width: 82px;
                 height: 82px;
                 margin: 2px;

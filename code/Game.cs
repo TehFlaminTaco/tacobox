@@ -67,7 +67,7 @@ partial class SandboxGame : Game
 			.Run();
 
 		var ent = Library.Create<Entity>( entName );
-		if ( ent is BaseCarriable && owner.Inventory != null )
+		if ( ent is Carriable && owner.Inventory != null )
 		{
 			if ( owner.Inventory.Add( ent, true ) )
 				return;

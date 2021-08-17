@@ -20,7 +20,7 @@ namespace Sandbox
 			SetLookAt( "aim_head", aimPos );
 			SetLookAt( "aim_body", aimPos );
 
-			if ( Pawn.ActiveChild is BaseCarriable carry )
+			if ( Pawn.ActiveChild is Carriable carry )
 			{
 				carry.SimulateAnimator( this );
 			}

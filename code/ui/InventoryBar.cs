@@ -99,7 +99,7 @@ public class InventoryBar : Panel
 			return;
 		var count = inventory.Count();
 		if ( count == 0 ) return;
-		if((player.ActiveChild as BaseCarriable)?.OnMouseWheel(idelta)??false)
+		if((player.ActiveChild as Carriable)?.OnMouseWheel(idelta)??false)
 			return;
 
 		var slot = inventory.GetActiveSlot();
