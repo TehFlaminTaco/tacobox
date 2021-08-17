@@ -18,7 +18,7 @@ public partial class NpcTest {
 	}
 
 	public void Die(DamageInfo info){
-        var ent = new ModelEntity();
+        var ent = new Prop();
 		ent.Position = Position;
 		ent.Rotation = Rotation;
 		ent.Scale = Scale;

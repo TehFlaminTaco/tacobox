@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 partial class Inventory : BaseInventory
@@ -24,6 +25,9 @@ partial class Inventory : BaseInventory
 		if ( !entity.IsValid() )
 			return false;
 
+		if(entity is not BaseCarriable bc)
+			return false;
+
 		if ( IsCarryingType( entity.GetType() ) )
 			return false;
 
@@ -46,5 +50,25 @@ partial class Inventory : BaseInventory
 		ent.OnCarryDrop( Owner );
 
 		return ent.Parent == null;
+	}
+
+	public IEnumerable<BaseCarriable> All(int slot){
+		for(int i = 0; i < Count(); i++){
+			var item = GetSlot(i);
+			if (item is Carriable c && c.HoldSlot == slot){
+				yield return c;
+			}
+			if(item is Weapon w && w.HoldSlot == slot){
+				yield return w;
+			}
+		}
+	}
+	public IEnumerable<BaseCarriable> All(){
+		for(int i = 0; i < Count(); i++){
+			var item = GetSlot(i);
+			if (item is BaseCarriable c){
+				yield return c;
+			}
+		}
 	}
 }

@@ -10,6 +10,8 @@ partial class SandboxGame : Game
 			// Create the HUD
 			_ = new SandboxHud();
 		}
+
+		Gate.ResetGates();
 	}
 
 	public override void ClientJoined( Client cl )
@@ -67,7 +69,7 @@ partial class SandboxGame : Game
 			.Run();
 
 		var ent = Library.Create<Entity>( entName );
-		if ( ent is Carriable && owner.Inventory != null )
+		if ( ent is BaseCarriable && owner.Inventory != null )
 		{
 			if ( owner.Inventory.Add( ent, true ) )
 				return;

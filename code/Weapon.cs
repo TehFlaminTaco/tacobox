@@ -2,6 +2,7 @@
 
 public partial class Weapon : BaseWeapon, IUse
 {
+	public virtual int HoldSlot => 1;
 	public virtual float ReloadTime => 3.0f;
 
 	public PickupTrigger PickupTrigger { get; protected set; }

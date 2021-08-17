@@ -10,6 +10,7 @@ partial class Shotgun : Weapon
 
 	public override AmmoType Clip1Type => AmmoType.Shell;
     public override int Clip1Size => 10;
+	public override int HoldSlot => 3;
 
 	public override void Spawn()
 	{
@@ -71,7 +72,7 @@ partial class Shotgun : Weapon
 		//
 		// Shoot the bullets
 		//
-		ShootBullets( 20, 0.4f, 20.0f, 8.0f, 3.0f );
+		ShootBullets( 20, 0.4f, 60.0f, 8.0f, 3.0f );
 		Clip1-=2;
 	}
 

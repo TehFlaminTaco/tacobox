@@ -12,6 +12,7 @@ partial class Pistol : Weapon, IWireEntity
 
 	public override AmmoType Clip1Type => AmmoType.Bullet;
     public override int Clip1Size => 10;
+	public override int HoldSlot => 2;
 
 	public override void Spawn()
 	{

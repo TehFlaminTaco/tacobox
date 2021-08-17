@@ -2,7 +2,7 @@
 
 public partial class Carriable : BaseCarriable, IUse
 {
-	public int HoldSlot => 1;
+	public virtual int HoldSlot => 1;
 
 	public override void CreateViewModel()
 	{

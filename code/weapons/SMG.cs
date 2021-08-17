@@ -11,6 +11,7 @@ partial class SMG : Weapon
 
 	public override AmmoType Clip1Type => AmmoType.Bullet;
     public override int Clip1Size => 50;
+	public override int HoldSlot => 4;
 
 	public override void Spawn()
 	{

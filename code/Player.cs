@@ -53,6 +53,9 @@ partial class SandboxPlayer : Player
 
 		Dress();
 
+		if(IsClient)
+			InventoryBar.Instance.ReBuild();
+
 		Inventory.Add( new PhysGun(), true );
 		Inventory.Add( new GravGun() );
 		Inventory.Add( new Tool() );

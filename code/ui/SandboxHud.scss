@@ -124,7 +124,7 @@ rootpanel
 	}
 }
 
-
+/*
 InventoryBar
 {
 	position: absolute;
@@ -199,5 +199,82 @@ InventoryIcon
 			transition: all 0.1s ease-out;
 			font-size: 13px;
 		}
+	}
+}
+*/
+
+InventoryBar
+{
+	position: absolute;
+	width: 100%;
+	//bottom: 48px;
+	top:0px;
+	//left:150px;
+	justify-content: center;
+	align-items: flex-start;
+	// flex-direction: column;
+	transition: all 0.2s ease-in-out;
+	font-family: poppins;
+	color: #fff;
+
+	label {
+		opacity: 1;
+		transition: all 0.2s ease-in-out;
+	}
+
+	&.hidden{
+		transform: scale(0.5);
+		margin-top: -256px;
+		label {
+			opacity:0;
+		}
+	}
+
+	.group {
+		width: 80px;
+		margin:0px 5px;
+		flex-direction: column;
+		transition: all 0.2s ease-in-out;
+
+		&.active{
+			width: 120px;
+		}
+
+		.groupHeader {
+			background: linear-gradient(to top, rgba(black, 0.5), rgba(black, 0.0));
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			width: 100%;
+			height:30px;
+		}
+
+		.groupName {
+			position: absolute;
+			top: 0px;
+			left: 5px;
+			font-size: 20px;
+		}
+	}
+
+	.weaponslot {
+		height: 40px;
+		background-color: #3338;
+		margin-bottom: 5px;
+		text-align: center;
+		transition: all 0.2s ease-in-out;
+		border-color: white;
+		font-size:14px;
+		&.active{
+			font-size:20px;
+			border: 2px solid white;
+		}
+	}
+
+	.weaponname{
+		position:absolute;
+		bottom:0px;
+		left:0px;
+		right:0px;
 	}
 }

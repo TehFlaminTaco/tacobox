@@ -9,6 +9,7 @@ public partial class WireGun : Carriable {
 	[ConVar.ClientData("wire_selection")]
 	public static string wire_select {get; set;}
 	public static int wire_selection {get; set;} = 0;
+	public override int HoldSlot => 0;
 
     public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
     public override void Spawn()
