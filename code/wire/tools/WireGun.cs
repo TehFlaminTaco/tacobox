@@ -37,17 +37,34 @@ public partial class WireGun : Carriable {
 		wirePanel = null;
 	}
 
-	[Net]
 	public Entity selectedEntity {get; set;}
-	[Net]
 	public string selectedID {get; set;}
-
-	[Net, Predicted]
-	public Entity wireTarget {get; set;}
 	public override void Simulate( Client client )
 	{
 		if ( Owner is not Player owner ) return;
-		var startPos = Owner.EyePos;
+		if(IsServer)return;
+
+		if(Input.Pressed(InputButton.Reload)){
+			selectedEntity = null;
+		}
+		if(selectedEntity is not null && !selectedEntity.IsValid()){
+			selectedEntity = null;
+		}
+
+		if (Input.Pressed( InputButton.Attack1 ) ){
+			if(WireHUD.HoveredEntity is not null){
+				if(selectedEntity is null){
+					selectedEntity = WireHUD.HoveredEntity;
+					selectedID = WireHUD.HoveredKey;
+				}else{
+					var builtString = $"{selectedEntity.NetworkIdent}:{selectedID}:{WireHUD.HoveredEntity.NetworkIdent}:{WireHUD.HoveredKey}";
+					WireConnection.MakeConnection(builtString);
+					selectedEntity = null;
+				}
+			}
+		}
+
+		/*var startPos = Owner.EyePos;
         var dir = Owner.EyeRot * Vector3.Forward;
         var tr = Trace.Ray( startPos, startPos + dir * 300 )
 					.Ignore( Owner )
@@ -92,23 +109,7 @@ public partial class WireGun : Carriable {
 				WireConnection.MakeConnection(selectedEntity, selectedID, wireTarget, targetID);
 				selectedEntity = null;
 			}
-		}
+		}*/
 
-	}
-
-	public override bool OnMouseWheel(int delta){
-		if(wireTarget is not null){
-			int MAX = selectedEntity is null
-			? (wireTarget as IWireEntity).Values().Where(x=>x.direction==WireVal.Direction.Input).Count()
-			: (wireTarget as IWireEntity).Values().Where(x=>x.direction==WireVal.Direction.Output).Count();
-			wire_selection = wire_selection + delta;
-			if(wire_selection < 0)wire_selection = MAX-1;
-			if(wire_selection >= MAX)wire_selection = 0;
-			if(wire_selection < 0)wire_selection = 0;
-			wire_select = wire_selection.ToString();
-			ConsoleSystem.Run("wire_selection "+wire_select);
-			return true;
-		}
-		return false;
 	}
 }

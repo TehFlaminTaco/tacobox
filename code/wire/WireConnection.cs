@@ -8,7 +8,25 @@ public partial class WireConnection {
     public Entity outEnt {get; set;}
     public string outID {get; set;}
     
+    [ServerCmd]
+    public static void MakeConnection(string buildString){
+        var chunks = buildString.Split(':');
+        Assert.True(chunks.Length == 4);
+
+        MakeConnection(Entity.FindByIndex(chunks[0].ToInt()), chunks[1], Entity.FindByIndex(chunks[2].ToInt()), chunks[3]);
+    }
+
+    [ClientRpc]
+    public static void MakeClientConnections(string buildString){
+        var chunks = buildString.Split(':');
+        Assert.True(chunks.Length == 4);
+
+        MakeConnection(Entity.FindByIndex(chunks[0].ToInt()), chunks[1], Entity.FindByIndex(chunks[2].ToInt()), chunks[3]);
+    }
+
     public static void MakeConnection(Entity inEnt, string inID, Entity outEnt, string outID){
+        if(inEnt.IsServer)
+            MakeClientConnections($"{inEnt.NetworkIdent}:{inID}:{outEnt.NetworkIdent}:{outID}");
         allConnections.RemoveAll(x => x.inEnt == inEnt && x.inID == inID);
         if(outEnt is null || outID is null)
             return;
@@ -25,8 +43,8 @@ public partial class WireConnection {
         allConnections.RemoveAll(x => x.inEnt == inEnt && x.inID == inID);
     }
 
-    public (Entity target, string id) GetConnection(Entity inEnt, string inID){
-        var connection = allConnections.Where(x => x.inEnt == inEnt && x.inID == inID).First();
+    public static (Entity target, string id) GetConnection(Entity inEnt, string inID){
+        var connection = allConnections.Where(x => x.inEnt == inEnt && x.inID == inID).FirstOrDefault();
         if(connection == null){
             return (null, null);
         }else{

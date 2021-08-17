@@ -1,12 +1,88 @@
 WirePanel
 {
-	position: absolute;
-	background-color: rgba( black, 0.5 );
-	left: 52%;
-    top: 50%;
-	font-size: 12px;
-	font-family: Courier New;
-	color: white;
-	padding: 20 20px;
-	align-items: center;
+	position:absolute;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+}
+
+WireEntityPanel
+{
+	position:absolute;
+	font-family: poppins;
+	font-size: 20px;
+	color:#fff;
+	flex-direction:column;
+	opacity:0.5;
+	//transition: transform 0.2s ease-in-out;
+
+	&:not(.targeted){
+		transform:scale(0.5);
+	}
+	&.targeted {
+		opacity:1;
+	}
+
+	.entname {
+		text-shadow: 0px 0px 1px #000;
+	}
+
+	.io {
+		border-radius: 8px;
+		background-color: #3338;
+		transition: all 0.2s ease-in-out;
+	}
+
+	.value {
+		transition: all 0.2s ease-in-out;
+		flex-direction:column;
+		min-width: 120px;
+	}
+
+	.iopanel {
+		transition: all 0.2s ease-in-out;
+		padding: 0px 8px;
+		background-color: #333F;
+
+		&.active{
+			background-color:#33fF;
+		}
+		&.hoverConnection{
+			background-color:#383F;
+		}
+		&.selected{
+			background-color:#833F;
+		}
+	}
+
+	WireInPanel {
+		border-radius: 8px 0px 0px 8px;
+		padding-left:16px;
+		transition: all 0.2s ease-in-out;
+	}
+	WireOutPanel {
+		border-radius: 0px 8px 8px 0px;
+		transition: all 0.2s ease-in-out;
+	}
+
+	.type {
+		color: #ff0;
+		padding-right: 4px;
+	}
+
+	.connectionBox{
+		padding-top: 6px;
+		font-size: 10px;
+		opacity: 1;
+		transition: all 0.2s ease-in-out;
+		&.hidden{
+			opacity: 0;
+		}
+	}
+
+	.targetEntity{
+		color: #ff0;
+		padding-right: 4px;
+	}
 }
