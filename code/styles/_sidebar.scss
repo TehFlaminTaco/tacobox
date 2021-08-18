@@ -1,0 +1,292 @@
+$padding-head: 100px !default;
+$padding-edge: 70px;
+
+$form-border: 3px solid #313c55;
+$form-border-active: 3px solid $primary;
+
+$corner-radius: 8px;
+
+mainmenupanel > navigator > .navigator-canvas > .navigator-body.has-sidebar
+{
+	flex-direction: row;
+	padding: 0px;
+	margin: 0px;
+
+	> .sidebar
+	{
+		width: 450px;
+		flex-shrink: 0;
+		flex-grow: 0;
+		flex-direction: column;
+		background-image: linear-gradient( to bottom, rgba( #191e28, 1 ), rgba( #191e28, 0.5 ), rgba( #191e28, 1 ) );
+		box-shadow: 0px 0 100px 10px rgba( black, 0.3 );
+		z-index: 10;
+		backdrop-filter: blur( 20px );
+
+		> .sidebar-inner
+		{
+			padding-top: $padding-head;
+			padding-left: $padding-edge;
+			padding-right: 30px;
+			flex-direction: column;
+			flex-grow: 1;
+		}
+
+		.section
+		{
+			flex-direction: column;
+			margin-bottom: 30px;
+
+			.section-header
+			{
+				color: #c6d4ee;
+				font-family: poppins;
+				font-weight: 400;
+				text-transform: uppercase;
+				padding-bottom: 10px;
+				letter-spacing: 2px;
+			}
+
+			.section-text
+			{
+				color: #c6d4ee;
+				font-family: poppins;
+				font-weight: 400;
+				padding-bottom: 10px;
+				margin: 10px 20px;
+				font-size: 13px;
+			}
+		}
+
+		.spacer
+		{
+			flex-grow: 1;
+		}
+
+		.textentry
+		{
+			border: $form-border;
+			border-radius: $corner-radius;
+			font-size: 13px;
+			color: #c6d4ee;
+			padding: 14px;
+			padding-bottom: 10px; // wtf?
+			font-family: poppins;
+			font-weight: 500;
+
+			.placeholder
+			{
+				opacity: 1;
+				font-size: 13px;
+				padding: 0;
+				padding: 13px;
+				opacity: 0.5;
+				font-weight: 300;
+			}
+		}
+
+		.button
+		{
+			border: $form-border;
+			border-radius: $corner-radius;
+			margin-bottom: 5px;
+			background-color: transparent;
+			font-family: poppins;
+			font-weight: 500;
+			font-size: 15px;
+			color: #c6d4ee;
+
+			&:hover
+			{
+				border: 3px solid $primary;
+				color: $primary-fg;
+				background-color: transparent;
+			}
+
+			&.active, &.active:hover
+			{
+				border: 3px solid $primary;
+				background-color: transparent;
+				color: $primary-fg;
+			}
+
+			&:active
+			{
+				border: 3px solid $primary-fg;
+				background-color: transparent;
+				color: $primary-fg;
+			}
+
+			&.is-danger
+			{
+				border: 3px solid $danger;
+				background-color: $danger;
+				color: $danger-fg;
+
+				&:hover
+				{
+					background-color: $danger-fg;
+					border: 3px solid $danger-fg;
+					color: $danger;
+				}
+
+				&:active
+				{
+					background-color: $danger-fg;
+					border: 3px solid white;
+					color: $danger;
+				}
+			}
+
+			&.is-primary
+			{
+				border: 3px solid $primary;
+				background-color: $primary;
+				color: $primary-fg;
+
+				&:hover
+				{
+					border: 3px solid $primary-fg;
+					background-color: $primary;
+					color: $primary-fg;
+				}
+
+				&:active
+				{
+					border: 3px solid $primary-fg;
+					background-color: $primary-fg;
+					color: $primary;
+				}
+			}
+		}
+
+		.checkbox
+		{
+			margin-bottom: 10px;
+			font-family: poppins;
+			font-weight: 400;
+			font-size: 13px;
+
+			&:last-child
+			{
+				margin-bottom: 0;
+			}
+		}
+
+		groupbox
+		{
+			border: $form-border;
+			border-radius: $corner-radius;
+			padding: 10px 15px;
+			flex-direction: column;
+		}
+
+		buttongroup
+		{
+			display: flex;
+			border: $form-border;
+			border-radius: $corner-radius;
+			overflow: hidden;
+			padding: 0;
+
+			> .button
+			{
+				margin: 0;
+				flex-grow: 1;
+				padding: 0;
+				font-size: 14px;
+				border: 0;
+				border-radius: 0;
+				text-align: center;
+				justify-content: center;
+
+				&:hover, &.active
+				{
+					border: 0;
+					background-color: $primary;
+				}
+
+				&:first-child
+				{
+					border-radius: $corner-radius 0 0 $corner-radius;
+				}
+
+				&:last-child
+				{
+					border-radius: 0 $corner-radius $corner-radius 0;
+				}
+			}
+		}
+
+		hr
+		{
+			height: 2px;
+			border-radius: 100px;
+			background-color: #313c55;
+			margin: 20px 0px;
+		}
+	}
+
+	> .canvas
+	{
+		padding-left: 100px;
+		padding-right: 100px;
+		padding-top: $padding-head;
+		flex-shrink: 1;
+		flex-direction: column;
+		flex-grow: 1;
+		overflow: scroll;
+
+		&.icon-canvas
+		{
+			flex-grow: 1;
+			flex-direction: row;
+			flex-wrap: wrap;
+			padding-bottom: $padding-head;
+
+			.cell
+			{
+				padding: 20px;
+			}
+		}
+
+		> .navigator-canvas
+		{
+			left: 100px;
+			top: $padding-head;
+			position: absolute;
+			transition: all 0.1s ease;
+
+			&.hidden
+			{
+				opacity: 0;
+				transform: scale( 0.95 );
+			}
+		}
+	}
+}
+
+
+mainmenupanel > navigator > .navigator-canvas > .navigator-body.has-sidebar .sidebar.is-secondary
+{
+	width: 400px;
+	overflow: hidden;
+
+	box-shadow: none;
+	z-index: 9;
+	transition: all 0.1s ease-out;
+	background-image: linear-gradient( to bottom, rgba( #191e28, 0.9 ), rgba( #191e28, 0.4 ), rgba( #191e28, 0.9 ) );
+
+	> .sidebar-inner
+	{
+		padding-left: 30px;
+		padding-right: 30px;
+		width: 400px;
+	}
+
+	&.hidden
+	{
+		width: 0px;
+		opacity: 0;
+	}
+}

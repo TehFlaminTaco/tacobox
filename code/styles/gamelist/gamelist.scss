@@ -1,0 +1,76 @@
+
+.gamelist
+{
+	flex-direction: column;
+	flex-grow: 1;
+	overflow: scroll;
+	width: 100%;
+
+
+	.game_canvas
+	{
+		padding-left: 30px;
+		padding-right: 30px;
+		padding-top: $header-height;
+		flex-wrap: wrap;
+		margin-bottom: 30px;
+		overflow: scroll;
+		flex-direction: row;
+		align-items: flex-start;
+		justify-content: flex-start;
+		transition: all 0.2s ease-out;
+	}
+
+	&.loading
+	{
+		.game_canvas
+		{
+			transition: all 0.2s ease-out;
+			opacity: 0;
+			pointer-events: none;
+			//	filter: blur( 10px); // TODO scissoring makes this look like shit
+		}
+	}
+
+	&.has-sidebar .sidebar .category-buttons
+	{
+		flex-wrap: wrap;
+		justify-content: space-between;
+
+		.button
+		{
+			width: 75px;
+			height: 75px;
+			margin: 5px;
+			padding: 0;
+			justify-content: center;
+			border: 0px solid transparent;
+			opacity: 0.3;
+			background-color: rgba( white, 0.01 );
+			border-radius: 100px;
+
+			label
+			{
+				font-size: 40px;
+				//	text-shadow: 0px 0px 10px rgba( white, 0.1 );
+			}
+
+			&.active
+			{
+				opacity: 1;
+				border: 3px solid $primary;
+			}
+		}
+	}
+
+	.empty
+	{
+		flex-grow: 1;
+		width: 100000px;
+		padding: 100px;
+		text-align: center;
+		font-size: 20px;
+		color: white;
+		font-family: Poppins;
+	}
+}

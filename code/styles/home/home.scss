@@ -1,0 +1,104 @@
+
+@import "previousgame";
+
+.page-home
+{
+	margin: 0;
+}
+
+.page-home .game-showcase
+{
+	height: 250px;
+
+	.is-cell
+	{
+		width: 20%;
+	}
+
+	.bigger
+	{
+		width: 40%;
+	}
+}
+
+.page-home .card
+{
+	border-radius: 10px;
+	background-color: $card-background;
+	flex-grow: 1;
+	padding: 20px;
+	box-shadow: 10px 10px 40px rgba( black, 0.3 );
+	color: $card-foreground;
+	background-position: center;
+	background-size: cover;
+	background-image-tint: rgba( white, 0.6 );
+
+	> .footer
+	{
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		padding: 20px 30px 30px 30px;
+		flex-direction: column;
+	}
+
+	&.button
+	{
+		border: 3px solid transparent;
+		transition: transform 0.2s ease;
+
+		&:hover
+		{
+			transform: scale( 1.05 );
+			background-image-tint: rgba( white, 0.8 );
+			border: 3px solid $primary;
+			padding: 0px;
+		}
+	}
+}
+
+
+.page-home .about-player
+{
+	width: 600px;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	background-color: rgba( white, 0.01 );
+	border-right: 2px solid rgba( white, 0.1 );
+	padding-top: 200px;
+
+	.avatar
+	{
+		flex-grow: 1;
+		left: 0px;
+		position: absolute;
+		top: 0px;
+		bottom: 0;
+		right: 0px;
+		opacity: 1;
+		color: white;
+	}
+
+	.player-footer
+	{
+		background-color: rgba( white, 0.01 );
+		position: absolute;
+		bottom: 0px;
+		height: 400px;
+		left: 0px;
+		right: 0px;
+		background-image: linear-gradient( rgba( black, 0 ), rgba( $background, 0.9 ) );
+	}
+}
+
+.page-home .home-body
+{
+	position: absolute;
+	left: 700px;
+	right: $padding-edge;
+	bottom: $padding-edge;
+	top: $header-height;
+}

@@ -1,0 +1,195 @@
+
+@import 'vars';
+@import 'button';
+@import '/styles/base.scss';
+@import '/styles/form.scss';
+
+@import 'ingame';
+@import 'popup';
+@import 'header';
+@import 'background';
+@import 'gameicon';
+@import 'grid';
+@import 'debug';
+
+@import 'form';
+@import 'sidebar';
+@import 'settings';
+
+@import 'home/home.scss';
+@import 'party/party.scss';
+@import 'game/game.scss';
+@import 'gamelist/gamelist.scss';
+
+mainmenupanel > navigator
+{
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	padding-left: 100px;
+	padding-right: 100px;
+}
+
+mainmenupanel > navigator > .navigator-canvas
+{
+	opacity: 1;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	transition: all 0.1s linear;
+	flex-direction: column;
+	z-index: 0;
+	align-items: center;
+
+	> .navigator-body
+	{
+		padding-top: $padding-head;
+		padding-right: $padding-edge;
+		padding-left: $padding-edge;
+		flex-grow: 1;
+		flex-direction: row;
+	}
+
+	&.hidden
+	{
+		transition: all 0.1s ease;
+		opacity: 0;
+		z-index: 1;
+		pointer-events: none;
+		transform: scale( 0.95 );
+	}
+}
+
+
+
+mainmenupanel
+{
+	background-color: $background;
+	width: 100%;
+	height: 100%;
+	transition: all 0.3s ease-out;
+	flex-direction: column;
+	pointer-events: all;
+	transform-origin: 50% 50%;
+	background-image: url( /ui/mainmenu/bg.png );
+	background-size: cover;
+	background-position: center;
+
+	&.hidden
+	{
+		transition: all 0.1s ease;
+		opacity: 0;
+		transform: scale( 1.1 );
+		pointer-events: none;
+		backdrop-filter: blur( 0px );
+	}
+
+	&:intro
+	{
+		background-color: rgba( black, 0 );
+	}
+}
+
+mainmenupanel .body
+{
+	width: 100%;
+	position: relative;
+	flex-grow: 1;
+	transition: all 0.2s 0.1s ease-out;
+	padding: 60px;
+	padding-top: 0;
+
+	&:intro
+	{
+		transform: scale( 0.9 );
+		opacity: 0;
+	}
+}
+
+button.primary
+{
+	background-color: #3171E6;
+	color: white;
+	font-size: 18px;
+	font-weight: bold;
+	padding: 13px 40px;
+	border-radius: 50px;
+	cursor: pointer;
+	opacity: 0.8;
+	border: 3px solid transparent;
+
+	&:hover
+	{
+		opacity: 1;
+	}
+}
+
+
+mainmenupanel.has-overlay .body
+{
+	opacity: 0;
+	transition: all 0.1s ease;
+}
+
+.actions
+{
+	button
+	{
+		background-color: #3171E6;
+		color: white;
+		font-size: 15px;
+		font-weight: bold;
+		padding: 10px 30px;
+		border-radius: 50px;
+		cursor: pointer;
+		opacity: 0.8;
+		border: 3px solid transparent;
+		margin-right: 10px;
+
+		&:hover
+		{
+			opacity: 1;
+		}
+
+		&.is-cancel
+		{
+			background-color: #555;
+			color: #aaa;
+		}
+
+		pointer-events: all;
+
+		&.is-danger
+		{
+		}
+	}
+
+	&.actions-side-bar
+	{
+		position: absolute;
+		bottom: 40px;
+		width: 200px;
+		right: 96px;
+
+		.container
+		{
+			flex-direction: column;
+
+			button
+			{
+				margin-right: 0;
+				margin-top: 10px;
+				text-align: center;
+
+				label
+				{
+					width: 100%;
+				}
+			}
+		}
+	}
+}

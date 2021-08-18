@@ -1,0 +1,26 @@
+
+
+friendline
+{
+	.avatar
+	{
+		width: 23px;
+		height: 23px;
+		background-size: cover;
+		background-position: center;
+		margin-right: 10px;
+		border-radius: 100px;
+	}
+
+	&:hover
+	{
+		background-color: $button-active;
+		color: $button-active-fg;
+		color: rgba( white, 1 );
+	}
+
+	&:last-child
+	{
+		border-radius: 0 0 8px 8px;
+	}
+}

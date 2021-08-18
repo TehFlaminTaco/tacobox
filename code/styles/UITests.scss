@@ -1,0 +1,132 @@
+
+@import '/styles/_vars.scss';
+@import '/styles/mainmenu.scss';
+
+mainmenupanel > navigator > .navigator-canvas uitests.navigator-body
+{
+	padding-top: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+uitests
+{
+	width: 100%;
+	height: 100%;
+
+	.inner
+	{
+		display: flex;
+		width: 100%;
+		height: 100%;
+		position: relative;
+
+		> .pagelist
+		{
+			flex-direction: column;
+			overflow: scroll;
+			background-color: rgba( black, 0.2 );
+			border-right: 1px solid rgba( white, 0.1 );
+			padding-top: 150px;
+			padding-right: 50px;
+			padding-left: 100px;
+			min-width: 400px;
+
+			button
+			{
+				display: block;
+				width: 100%;
+				font-size: 13px;
+				color: #aaa;
+				cursor: pointer;
+				background-color: transparent;
+				min-height: 0;
+				padding-left: 42px;
+				border-radius: 8px;
+
+				.iconpanel
+				{
+					position: absolute;
+					left: 8px;
+				}
+
+				&:hover
+				{
+					background-color: transparent;
+				}
+
+				&.active:hover, &.active
+				{
+					background-color: #ff00dc;
+					color: white;
+					z-index: 1;
+				}
+			}
+		}
+
+		.pagecontainer
+		{
+			flex-grow: 1;
+
+
+			.page
+			{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				padding-top: $padding-head;
+				padding-right: $padding-edge;
+				padding-left: $padding-edge;
+
+				&.has-form
+				{
+					padding-right: 450px;
+				}
+			}
+		}
+	}
+
+
+
+	.form
+	{
+		background-color: rgba( #1b2023, 0.95 );
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		width: 450px;
+		padding: 0px;
+		padding-top: $padding-head;
+		backdrop-filter: blur( 60px );
+
+		.form-row
+		{
+			flex-direction: column;
+			border-radius: 0;
+			padding: 5px 20px;
+		}
+
+		.form-row .form-label
+		{
+			font-weight: 500;
+			padding: 0px;
+			margin-bottom: 10px;
+		}
+
+		.form-row .form-value
+		{
+			padding: 0px;
+
+			.textentry, .button
+			{
+				border: 3px solid rgba( $primary, 0.3 );
+
+				&:hover
+				{
+					border: 3px solid $primary;
+				}
+			}
+		}
+	}
+}

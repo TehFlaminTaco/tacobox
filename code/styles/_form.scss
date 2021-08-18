@@ -1,0 +1,70 @@
+.form .form-row
+{
+	.form-label
+	{
+		flex-grow: 0;
+		font-weight: 600;
+		opacity: 1;
+		width: 230px;
+		font-size: 13px;
+		text-transform: uppercase;
+		letter-spacing: 2px;
+		color: white;
+		flex-direction: column;
+		font-size: 13px;
+
+		.subtitle
+		{
+			font-size: 11px;
+			font-weight: normal;
+			opacity: 0.2;
+		}
+	}
+
+	.form-value
+	{
+		flex-shrink: 0;
+		font-weight: 600;
+		padding: 10px;
+		flex-grow: 1;
+		flex-direction: column;
+
+		textentry, button, .button
+		{
+			border: 3px solid rgba( $primary, 0.2 );
+			border-radius: 5px;
+			flex-grow: 1;
+			padding: 5px 10px;
+
+			&:hover
+			{
+				border: 3px solid rgba( $primary, 0.3 );
+				background-color: rgba( #fff, 0.01 );
+			}
+
+			&:focus
+			{
+				border: 3px solid rgba( $primary, 0.6 );
+				background-color: rgba( #fff, 0.01 );
+			}
+		}
+
+		textentry
+		{
+			align-items: center;
+			text-align: left;
+			cursor: text;
+			flex-grow: 1;
+		}
+
+		button, .button
+		{
+			cursor: pointer;
+
+			&:hover
+			{
+				//	background-color: rgba( black, 0.6 );
+			}
+		}
+	}
+}

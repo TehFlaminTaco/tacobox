@@ -1,0 +1,30 @@
+
+mainmenupanel
+{
+	.showingame
+	{
+		display: none;
+	}
+}
+
+mainmenupanel.ingame
+{
+	background-color: rgba( $background, 0.95 );
+	background-image-tint: rgba( white, 0.95 );
+	backdrop-filter: blur( 30px );
+
+	.page-background
+	{
+		display: none;
+	}
+
+	.hideingame
+	{
+		display: none;
+	}
+
+	.showingame
+	{
+		display: inline;
+	}
+}

@@ -1,0 +1,19 @@
+.find-game
+{
+	&:not( .can-refresh )
+	{
+		.refresh-button
+		{
+			opacity: 0.4;
+			pointer-events: none;
+		}
+	}
+
+	&:not( .is-empty )
+	{
+		.none-found
+		{
+			display: none;
+		}
+	}
+}

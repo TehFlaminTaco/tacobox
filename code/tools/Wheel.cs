@@ -13,25 +13,20 @@ namespace Sandbox.Tools
 
 		PreviewEntity previewModel;
 
-		public override void GenerateControls(Panel inspector){
-			inspector.Add.Label("Torque");
-			var torqueEntry = inspector.Add.TextEntry(wheel_torque);
-			torqueEntry.Numeric = true;
-			torqueEntry.AddEventListener("onchange", e=>{
-				wheel_torque = torqueEntry.Text;
-				ConsoleSystem.Run("wheel_torque "+torqueEntry.Text);
+		public override void GenerateControls(Form inspector){
+			var slider = new SliderEntry{MinValue = 0, MaxValue = 2000, Value = wheel_torque.ToFloat()};
+			slider.AddEventListener("value.changed", e=>{
+				wheel_torque = ""+slider.Value;
+				ConsoleSystem.Run("wheel_torque "+slider.Value);
 			});
+			inspector.AddRow("Torque", slider);
 
-			inspector.Add.Label("Max Speed");
-			var speedEntry = inspector.Add.TextEntry(wheel_maxspeed);
-			speedEntry.Numeric = true;
-			speedEntry.AddEventListener("onchange", e=>{
-				wheel_maxspeed = speedEntry.Text;
-				ConsoleSystem.Run("wheel_maxspeed "+speedEntry.Text);
+			slider = new SliderEntry{MinValue = 0, MaxValue = 200, Value = wheel_maxspeed.ToFloat()};
+			slider.AddEventListener("value.changed", e=>{
+				wheel_maxspeed = ""+slider.Value;
+				ConsoleSystem.Run("wheel_maxspeed "+slider.Value);
 			});
-
-			
-			Log.Info("Added");
+			inspector.AddRow("Max Speed", slider);
 		}
 
 		protected override bool IsPreviewTraceValid( TraceResult tr )

@@ -126,7 +126,7 @@ namespace Sandbox.Tools
 		}
 
 		public virtual void ClearControls(Panel inspector){}
-		public virtual void GenerateControls(Panel inspector){}
+		public virtual void GenerateControls(Form inspector){}
 
 		public virtual string GetTitle()
 		{

@@ -1,0 +1,23 @@
+
+
+.mainmenu > navigator > .header > .right > partydeck
+{
+	margin-right: 32px;
+
+	.button
+	{
+		margin-left: 8px;
+	}
+
+	.avatar
+	{
+		background-position: center;
+		background-size: cover;
+		border: 2px solid $primary;
+	}
+
+	.owner
+	{
+		border: 2px solid $secondary;
+	}
+}

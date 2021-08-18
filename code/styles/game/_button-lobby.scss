@@ -1,0 +1,14 @@
+.button-lobby
+{
+	.player-count
+	{
+		position: absolute;
+		right: 10px;
+		padding: 5px 10px;
+		border-radius: 100px;
+		aspect-ratio: 1;
+		min-width: 30px;
+		text-align: center;
+		background-color: $primary;
+	}
+}

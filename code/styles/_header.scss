@@ -1,0 +1,87 @@
+
+$header-height: 120px !default;
+$header-spacing-top: 40px !default;
+$header-spacing-bottom: 32px !default;
+
+.mainmenu > navigator > .header
+{
+	left: 0px;
+	right: 0px;
+	padding: 40px;
+	padding-bottom: 25px;
+	flex-direction: column;
+	position: absolute;
+	flex-direction: row;
+	z-index: 1000;
+	background-image: linear-gradient( #191e28ff, #191e2800 );
+	background-repeat: no-repeat;
+	height: $header-height;
+	padding-top: $header-spacing-top;
+	padding-bottom: $header-spacing-bottom;
+	align-items: center;
+	pointer-events: none;
+
+	> .left
+	{
+		flex-grow: 1;
+		align-items: center;
+
+
+		.button
+		{
+			margin-right: 16px;
+			pointer-events: all;
+		}
+
+		.gameicon
+		{
+			width: 200px;
+			height: 100px;
+		}
+
+
+		.button_group
+		{
+			margin-right: 16px;
+
+			.button
+			{
+				margin-right: 0;
+				margin-left: 0;
+				border-radius: 0;
+
+				&:first-child
+				{
+					border-radius: 100px 0 0 100px;
+				}
+
+				&:last-child
+				{
+					border-radius: 0 100px 100px 0;
+				}
+			}
+		}
+	}
+
+	> .right
+	{
+		align-items: center;
+
+		.button
+		{
+			margin-left: 16px;
+			pointer-events: all;
+		}
+	}
+
+	.button
+	{
+		font-size: 21px;
+
+		iconpanel
+		{
+			font-size: 26px;
+		}
+	}
+}
+

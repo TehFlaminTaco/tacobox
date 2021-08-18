@@ -1,0 +1,160 @@
+
+@import "vars";
+@import '/styles/base.scss';
+
+MenuOverlay
+{
+	pointer-events: none;
+}
+
+.popup_canvas
+{
+	position: absolute;
+	left: 35%;
+	right: 35%;
+	top: 100px;
+	bottom: 150px;
+	z-index: 1000;
+	//border: 1px solid red;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: center;
+
+	.popup
+	{
+		background-color: $primary;
+		height: 64px;
+		border-radius: 1000px;
+		padding: 0px 8px;
+		color: $primary-fg;
+		font-family: $font-title;
+		font-size: 18px;
+		font-weight: 600;
+		align-items: center;
+		cursor: pointer;
+		pointer-events: auto;
+		box-shadow: 5px 5px 20px rgba( black, 0.5 );
+		opacity: 1;
+		transition: all 0.3s bounce-out;
+		position: absolute;
+		padding-left: 72px;
+		sound-in: ui.popup.message.open;
+
+		& > .iconpanel
+		{
+			position: absolute;
+			top: 8px;
+			left: 8px;
+			width: 48px;
+			height: 48px;
+			aspect-ratio: 1;
+			border-radius: 100px;
+			align-items: center;
+			text-align: center;
+			font-size: 24px;
+			color: rgba( $primary-fg, 0.9 );
+			background-position: center;
+			background-size: cover;
+			background-color: rgba( black, 0.3 );
+		}
+
+		&:intro
+		{
+			opacity: 0;
+			transform: scale( 0.2 );
+		}
+
+		&:outro
+		{
+			transition: all 0.1s ease-out;
+			opacity: 0;
+			transform: scale( 1.2 );
+			sound-in: ui.popup.message.close;
+		}
+
+		.message
+		{
+			padding-right: 16px;
+		}
+
+		&.has-subtitle
+		{
+			flex-direction: column;
+			justify-content: center;
+			align-items: flex-start;
+
+			.subtitle
+			{
+				font-size: 13px;
+				opacity: 0.5;
+			}
+		}
+
+		&.has-options
+		{
+			height: 120px;
+			border-radius: 30px;
+			flex-direction: column;
+			min-width: 400px;
+			align-items: end;
+			cursor: default;
+
+			.progress-bar
+			{
+				height: 4px;
+				border-radius: 100px 100px 0 0;
+				background-color: rgba( white, 0.3 );
+				position: absolute;
+				left: 20%;
+				bottom: 0px;
+				width: 1px;
+				transition: width 10s linear;
+
+				&:intro
+				{
+					width: 80%;
+				}
+			}
+
+			.message
+			{
+				height: 64px;
+				justify-content: center;
+				align-items: center;
+			}
+
+			.options
+			{
+				flex-grow: 1;
+				align-items: flex-end;
+				justify-content: flex-end;
+				padding-bottom: 8px;
+
+				.button
+				{
+					position: initial;
+					width: 48px;
+					height: 48px;
+					background-color: red;
+					border-radius: 100px;
+					margin-left: 10px;
+					color: rgba( $primary-fg, 0.9 );
+					background-position: center;
+					background-size: cover;
+					background-color: rgba( black, 0.3 );
+					align-items: center;
+					justify-content: center;
+					text-align: center;
+					font-size: 24px;
+					cursor: pointer;
+
+					&:hover
+					{
+						background-color: $primary-fg;
+						color: $primary;
+					}
+				}
+			}
+		}
+	}
+}

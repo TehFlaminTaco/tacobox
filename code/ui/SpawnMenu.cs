@@ -14,7 +14,7 @@ public partial class SpawnMenu : Panel
 {
 	public static SpawnMenu Instance;
 	readonly Panel toollist;
-	public readonly Panel inspector;
+	public readonly Form inspector;
 	readonly EntityList ents;
 
 	public SpawnMenu()
@@ -49,7 +49,9 @@ public partial class SpawnMenu : Panel
 			var body = right.Add.Panel( "body" );
 			{
 				toollist = body.Add.Panel( "toollist" );
-				inspector = body.Add.Panel( "inspector" );
+				var insp = body.Add.Panel( "inspector" );
+				insp.StyleSheet.Load( "/styles/UITests.scss" );
+				insp.AddChild(inspector=new Form());
 				{
 					RebuildToolList();
 				}

@@ -1,0 +1,29 @@
+
+
+
+mainmenupanel > .page-background
+{
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	position: absolute;
+	z-index: -1;
+	background-size: cover;
+	background-position: center;
+	opacity: 0.1;
+	transition: opacity 0.5s linear, transform 40s linear;
+	transform: scale( 2 );
+
+	&:intro
+	{
+		opacity: 0;
+		transform: scale( 1 );
+	}
+
+	&:outro
+	{
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+}

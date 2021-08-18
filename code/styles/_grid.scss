@@ -1,0 +1,29 @@
+
+$content-border: 10px !default;
+
+.content
+{
+	width: 100%;
+	flex-grow: 1;
+	margin-bottom: $content-border;
+}
+
+.is-column
+{
+	flex-direction: column;
+}
+
+.is-row
+{
+	flex-direction: row;
+}
+
+.is-cell
+{
+	padding: 20px;
+}
+
+.no-padding
+{
+	padding: 0;
+}

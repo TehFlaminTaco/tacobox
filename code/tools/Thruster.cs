@@ -21,17 +21,13 @@ namespace Sandbox.Tools
 			}
 		}
 
-		public override void GenerateControls(Panel inspector){
-			inspector.Add.Label("Force");
-			var textEntry = inspector.Add.TextEntry(thrusterForce);
-			textEntry.Numeric = true;
-			textEntry.AddEventListener("onchange", e=>{
-				ThrusterTool.thrusterForce = textEntry.Text;
-				ConsoleSystem.Run("thruster_force "+textEntry.Text);
+		public override void GenerateControls(Form inspector){
+			var slider = new SliderEntry{MinValue = 0, MaxValue = 10000, Value = thrusterForce.ToFloat()};
+			slider.AddEventListener("value.changed", e=>{
+				ThrusterTool.thrusterForce = ""+slider.Value;
+				ConsoleSystem.Run("thruster_force "+slider.Value);
 			});
-
-			
-			Log.Info("Added");
+			inspector.AddRow("Thrust", slider);
 		}
 
 		protected override bool IsPreviewTraceValid( TraceResult tr )

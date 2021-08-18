@@ -1,8 +1,9 @@
 ﻿using Sandbox;
 using System;
+using System.Collections.Generic;
 
 [Library( "ent_drone", Title = "Drone", Spawnable = true )]
-public partial class DroneEntity : Prop
+public partial class DroneEntity : Prop, IWireEntity
 {
 	public virtual float altitudeAcceleration => 2000;
 	public virtual float movementAcceleration => 5000;
@@ -12,7 +13,7 @@ public partial class DroneEntity : Prop
 	public virtual float leanWeight => 0.5f;
 	public virtual float leanMaxVelocity => 1000;
 
-	private struct DroneInputState
+	/*private struct DroneInputState
 	{
 		public Vector3 movement;
 		public float throttle;
@@ -27,7 +28,16 @@ public partial class DroneEntity : Prop
 		}
 	}
 
-	private DroneInputState currentInput;
+	private DroneInputState currentInput;*/
+
+	[Net]
+	public Vector3 movement {get; set;} = Vector3.Zero;
+	[Net]
+	public float throttle {get; set;} = 0f;
+	[Net]
+	public float yaw {get; set;} = 0f;
+	[Net]
+	public float pitch {get; set;} = 0f;
 
 	public override void Spawn()
 	{
@@ -45,6 +55,10 @@ public partial class DroneEntity : Prop
 			return;
 		}
 
+		if(movement.LengthSquared > 1)
+			movement = movement.Normal;
+		throttle = throttle.Clamp(-1f, 1f);
+
 		var body = PhysicsBody;
 		var transform = Transform;
 
@@ -54,7 +68,7 @@ public partial class DroneEntity : Prop
 		body.AngularDamping = 4.0f;
 
 		var yawRot = Rotation.From( new Angles( 0, Rotation.Angles().yaw, 0 ) );
-		var worldMovement = yawRot * currentInput.movement;
+		var worldMovement = yawRot * movement;
 		var velocityDirection = body.Velocity.WithZ( 0 );
 		var velocityMagnitude = velocityDirection.Length;
 		velocityDirection = velocityDirection.Normal;
@@ -73,16 +87,16 @@ public partial class DroneEntity : Prop
 
 		if ( !hasCollision || isGrounded )
 		{
-			var hoverForce = isGrounded && currentInput.throttle <= 0 ? Vector3.Zero : -1 * transform.NormalToWorld( Vector3.Up ) * -800.0f;
+			var hoverForce = isGrounded && throttle <= 0 ? Vector3.Zero : -1 * transform.NormalToWorld( Vector3.Up ) * -800.0f;
 			var movementForce = isGrounded ? Vector3.Zero : worldMovement * movementAcceleration;
-			var altitudeForce = transform.NormalToWorld( Vector3.Up ) * currentInput.throttle * altitudeAcceleration;
+			var altitudeForce = transform.NormalToWorld( Vector3.Up ) * throttle * altitudeAcceleration;
 			var totalForce = hoverForce + movementForce + altitudeForce;
 			body.ApplyForce( (totalForce * alignment) * body.Mass );
 		}
 
 		if ( !hasCollision && !isGrounded )
 		{
-			var spinTorque = Transform.NormalToWorld( new Vector3( 0, 0, currentInput.yaw * yawSpeed ) );
+			var spinTorque = Transform.NormalToWorld( new Vector3( 0, 0, yaw * yawSpeed ) );
 			var uprightTorque = Vector3.Cross( currentUp, targetUp ) * uprightSpeed;
 			var uprightAlignment = alignment < uprightDot ? 0 : alignment;
 			var totalTorque = spinTorque * alignment + uprightTorque * uprightAlignment;
@@ -94,21 +108,6 @@ public partial class DroneEntity : Prop
 	{
 		if ( owner == null ) return;
 		if ( !IsServer ) return;
-
-		using ( Prediction.Off() )
-		{
-			currentInput.Reset();
-			var x = (Input.Down( InputButton.Forward ) ? -1 : 0) + (Input.Down( InputButton.Back ) ? 1 : 0);
-			var y = (Input.Down( InputButton.Right ) ? 1 : 0) + (Input.Down( InputButton.Left ) ? -1 : 0);
-			currentInput.movement = new Vector3( x, y, 0 ).Normal;
-			currentInput.throttle = (Input.Down( InputButton.Run ) ? 1 : 0) + (Input.Down( InputButton.Duck ) ? -1 : 0);
-			currentInput.yaw = -Input.MouseDelta.x;
-		}
-	}
-
-	public void ResetInput()
-	{
-		currentInput.Reset();
 	}
 
 	private readonly Vector3[] turbinePositions = new Vector3[]
@@ -142,5 +141,18 @@ public partial class DroneEntity : Prop
 			transform.Scale = Scale;
 			SetBoneTransform( i, transform );
 		}
+	}
+
+	List<WireVal> values;
+	public List<WireVal> Values()
+	{
+		if(values is not null)return values;
+
+		values = new();
+		values.Add(new WireValVector("Thrust Direction", "Thrust Direction", WireVal.Direction.Input, ()=>movement, f=>movement = f));
+		values.Add(new WireValNormal("Throttle", "Throttle", WireVal.Direction.Input, ()=>throttle, f=>throttle=(float)f));
+		values.Add(new WireValNormal("Yaw", "Yaw", WireVal.Direction.Input, ()=>yaw, f=>yaw=(float)f));
+		values.Add(new WireValNormal("Pitch", "Pitch", WireVal.Direction.Input, ()=>pitch, f=>pitch=(float)f));
+		return values;
 	}
 }

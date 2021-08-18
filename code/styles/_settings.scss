@@ -1,0 +1,74 @@
+
+.settings
+{
+	flex-grow: 1;
+	flex-direction: row;
+
+	&:not( .is-dirty )
+	{
+		.apply-button
+		{
+			opacity: 0.1;
+			pointer-events: none;
+		}
+	}
+}
+
+.settings .settings-page
+{
+	flex-grow: 1;
+
+	column
+	{
+		flex-grow: 1;
+		margin-right: 10px;
+		
+		flex-direction: column;
+		width: 50%;
+
+		.heading
+		{
+			font-size: 18px;
+			font-family: Poppins;
+			text-transform: uppercase;
+			color: white;
+			margin: 10px 0;
+			letter-spacing: 2px;
+		}
+
+		.row
+		{
+			//background-color: rgba( black, 0.1 );
+			margin: 3px 0;
+			border-radius: 3px;
+			padding: 5px;
+			transition: all 0.3s ease;
+
+			&.disabled
+			{
+				opacity: 0.2;
+				pointer-events: none;
+				transform: scale( 0.95 );
+			}
+
+			.left
+			{
+				width: 300px;
+				font-size: 14px;
+				font-family: Poppins;
+				text-transform: uppercase;
+				color: white;
+				margin: 10px 0;
+				letter-spacing: 2px;
+				padding-left: 20px;
+			}
+
+			.right
+			{
+				flex-grow: 1;
+				flex-direction: column;
+				justify-content: center;
+			}
+		}
+	}
+}

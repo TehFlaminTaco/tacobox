@@ -10,13 +10,13 @@ namespace Sandbox.Tools
         [ConVar.ClientData("gate_selected")]
 		public static string gate_selected {get; set;} = "maths_add";
         
-        public override void GenerateControls(Panel inspector){
-            inspector.Add.Label("Gate Type:");
+        public override void GenerateControls(Form inspector){
+            //inspector.Add.Label("Gate Type:");
 
             Panel GateOptions = new();
             Panel GateBox = new();
             GateOptions.AddClass("scrollable");
-            inspector.AddChild(GateOptions);
+            inspector.AddRow("Gate Type", GateOptions);
             GateBox.AddClass("box");
             GateOptions.AddChild(GateBox);
 

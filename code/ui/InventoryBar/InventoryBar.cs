@@ -90,7 +90,7 @@ public class InventoryBar : Panel
 		}
 
 		var player = Local.Pawn;
-		if ( player is not SandboxPlayer ) return;
+		if ( player is not SandboxPlayer sp ) return;
 		if ( player.Inventory is not Inventory inv ) return;
 		SetClass("hidden", lastUpdate + 2f < Time.Now);
 
@@ -114,19 +114,21 @@ public class InventoryBar : Panel
 			kv.Value.SetClass("active", activeGroup == kv.Key);
 		}
 
-	}
-
-	private static void UpdateIcon( Entity ent, InventoryIcon inventoryIcon, int i )
-	{
-		if ( ent == null )
-		{
-			inventoryIcon.Clear();
-			return;
+		var heldGroup = -1;
+		if(sp.ActiveChild is Carriable c){
+			heldGroup = c.HoldSlot;
+		}
+		if(sp.ActiveChild is Weapon w){
+			heldGroup = w.HoldSlot;
 		}
 
-		inventoryIcon.TargetEnt = ent;
-		inventoryIcon.Label.Text = ent.ClassInfo.Title;
-		inventoryIcon.SetClass( "active", ent.IsActiveChild() );
+		var heldIndex = inv.All(heldGroup).TakeWhile(x=>x!=sp.ActiveChild).Count();
+		if(activeGroup != heldGroup || subSlot != heldIndex){
+			activeGroup = heldGroup;
+			subSlot = heldIndex;
+			lastUpdate = Time.Now;
+		}
+
 	}
 
 	void EquipSelected(InputBuilder input, SandboxPlayer ply, Inventory inv){
