@@ -44,6 +44,10 @@ public partial class GateEntity : Prop, IWireEntity
 		(gateValues[key] as StoredWireVal<T>).data = Value;
 	}
 
+	public string Name() {
+		return getGate().Name;
+	}
+
 	public override void Spawn()
 	{
 		base.Spawn();

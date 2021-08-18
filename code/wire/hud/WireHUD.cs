@@ -63,7 +63,7 @@ class WireEntityPanel : Panel {
     List<WireIOPanel> ioDevices = new();
     public WireEntityPanel(IWireEntity target){
         this.target = target;
-        Name = Add.Label((target as Entity).ClassInfo.Title, "entname");
+        Name = Add.Label(target.Name(), "entname");
         IO = Add.Panel( "io" );
         var inputs = IO.Add.Panel("value inputs");
         var outputs = IO.Add.Panel("value outputs");
@@ -163,7 +163,7 @@ class WireIOPanel : Panel {
         var conn = WireConnection.GetConnection(ent, val.id);
         if(conn.target is not null && conn.target.IsValid()){
             connectionBox.SetClass("hidden", false);
-            connectedEnt.Text = conn.target.ClassInfo.Title;
+            connectedEnt.Text = (conn.target as IWireEntity).Name();
             var targ = (conn.target as IWireEntity).Values().Where(x=>x.id==conn.id).First();
             if(hoveredOver){
                 WireHUD.DidHover = true;
