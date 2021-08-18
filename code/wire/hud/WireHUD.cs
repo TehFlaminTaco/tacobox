@@ -12,6 +12,7 @@ class WireHUD : HudEntity<RootPanel> {
     public static bool DidHover = false;
     public static bool DidHoverPanel = false;
     public static WireVal HoveredPair;
+    public static IWireEntity HoveredPairEntity;
     public static WireGun gun;
     public WireHUD(WireGun gun){
         if(!IsClient)
@@ -38,6 +39,7 @@ class WirePanel : Panel {
         WireHUD.HoveredKey = null;
         if(!WireHUD.DidHover){
             WireHUD.HoveredPair = null;
+            WireHUD.HoveredPairEntity = null;
         }
         WireHUD.DidHover = false;
         var ents = Entity.All.OfType<IWireEntity>().ToList();
@@ -96,8 +98,10 @@ class WireEntityPanel : Panel {
         var pos = e.Position.ToScreen();
         this.Style.ZIndex = (int)-e.Position.Distance(Local.Pawn.EyePos)*300;
 
-        Style.Left = Length.Pixels(pos.x * Screen.Width);
-        Style.Top = Length.Pixels(pos.y * Screen.Height);
+        var panelSize = new Vector2(Box.Right - Box.Left, Box.Bottom - Box.Top);
+
+        Style.Left = Length.Pixels(pos.x * Screen.Width - panelSize.x/2);
+        Style.Top = Length.Pixels(pos.y * Screen.Height - panelSize.y/2);
 
 
         foreach(var p in ioDevices){
@@ -111,7 +115,8 @@ class WireEntityPanel : Panel {
             WireHUD.DidHoverPanel = true;
             this.Style.ZIndex = 9000;
         }
-        SetClass("targeted", inX && inY && WireHUD.HoveredPanel==this);
+        SetClass("targeted", WireHUD.HoveredPairEntity==target||(inX && inY && WireHUD.HoveredPanel==this));
+        SetClass("hoverpair", WireHUD.HoveredPairEntity==target);
         Style.Dirty();
     }
 }
@@ -173,6 +178,7 @@ class WireIOPanel : Panel {
             if(hoveredOver){
                 WireHUD.DidHover = true;
                 WireHUD.HoveredPair = targ;
+                WireHUD.HoveredPairEntity = conn.target as IWireEntity;
             }
             connectedKey.Text = targ.name;
         }else{

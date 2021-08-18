@@ -14,6 +14,9 @@ partial class Pistol : Weapon, IWireEntity
     public override int Clip1Size => 10;
 	public override int HoldSlot => 2;
 
+	public virtual float Damage => 9.0f;
+	public virtual float Force => 1.5f;
+
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -38,7 +41,7 @@ partial class Pistol : Weapon, IWireEntity
 
 		ShootEffects();
 		PlaySound( "rust_pistol.shoot" );
-		ShootBullet( 0.05f, 1.5f, 9.0f, 3.0f );
+		ShootBullet( 0.05f, Force, Damage, 3.0f );
 		Clip1--;
 	}
 
@@ -55,7 +58,7 @@ partial class Pistol : Weapon, IWireEntity
 
 		ShootEffects();
 		PlaySound( "rust_pistol.shoot" );
-		ShootBullet( pos, rot.Forward, 0.05f, 1.5f, 9.0f, 3.0f );
+		ShootBullet( pos, rot.Forward, 0.05f, Force, Damage, 3.0f );
 
 		ApplyAbsoluteImpulse( rot.Backward * 200.0f );
 	}

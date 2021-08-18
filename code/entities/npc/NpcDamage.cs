@@ -36,7 +36,7 @@ public partial class NpcTest {
 		ent.SurroundingBoundsMode = SurroundingBoundsType.Physics;
 		ent.RenderColorAndAlpha = RenderColorAndAlpha;
 		ent.PhysicsGroup.Velocity = PhysicsBody.Velocity;
-        (ent.GetBonePhysicsBody(info.BoneIndex)??ent.PhysicsBody).ApplyImpulse(info.Force);
+        (ent.GetBonePhysicsBody(info.BoneIndex)??ent.PhysicsBody).ApplyImpulse(info.Force * 50f);
 		ent.PhysicsGroup.RebuildMass();
         
         ent.PhysicsGroup.SetSurface("flesh");
