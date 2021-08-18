@@ -6,10 +6,11 @@ using Sandbox.UI.Construct;
 using System.Collections.Generic;
 
 class WireHUD : HudEntity<RootPanel> {
-    public static bool HoveredPanel = false;
+    public static Panel HoveredPanel = null;
     public static Entity HoveredEntity = null;
     public static string HoveredKey = null;
     public static bool DidHover = false;
+    public static bool DidHoverPanel = false;
     public static WireVal HoveredPair;
     public static WireGun gun;
     public WireHUD(WireGun gun){
@@ -29,7 +30,10 @@ class WirePanel : Panel {
     Dictionary<IWireEntity, WireEntityPanel> knownEnts = new();
 
     public override void Tick(){
-        WireHUD.HoveredPanel = false;
+        if(!WireHUD.DidHoverPanel){
+            WireHUD.HoveredPanel = null;
+        }
+        WireHUD.DidHoverPanel = false;
         WireHUD.HoveredEntity = null;
         WireHUD.HoveredKey = null;
         if(!WireHUD.DidHover){
@@ -49,7 +53,7 @@ class WirePanel : Panel {
             AddChild(knownEnts[ent] = new(ent));
         }
 
-        foreach(var kv in knownEnts.OrderBy(x=>(x.Key as Entity).Position.Distance(Local.Pawn.EyePos))){
+        foreach(var kv in knownEnts.OrderBy(x=>x.Value == WireHUD.HoveredPanel ? -1 : (x.Key as Entity).Position.Distance(Local.Pawn.EyePos))){
             kv.Value.Tick();
         }
 
@@ -102,11 +106,12 @@ class WireEntityPanel : Panel {
 
         var inX = IO.Box.Left <= Screen.Width / 2 && IO.Box.Right > Screen.Width / 2;
         var inY = IO.Box.Top <= Screen.Height / 2 && IO.Box.Bottom > Screen.Height / 2;
-        SetClass("targeted", inX && inY && !WireHUD.HoveredPanel);
-        if(inX && inY && !WireHUD.HoveredPanel){
-            WireHUD.HoveredPanel = true;
+        if(inX && inY && (WireHUD.HoveredPanel is null || WireHUD.HoveredPanel == this)){
+            WireHUD.HoveredPanel = this;
+            WireHUD.DidHoverPanel = true;
             this.Style.ZIndex = 9000;
         }
+        SetClass("targeted", inX && inY && WireHUD.HoveredPanel==this);
         Style.Dirty();
     }
 }
@@ -146,7 +151,7 @@ class WireIOPanel : Panel {
         var inX = Box.Left <= Screen.Width / 2 && Box.Right > Screen.Width / 2;
         var inY = Box.Top <= Screen.Height / 2 && Box.Bottom > Screen.Height / 2;
 
-        var hoveredOver = !WireHUD.HoveredPanel && inX && inY;
+        var hoveredOver = !WireHUD.DidHoverPanel && inX && inY;
         bool targetingOutput = WireHUD.gun.selectedEntity is not null && WireHUD.gun.selectedEntity.IsValid();
         hoveredOver &= targetingOutput ^ val.direction==WireVal.Direction.Input;
         SetClass("active", hoveredOver);
