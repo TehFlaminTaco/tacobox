@@ -38,4 +38,6 @@ public partial class LampEntity : SpotLightEntity, IWireEntity
 		values.Add(new WireValTexture("cookie", "Cookie", WireVal.Direction.Input, ()=>cookie, f=>cookie=f));
 		return values;
 	}
+
+	bool IWireEntity.ShouldGlow => true;
 }

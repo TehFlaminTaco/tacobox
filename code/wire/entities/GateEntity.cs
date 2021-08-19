@@ -63,4 +63,6 @@ public partial class GateEntity : Prop, IWireEntity
 	public void ProcessGate(){
 		getGate().Process(this);
 	}
+
+	bool IWireEntity.ShouldGlow => true;
 }

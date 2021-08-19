@@ -53,6 +53,13 @@ public abstract class Gate {
         RegisterGate("Vector", new GateVectorMagnitude()); 
         RegisterGate("Vector", new GateVectorMake()); 
         RegisterGate("Vector", new GateVectorBreak());
+
+        RegisterGate("Rotation", new GateRotationForward());
+        RegisterGate("Rotation", new GateRotationRight());
+        RegisterGate("Rotation", new GateRotationUp());
+        RegisterGate("Rotation", new GateRotationAroundAxis());
+        RegisterGate("Rotation", new GateRotationMake());
+        RegisterGate("Rotation", new GateRotationBreak());
     }
 
 }

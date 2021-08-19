@@ -23,7 +23,9 @@ public abstract class WireVal{
     public enum Type{
         Normal,
         Vector3,
-        String
+        Rotation,
+        String,
+        Texture
     }
 
     public static StoredWireVal FromType(Type t, string key, string name, Direction direction){
@@ -40,12 +42,24 @@ public abstract class WireVal{
                 vec3_store.data = new Vector3();
                 vec3_store.val = vec3_val;
                 return vec3_store;
+            case Type.Rotation:
+                var rot_store=new StoredWireVal<Rotation>();
+                var rot_val = new WireValRotation(key, name, direction, ()=>rot_store.data, f=>rot_store.data=f);
+                rot_store.data = Rotation.Identity;
+                rot_store.val = rot_val;
+                return rot_store;
             case Type.String:
                 var str_store=new StoredWireVal<string>();
                 var str_val = new WireValString(key, name, direction, ()=>str_store.data, f=>str_store.data=f);
                 str_store.data = string.Empty;
                 str_store.val = str_val;
                 return str_store;
+            case Type.Texture:
+                var tex_store=new StoredWireVal<Texture>();
+                var tex_val = new WireValTexture(key, name, direction, ()=>tex_store.data, f=>tex_store.data=f);
+                tex_store.data = null;
+                tex_store.val = tex_val;
+                return tex_store;
         }
         return null;
     }
@@ -108,10 +122,26 @@ public class WireValString : WireVal<string> {
             setter(v.getter().ToString());
             return;
         }
+        if(other is WireValRotation r){
+            setter(r.getter().ToString());
+            return;
+        }
         if(other is WireValString s){
             setter(s.getter());
             return;
         }
+	}
+}
+
+public class WireValRotation : WireVal<Rotation> {
+    public override string TypeName {get; set;} = "Rotation";
+    public WireValRotation(string id, string name, Direction direction, Func<Rotation> getter, Action<Rotation> setter) : base(id, name, direction, getter, setter){}
+	public override void CopyFrom( WireVal other ){
+		if(other is WireValRotation t){
+            setter(t.getter());
+            return;
+        }
+        return;
 	}
 }
 

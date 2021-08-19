@@ -31,4 +31,6 @@ public partial class DebugBeacon : Prop, IWireEntity {
 	{
         DebugOverlay.Text( Position, DrawText );
     }
+
+    bool IWireEntity.ShouldGlow => true;
 }

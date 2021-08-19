@@ -37,13 +37,9 @@ class RTCamera : Prop, IWireEntity{
     Texture depth;
     [Event.Frame]
 	public void OnFrame(){
-        //Render.SetRenderTarget(rt);
         RenderTargets.Render.Add(()=>{
-            //Render.Clear();
-            Render.DrawScene(rt, depth, new Vector2(1024, 1024), SceneWorld.Current, Position + Rotation.Forward*10f, Rotation.Angles(), 90, default, default, 0.1f, 9000);
+            Render.DrawScene(rt, depth, new Vector2(1024, 1024), SceneWorld.Current, Position + Rotation.Forward*10f, Rotation.Angles(), 90, default, default, 0.2f, 9000);
         });
-
-        //Render.RestoreRenderTarget();
 	}
 
     List<WireVal> values;
@@ -54,4 +50,6 @@ class RTCamera : Prop, IWireEntity{
         values.Add(new WireValTexture("RenderTexture", "RenderTexture", WireVal.Direction.Output, ()=>rt, r=>rt=r));
         return values;
 	}
+
+    bool IWireEntity.ShouldGlow => true;
 }

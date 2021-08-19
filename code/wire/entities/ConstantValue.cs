@@ -21,8 +21,11 @@ partial class ConstantValue : Prop, IWireEntity
 		base.Spawn();
 
 		SetModel( "models/citizen_props/chippacket01.vmdl" );
+		Scale = 0.5f;
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 
 		RenderColor = Color.Red;
 	}
+
+	bool IWireEntity.ShouldGlow => true;
 }

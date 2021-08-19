@@ -50,4 +50,6 @@ partial class ThrusterEntity : Prop, IWireEntity
 		values.Add(new WireValNormal("force", "Force", WireVal.Direction.Input, ()=>wireForce, f=>wireForce=(float)f));
 		return values;
 	}
+
+	bool IWireEntity.ShouldGlow => true;
 }

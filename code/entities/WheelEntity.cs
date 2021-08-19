@@ -52,4 +52,6 @@ public partial class WheelEntity : Prop, IWireEntity
 
 		Health = -1;
 	}
+
+	bool IWireEntity.ShouldGlow => true;
 }

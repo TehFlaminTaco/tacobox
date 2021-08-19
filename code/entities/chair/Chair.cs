@@ -17,6 +17,12 @@ public partial class Chair : Prop, IUse, IWireEntity
 	public double S {get; set;}
 	[Net]
 	public double D {get; set;}
+	[Net]
+	public double Jump {get; set;}
+	[Net]
+	public double Duck {get; set;}
+	[Net]
+	public Rotation EyeAngles {get; set;}
 
     private void RemoveDriver( SandboxPlayer player )
 	{
@@ -33,6 +39,9 @@ public partial class Chair : Prop, IUse, IWireEntity
 		A = 0;
 		S = 0;
 		D = 0;
+		Jump = 0;
+		Duck = 0;
+		EyeAngles = Rotation.Identity;
 
 		timeSinceDriverLeft = 0;
 	}
@@ -114,6 +123,8 @@ public partial class Chair : Prop, IUse, IWireEntity
 			A = Input.Down(InputButton.Left) ? 1 : 0;
 			S = Input.Down(InputButton.Back) ? 1 : 0;
 			D = Input.Down(InputButton.Right) ? 1 : 0;
+			Jump = Input.Down(InputButton.Jump) ? 1 : 0;
+			Duck = Input.Down(InputButton.Duck) ? 1 : 0;
 		}
 	}
 
@@ -124,6 +135,8 @@ public partial class Chair : Prop, IUse, IWireEntity
 		outputs.Add(new WireValNormal("a", "A", WireVal.Direction.Output, ()=>A, f=>A=f));
 		outputs.Add(new WireValNormal("s", "S", WireVal.Direction.Output, ()=>S, f=>S=f));
 		outputs.Add(new WireValNormal("d", "D", WireVal.Direction.Output, ()=>D, f=>D=f));
+		outputs.Add(new WireValNormal("jump", "Jump", WireVal.Direction.Output, ()=>Jump, f=>Jump=f));
+		outputs.Add(new WireValNormal("duck", "Duck", WireVal.Direction.Output, ()=>Duck, f=>Duck=f));
 		return outputs;
 	}
 }

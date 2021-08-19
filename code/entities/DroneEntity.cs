@@ -7,7 +7,7 @@ public partial class DroneEntity : Prop, IWireEntity
 {
 	public virtual float altitudeAcceleration => 2000;
 	public virtual float movementAcceleration => 5000;
-	public virtual float yawSpeed => 150;
+	public virtual float yawSpeed => 15550;
 	public virtual float uprightSpeed => 5000;
 	public virtual float uprightDot => 0.5f;
 	public virtual float leanWeight => 0.5f;
@@ -153,6 +153,8 @@ public partial class DroneEntity : Prop, IWireEntity
 		values.Add(new WireValNormal("Throttle", "Throttle", WireVal.Direction.Input, ()=>throttle, f=>throttle=(float)f));
 		values.Add(new WireValNormal("Yaw", "Yaw", WireVal.Direction.Input, ()=>yaw, f=>yaw=(float)f));
 		values.Add(new WireValNormal("Pitch", "Pitch", WireVal.Direction.Input, ()=>pitch, f=>pitch=(float)f));
+		values.Add(new WireValVector("Position", "Position", WireVal.Direction.Output, ()=>Position, f=>{}));
+		values.Add(new WireValRotation("Rotation", "Rotation", WireVal.Direction.Output, ()=>Rotation, f=>{}));
 		return values;
 	}
 }

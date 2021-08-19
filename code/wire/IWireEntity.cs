@@ -7,4 +7,6 @@ interface IWireEntity {
 	public string Name() {
 		return (this as Entity)?.ClassInfo.Title;
 	}
+
+	public virtual bool ShouldGlow => false;
 }

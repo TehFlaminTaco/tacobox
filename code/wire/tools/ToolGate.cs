@@ -5,7 +5,7 @@ using Sandbox.UI.Tests;
 
 namespace Sandbox.Tools
 {
-	[Library( "tool_gate", Title = "Gate", Description = "Spawn Gates", Group = "fun" )]
+	[Library( "tool_gate", Title = "Gate", Description = "Spawn Gates", Group = "wire" )]
 	public class ToolGate : BaseTool{
         [ConVar.ClientData("gate_selected")]
 		public static string gate_selected {get; set;} = "maths_add";

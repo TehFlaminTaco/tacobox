@@ -12,6 +12,7 @@ public static class Do {
 
     [Event.Tick]
     public static void HandleWaited(){
+
         foreach ((float time, Action act) in delayedActions.Where(x => x.time <= Time.Now)){
             act();
         }
