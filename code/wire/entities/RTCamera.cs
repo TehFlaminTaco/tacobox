@@ -4,7 +4,7 @@ using Sandbox;
 using Sandbox.UI;
 
 [Library( "ent_rtcamera", Title = "RT Camera", Spawnable = true, Group = "Wire" )]
-class RTCamera : Prop, IWireEntity{
+class RTCamera : Prop, IWireEntity, IGlowing{
     public override void Spawn()
 	{
 		base.Spawn();
@@ -50,6 +50,4 @@ class RTCamera : Prop, IWireEntity{
         values.Add(new WireValTexture("RenderTexture", "RenderTexture", WireVal.Direction.Output, ()=>rt, r=>rt=r));
         return values;
 	}
-
-    bool IWireEntity.ShouldGlow => true;
 }

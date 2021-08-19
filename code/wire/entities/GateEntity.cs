@@ -2,9 +2,11 @@ using System.Xml.Schema;
 using Sandbox;
 using System;
 using System.Collections.Generic;
+using Sandbox.UI;
+using Sandbox.UI.Construct;
 
 [Library( "ent_gate" )]
-public partial class GateEntity : Prop, IWireEntity
+public partial class GateEntity : Prop, IWireEntity, ITargetID, IGlowing
 {
 
     [Net]
@@ -63,5 +65,12 @@ public partial class GateEntity : Prop, IWireEntity
 		getGate().Process(this);
 	}
 
-	bool IWireEntity.ShouldGlow => true;
+	Label labelName;
+	public void GenerateTargetID(Panel panel){
+		labelName = panel.Add.Label("Gate");
+	}
+
+	public void TickTargetID(){
+		labelName.Text = Name();
+	}
 }

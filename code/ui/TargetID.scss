@@ -1,0 +1,18 @@
+
+TargetID {
+    position:absolute;
+    left: 50%;
+    top: 50%;
+    background-color: #333A;
+    padding:8px;
+    border: 2px solid #FFF;
+    border-radius: 8px;
+    color:#FFF;
+    transition: all 0.2s ease-in-out;
+    opacity:1;
+    font-family: Poppins;
+    font-weight: 600;
+    &.hidden{
+        opacity:0;
+    }
+}

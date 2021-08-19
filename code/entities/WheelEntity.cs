@@ -4,7 +4,7 @@ using Sandbox;
 using Sandbox.Joints;
 
 [Library( "ent_wheel" )]
-public partial class WheelEntity : Prop, IWireEntity
+public partial class WheelEntity : Prop, IWireEntity, IGlowing
 {
 	public RevoluteJoint Joint;
 	[Net]
@@ -52,6 +52,4 @@ public partial class WheelEntity : Prop, IWireEntity
 
 		Health = -1;
 	}
-
-	bool IWireEntity.ShouldGlow => true;
 }

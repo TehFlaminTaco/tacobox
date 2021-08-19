@@ -2,7 +2,7 @@
 using Sandbox;
 
 [Library( "ent_thruster" )]
-partial class ThrusterEntity : Prop, IWireEntity
+partial class ThrusterEntity : Prop, IWireEntity, IGlowing
 {
 	[Net]
 	public float Force {get; set;} = 1000.0f;
@@ -50,6 +50,4 @@ partial class ThrusterEntity : Prop, IWireEntity
 		values.Add(new WireValNormal("force", "Force", WireVal.Direction.Input, ()=>wireForce, f=>wireForce=(float)f));
 		return values;
 	}
-
-	bool IWireEntity.ShouldGlow => true;
 }

@@ -2,7 +2,7 @@
 using Sandbox;
 
 [Library( "ent_lamp", Title = "Lamp", Spawnable = true )]
-public partial class LampEntity : SpotLightEntity, IWireEntity
+public partial class LampEntity : SpotLightEntity, IWireEntity, IGlowing
 {
 	[Net]
 	public double toggled {get; set;}
@@ -38,6 +38,4 @@ public partial class LampEntity : SpotLightEntity, IWireEntity
 		values.Add(new WireValTexture("cookie", "Cookie", WireVal.Direction.Input, ()=>cookie, f=>cookie=f));
 		return values;
 	}
-
-	bool IWireEntity.ShouldGlow => true;
 }

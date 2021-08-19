@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Sandbox;
+using Sandbox.UI;
 
 interface IWireEntity {
 	public List<WireVal> Values();
@@ -7,6 +8,4 @@ interface IWireEntity {
 	public string Name() {
 		return (this as Entity)?.ClassInfo.Title;
 	}
-
-	public virtual bool ShouldGlow => false;
 }

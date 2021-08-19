@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Sandbox;
 
 [Library( "ent_debugbeacon", Title = "Debug Beacon", Spawnable = true, Group = "Wire" )]
-public partial class DebugBeacon : Prop, IWireEntity {
+public partial class DebugBeacon : Prop, IWireEntity, IGlowing {
     [Net]
     string drawText {get; set;} = "";
     public override void Spawn()
@@ -31,6 +31,4 @@ public partial class DebugBeacon : Prop, IWireEntity {
 	{
         DebugOverlay.Text( Position, DrawText );
     }
-
-    bool IWireEntity.ShouldGlow => true;
 }

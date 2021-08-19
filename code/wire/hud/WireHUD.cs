@@ -22,27 +22,6 @@ class WireHUD : HudEntity<RootPanel> {
         RootPanel.AddChild<WirePanel>();
         WireHUD.gun = gun;
     }
-
-    static ModelEntity lastHovered=null;
-    [Event.Tick]
-    public static void GlowHovered(){
-        if(Local.Pawn is null)return;
-        var startPos = Local.Pawn.EyePos;
-		var dir = Local.Pawn.EyeRot.Forward;
-        if(lastHovered is not null)lastHovered.GlowActive = false;
-
-		var tr = Trace.Ray( startPos, startPos + dir * 300f )
-			.Ignore( Local.Pawn )
-			.Run();
-		if(tr.Entity is IWireEntity we && (we.ShouldGlow || Local.Pawn.ActiveChild is WireGun) && tr.Entity is ModelEntity ent ){
-			ent.GlowState = GlowStates.GlowStateLookAt;
-			ent.GlowDistanceStart = 0;
-			ent.GlowDistanceEnd = 1000;
-			ent.GlowColor = Color.White;
-			ent.GlowActive = true;
-            lastHovered = ent;
-		}
-    }
 }
 
 class WirePanel : Panel {

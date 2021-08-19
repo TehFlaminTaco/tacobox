@@ -20,7 +20,6 @@ public class ModelPicker : Panel {
         this.Models = Models;
         foreach(var model in Models){
             var file = (string)model.Remove(model.Length - 5);
-            Log.Info(file);
 			var panel = scrollPanel.Add.Panel( "icon" );
             icons.Add((panel, model));
 			panel.AddEventListener( "onclick", () => SetSelectedModel(model) );

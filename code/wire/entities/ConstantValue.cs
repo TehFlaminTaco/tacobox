@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 [Library( "ent_constantvalue", Title = "Constant Value", Spawnable = true, Group = "Wire" )]
-partial class ConstantValue : Prop, IWireEntity
+partial class ConstantValue : Prop, IWireEntity, IGlowing
 {
     [Net]
 	public double value { get; set; } = 1.0d;
@@ -26,6 +26,4 @@ partial class ConstantValue : Prop, IWireEntity
 
 		RenderColor = Color.Red;
 	}
-
-	bool IWireEntity.ShouldGlow => true;
 }
