@@ -8,6 +8,7 @@ using Sandbox.UI.Construct;
 using System;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using System.Linq;
 
 [Library]
 public partial class SpawnMenu : Panel
@@ -79,28 +80,33 @@ public partial class SpawnMenu : Panel
 		inspector.DeleteChildren( true );
 		ents.Reload();
 
-		foreach ( var entry in Library.GetAllAttributes<Sandbox.Tools.BaseTool>() )
+		foreach ( var kv in Library.GetAllAttributes<Sandbox.Tools.BaseTool>().GroupBy(x=>x.Group) )
 		{
-			if ( entry.Title == "BaseTool" )
+			
+			toollist.Add.Label(kv.Key, "category");
+
+			foreach(var entry in kv){
+				if ( entry.Title == "BaseTool" )
 				continue;
 
-			var button = toollist.Add.Button( entry.Title );
-			button.SetClass( "active", entry.Name == ConsoleSystem.GetValue( "tool_current" ) );
+				var button = toollist.Add.Button( entry.Title );
+				button.SetClass( "active", entry.Name == ConsoleSystem.GetValue( "tool_current" ) );
 
-			button.AddEventListener( "onclick", () =>
-			{
-				if(!button.HasClass("active")){
-					GetCurrentTool()?.ClearControls(inspector);
-					inspector.DeleteChildren(true);
-				}
-				ConsoleSystem.Run( "tool_current", entry.Name );
-				ConsoleSystem.Run( "inventory_current", "weapon_tool" );
-				
-				foreach ( var child in toollist.Children )
-					child.SetClass( "active", child == button );
-				
-				
-			} );
+				button.AddEventListener( "onclick", () =>
+				{
+					if(!button.HasClass("active")){
+						GetCurrentTool()?.ClearControls(inspector);
+						inspector.DeleteChildren(true);
+					}
+					ConsoleSystem.Run( "tool_current", entry.Name );
+					ConsoleSystem.Run( "inventory_current", "weapon_tool" );
+					
+					foreach ( var child in toollist.Children )
+						child.SetClass( "active", child == button );
+					
+					
+				} );
+			}
 		}
 
 		GetCurrentTool()?.GenerateControls(inspector);

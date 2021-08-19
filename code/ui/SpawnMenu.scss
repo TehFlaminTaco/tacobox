@@ -81,6 +81,11 @@
                 width: 150px;
                 color: #aaa;
 
+                .category{
+                    text-transform: capitalize;
+                    color:#fff;
+                }
+
                 button {
                     padding: 3px 10px;
                     font-size: 11px;
