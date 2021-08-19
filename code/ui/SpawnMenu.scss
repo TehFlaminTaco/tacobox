@@ -157,69 +157,39 @@
                     }
                 }
 
-                //flex-label{width:100%;}
-                /*color: #aaa;
-
-                label {
-                    font-size: 14px;
-                }
-
-                .scrollable{
-                    flex-direction: column;
+                modelpicker {
+                    width:320px;
+                    height:240px;
+                    background-color:#111;
                     overflow: scroll;
-                    padding: 4px;
-                    height:400px;
-
-                    border-color: #aaa;
-                    border-radius: 0;
-                    border-style: solid;
-                    border: 1px;
-
+                    border-radius:8px;
                     .box{
-                        flex-direction: column;
+                        width:320px;
+                        flex-direction: flex-start;
                         flex-shrink: 0;
-                        .category{
-                            .header {
-                                background-color: #08f;
-                                border-radius:4px 4px 0px 0px;
-                                padding: 0px 4px 0px 4px;
-                                color: #FFF;
-                            }
-                            flex-direction: column;
-                            margin-bottom:2px;
+                        flex-wrap: wrap;
+                    }
+                    .icon {
+                        flex-shrink: 0;
+                        border-radius: 8px;
+                        width: 76px;
+                        height: 76px;
+                        margin: 2px;
+                        background-position: center;
+                        background-size: cover;
+                        background-color: rgba(black, 0.1);
+                        background-image: url( /entity/spawnicon.png );
+
+                        &:hover {
+                            cursor: pointer;
+                            border: 1px solid white;
                         }
-                        .childrenBox{
-                            flex-direction: column;
-                        }
-                        .inactive{
-                            display:none;
+
+                        &.selected {
+                            border: 1px solid #08F;
                         }
                     }
                 }
-
-                textentry {
-                    border-color: #aaa;
-                    border-radius: 0;
-                    border-style: solid;
-                    border: 1px;
-                    padding: 0px 4px 0px 4px;
-                }
-
-                button {
-                    font-size: 11px;
-                    transition: all 0.2s ease-out;
-                    cursor: pointer;
-
-                    &:hover {
-                        //border-left: 3px solid #3273eb;
-                        color: white;
-                    }
-
-                    &.active {
-                        //border-left: 5px solid #3273eb;
-                        color: white;
-                    }
-                }*/
             }
         }
     }

@@ -7,8 +7,19 @@ namespace Sandbox.Tools
 {
 	[Library( "tool_gate", Title = "Gate", Description = "Spawn Gates", Group = "wire" )]
 	public class ToolGate : BaseTool{
+		public static string[] Models = new[]{
+			"models/wirebox/katlatze/chip_rectangle.vmdl",
+			"models/wirebox/katlatze/chip_rectangle_logo.vmdl",
+			"models/wirebox/katlatze/chip_square.vmdl",
+			"models/wirebox/katlatze/constant_value.vmdl",
+			"models/wirebox/katlatze/e2.vmdl"
+		};
+
         [ConVar.ClientData("gate_selected")]
 		public static string gate_selected {get; set;} = "maths_add";
+
+		[ConVar.ClientData("gate_model")]
+		public static string gate_model {get; set;} = "models/wirebox/katlatze/chip_square.vmdl";
         
         public override void GenerateControls(Form inspector){
             //inspector.Add.Label("Gate Type:");
@@ -56,13 +67,19 @@ namespace Sandbox.Tools
 
                 GateBox.AddChild(CategoryBox);
             }
+			var picker = new ModelPicker(Models, ()=>gate_model, s=>{
+				gate_model=s;
+				ConsoleSystem.Run("gate_model "+s);
+			});
+
+			inspector.AddRow("Model", picker);
 
             //GateBox.Add.Button("Test");
         }
 
         PreviewEntity previewModel;
 
-		private string Model => "models/citizen_props/chippacket01.vmdl";
+		private string Model => Local.Pawn is null ? Owner.GetClientOwner().GetUserString("gate_model") : gate_model;
 
 		protected override bool IsPreviewTraceValid( TraceResult tr )
 		{
@@ -88,6 +105,10 @@ namespace Sandbox.Tools
 
         public override void Simulate()
 		{
+			if(previewModel is not null && previewModel.GetModelName() != Model)
+				previewModel.SetModel(Model);
+			
+
 			if ( !Host.IsServer )
 				return;
 
@@ -130,6 +151,8 @@ namespace Sandbox.Tools
 					Rotation = targAngle,
                     gateType = Owner.IsClient ? gate_selected : Owner.GetClientOwner().GetUserString("gate_selected")
 				};
+				ent.SetModel(Model);
+				ent.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 
 
 				if ( attached )

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 [Library( "ent_gate" )]
 public partial class GateEntity : Prop, IWireEntity
 {
+
     [Net]
 	public double value { get; set; } = 1.0d;
 
@@ -52,11 +53,9 @@ public partial class GateEntity : Prop, IWireEntity
 	{
 		base.Spawn();
 
-		SetModel( "models/citizen_props/chippacket01.vmdl" );
+		SetModel( "models/wirebox/katlatze/chip_square.vmdl" );
         Scale = 0.5f;
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
-
-		RenderColor = Color.Red;
 	}
 
 	[Event.Tick]
