@@ -9,7 +9,7 @@ public interface IGlowing{
         if(Local.Pawn is null)return;
         var startPos = Local.Pawn.EyePos;
 		var dir = Local.Pawn.EyeRot.Forward;
-        if(lastHovered is not null)lastHovered.GlowActive = false;
+        if(lastHovered is not null && lastHovered.IsValid())lastHovered.GlowActive = false;
 
 		var tr = Trace.Ray( startPos, startPos + dir * 300f )
 			.Ignore( Local.Pawn )
