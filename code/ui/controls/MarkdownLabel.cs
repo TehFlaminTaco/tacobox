@@ -24,7 +24,7 @@ public class MarkdownLabel : Panel {
 
     public MarkdownLabel(string text) : this(text, ""){}
 
-    //**bold** _italic_ ~~strike~~ [color=blue]BLUE[/color]
+    //**bold** _small_ ~~strike~~ [color=red]RED[/color]
     public void Regenerate(){
         DeleteChildren( true );
         foreach(var chunk in FormatText(Text)){

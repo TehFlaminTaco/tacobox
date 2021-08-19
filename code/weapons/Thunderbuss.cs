@@ -1,10 +1,10 @@
 ﻿using Sandbox;
 
-[Library( "weapon_shotgun", Title = "Shotgun", Spawnable = true, Group = "Weapon" )]
-partial class Shotgun : Weapon
+[Library( "weapon_thunderbuss", Title = "Thunderbuss", Spawnable = true, Group = "Weapon" )]
+partial class Thunderbuss : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
-	public override float PrimaryRate => 2f;
+	public override float PrimaryRate => 1;
 	public override float SecondaryRate => 1;
 	public override float ReloadTime => 0.3f;
 
@@ -21,7 +21,38 @@ partial class Shotgun : Weapon
 		SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );
 	}
 
-    public override bool CanSecondaryAttack()
+	public override void Simulate( Client owner )
+	{
+		if ( TimeSinceDeployed < 0.6f )
+			return;
+
+		if ( IsReloading && TimeSinceReload > ReloadTime )
+		{
+			OnReloadFinish();
+		}
+
+		if(!Input.Down(InputButton.Attack1) && !IsReloading){
+			if(Clip1==0)return;
+			if(Clip1>1){
+				DoubleShootEffects();
+			}else{
+				ShootEffects();
+			}
+			//if(Owner.Parent is not null && Owner.Parent.IsValid() && Owner.Root is not null && Owner.Root.IsValid() && Owner.Root.PhysicsGroup is not null)
+			//	if(IsServer){Owner.Root.PhysicsGroup.GetBody(0).ApplyImpulseAt(Owner.EyePos, Owner.EyeRot.Forward * -150f * Clip1);}
+			//else
+			Owner.Velocity += Owner.EyeRot.Forward * -150f * Clip1;
+			PlaySound( Clip1>1 ? "rust_pumpshotgun.shootdouble" : "rust_pumpshotgun.shoot" );
+			ShootBullets( Clip1*10, 0.1f + (0.05f * Clip1), 60.0f, 8.0f, 3.0f );
+			Clip1 = 0;
+		}
+
+		if(Input.Down(InputButton.Attack1) && !IsReloading && Clip1 < Clip1Size){
+			Reload();
+		}
+	}
+
+    /*public override bool CanSecondaryAttack()
     {
         if ( !Owner.IsValid() || !Input.Down( InputButton.Attack2 ) ) return false;
         if ( Clip1 <= 0 ) return false;
@@ -74,7 +105,7 @@ partial class Shotgun : Weapon
 		//
 		ShootBullets( 20, 0.4f, 60.0f, 8.0f, 3.0f );
 		Clip1-=2;
-	}
+	}*/
 
 	[ClientRpc]
 	protected override void ShootEffects()
@@ -114,9 +145,9 @@ partial class Shotgun : Weapon
 	{
 		Clip1+=(Owner as SandboxPlayer)?.RemoveAmmo(Clip1Type, 1)??0;
 		IsReloading = false;
-		if((Owner as SandboxPlayer)?.HasAmmo(Clip1Type)??false && Clip1<Clip1Size){
+		/*if((Owner as SandboxPlayer)?.HasAmmo(Clip1Type)??false && Clip1<Clip1Size){
 			Reload();
-		}
+		}*/
 
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
