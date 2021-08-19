@@ -6,6 +6,7 @@ public partial class LampEntity : SpotLightEntity, IWireEntity
 {
 	[Net]
 	public double toggled {get; set;}
+	public Texture cookie {get; set;}
 	public override void Spawn()
 	{
 		base.Spawn();
@@ -16,6 +17,9 @@ public partial class LampEntity : SpotLightEntity, IWireEntity
 
 	[Event.Tick]
 	public void UpdateEnabled(){
+		if(cookie is not null){
+			this.LightCookie = cookie;
+		}
 		Enabled = toggled > 0.0d;
 	}
 
@@ -31,6 +35,7 @@ public partial class LampEntity : SpotLightEntity, IWireEntity
 		if(values is not null) return values;
 		values = new();
 		values.Add(new WireValNormal("toggled", "Enabled", WireVal.Direction.Input, ()=>toggled, f=>toggled=(float)f));
+		values.Add(new WireValTexture("cookie", "Cookie", WireVal.Direction.Input, ()=>cookie, f=>cookie=f));
 		return values;
 	}
 }

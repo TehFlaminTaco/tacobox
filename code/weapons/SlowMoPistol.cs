@@ -8,9 +8,11 @@ class SlowMoPistol : Pistol {
     public override void AttackPrimary()
 	{
         base.AttackPrimary();
+        var dearSister = Sound.FromScreen("dear_sister");
+        dearSister.SetVolume(0.2f);
 		if(IsServer){
             ConsoleSystem.Run("host_timescale 0.1");
-            Do.After(1f, ()=>ConsoleSystem.Run("host_timescale 1"));
+            Do.After(1.6f, ()=>ConsoleSystem.Run("host_timescale 1"));
         }
 	}
 }

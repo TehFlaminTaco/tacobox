@@ -78,6 +78,10 @@ public class WireValNormal : WireVal<double> {
 		if(other is WireValNormal n){
             setter(n.getter());
         }
+        
+        if(other is WireValString s){
+            setter(s.getter().ToFloat());
+        }
 	}
 }
 
@@ -87,6 +91,7 @@ public class WireValVector : WireVal<Vector3> {
 	public override void CopyFrom( WireVal other ){
 		if(other is WireValVector n){
             setter(n.getter());
+            return;
         }
 	}
 }
@@ -107,5 +112,17 @@ public class WireValString : WireVal<string> {
             setter(s.getter());
             return;
         }
+	}
+}
+
+public class WireValTexture : WireVal<Texture> {
+    public override string TypeName {get; set;} = "Texture";
+    public WireValTexture(string id, string name, Direction direction, Func<Texture> getter, Action<Texture> setter) : base(id, name, direction, getter, setter){}
+	public override void CopyFrom( WireVal other ){
+		if(other is WireValTexture t){
+            setter(t.getter());
+            return;
+        }
+        return;
 	}
 }
