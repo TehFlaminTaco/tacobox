@@ -15,9 +15,14 @@ public partial class GateEntity : Prop, IWireEntity, ITargetID, IGlowing
 	[Net]
 	public string gateType {get; set;} = "maths_add"; 
 
+	[Net]
+	public Player GateSpawner {get; set;}
+
 	Dictionary<string, StoredWireVal> gateValues = new();
-	List<WireVal> values;
+	public List<WireVal> values;
 	public List<WireVal> Values() {
+		if(values is not null) return values;
+		values = getGate().GenerateValues(GateSpawner, this);
 		if(values is not null) return values;
 		values = new List<WireVal>();
 		foreach(var inp in getGate().Inputs){

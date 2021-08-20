@@ -22,16 +22,14 @@ namespace Sandbox.Tools
 		public static string gate_model {get; set;} = "models/wirebox/katlatze/chip_square.vmdl";
         
         public override void GenerateControls(Form inspector){
-            //inspector.Add.Label("Gate Type:");
-
             Panel GateOptions = new();
             Panel GateBox = new();
+			Form subForm = new Form();
             GateOptions.AddClass("scrollable");
             inspector.AddRow("Gate Type", GateOptions);
             GateBox.AddClass("box");
             GateOptions.AddChild(GateBox);
 
-            //var gateTypes = GateEntity.GateTypes();
             var gateTypes = Gate.knownGates;
             List<(string key, Button button)> buttons = new();
             foreach(var category in gateTypes){
@@ -58,7 +56,14 @@ namespace Sandbox.Tools
                     
                     button.AddEventListener("onclick", e=>{
                         ConsoleSystem.Run("gate_selected "+gate.Key);
+						if(Gate.gatesByKey.ContainsKey(gate_selected)){
+							Gate.gatesByKey[gate_selected].DestroyControls();
+						}
+						subForm.DeleteChildren(true);
                         gate_selected = gate.Key;
+						if(Gate.gatesByKey.ContainsKey(gate_selected)){
+							Gate.gatesByKey[gate_selected].GenerateControls(subForm);
+						}
                         foreach(var b in buttons){
                             b.button.SetClass("active", gate_selected == b.key);
                         }
@@ -73,8 +78,11 @@ namespace Sandbox.Tools
 			});
 
 			inspector.AddRow("Model", picker);
+			inspector.AddChild(subForm);
 
-            //GateBox.Add.Button("Test");
+			if(Gate.gatesByKey.ContainsKey(gate_selected)){
+            	Gate.gatesByKey[gate_selected].GenerateControls(subForm);
+			}
         }
 
         PreviewEntity previewModel;
@@ -109,8 +117,11 @@ namespace Sandbox.Tools
 				previewModel.SetModel(Model);
 			
 
-			if ( !Host.IsServer )
+			if ( !Host.IsServer ){
+				if(Gate.gatesByKey.ContainsKey(gate_selected))
+					Gate.gatesByKey[gate_selected].TickControls();
 				return;
+			}
 
 			using ( Prediction.Off() )
 			{
@@ -145,12 +156,15 @@ namespace Sandbox.Tools
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
+				var targetGate = Owner.IsClient ? gate_selected : Owner.GetClientOwner().GetUserString("gate_selected");
 				var ent = new GateEntity()
 				{
 					Position = tr.EndPos,
 					Rotation = targAngle,
-                    gateType = Owner.IsClient ? gate_selected : Owner.GetClientOwner().GetUserString("gate_selected")
+                    gateType = targetGate
 				};
+				ent.GateSpawner = (Local.Pawn as Player) ?? Owner;
+				//ent.values = Gate.gatesByKey[targetGate].GenerateValues(ent.GateSpawner, ent);
 				ent.SetModel(Model);
 				ent.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 

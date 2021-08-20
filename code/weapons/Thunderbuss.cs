@@ -16,8 +16,6 @@ partial class Thunderbuss : Weapon
 	{
 		base.Spawn();
 
-		Clip1 = 10;
-
 		SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );
 	}
 

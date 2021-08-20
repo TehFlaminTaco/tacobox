@@ -54,7 +54,7 @@ namespace Sandbox.UI
 			if ( string.IsNullOrWhiteSpace( msg ) )
 				return;
 
-			Say( msg );
+			CommandIntercept.Say( msg );
 		}
 
 		public void AddEntry( string name, string message, string avatar )
@@ -86,19 +86,6 @@ namespace Sandbox.UI
 		public static void AddInformation( string message, string avatar = null )
 		{
 			Current?.AddEntry( null, message, avatar );
-		}
-
-		[ServerCmd( "say" )]
-		public static void Say( string message )
-		{
-			Assert.NotNull( ConsoleSystem.Caller );
-
-			// todo - reject more stuff
-			if ( message.Contains( '\n' ) || message.Contains( '\r' ) )
-				return;
-
-			Log.Info( $"{ConsoleSystem.Caller}: {message}" );
-			AddChatEntry( To.Everyone, ConsoleSystem.Caller.Name, message, $"avatar:{ConsoleSystem.Caller.SteamId}" );
 		}
 
 	}

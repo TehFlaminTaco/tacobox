@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
+using Sandbox.UI;
 
 public abstract class Gate {
     public string Key;
@@ -60,6 +61,24 @@ public abstract class Gate {
         RegisterGate("Rotation", new GateRotationAroundAxis());
         RegisterGate("Rotation", new GateRotationMake());
         RegisterGate("Rotation", new GateRotationBreak());
+
+        RegisterGate("Misc", new GateConstantValue());
+    }
+
+    public virtual void GenerateControls(Form inspector){
+        
+    }
+
+    public virtual void DestroyControls(){
+
+    }
+
+    public virtual void TickControls(){
+
+    }
+
+    public virtual List<WireVal> GenerateValues(Player ply, GateEntity ent){
+        return null;
     }
 
 }

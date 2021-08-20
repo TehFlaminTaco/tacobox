@@ -20,6 +20,8 @@ public abstract class WireVal{
         return null;
     }
 
+    public abstract void ParseFromString(string s);
+
     public enum Type{
         Normal,
         Vector3,
@@ -97,6 +99,11 @@ public class WireValNormal : WireVal<double> {
             setter(s.getter().ToFloat());
         }
 	}
+
+	public override void ParseFromString( string s )
+	{
+		setter(s.ToFloat());
+	}
 }
 
 public class WireValVector : WireVal<Vector3> {
@@ -107,6 +114,11 @@ public class WireValVector : WireVal<Vector3> {
             setter(n.getter());
             return;
         }
+	}
+
+	public override void ParseFromString( string s )
+	{
+		throw new NotImplementedException();
 	}
 }
 
@@ -131,6 +143,11 @@ public class WireValString : WireVal<string> {
             return;
         }
 	}
+
+	public override void ParseFromString( string s )
+	{
+		setter(s);
+	}
 }
 
 public class WireValRotation : WireVal<Rotation> {
@@ -143,6 +160,11 @@ public class WireValRotation : WireVal<Rotation> {
         }
         return;
 	}
+
+	public override void ParseFromString( string s )
+	{
+		throw new NotImplementedException();
+	}
 }
 
 public class WireValTexture : WireVal<Texture> {
@@ -154,5 +176,15 @@ public class WireValTexture : WireVal<Texture> {
             return;
         }
         return;
+	}
+
+	public override void ParseFromString( string s )
+	{
+        if(Local.Pawn is null)
+            return;
+        //if(s.StartsWith("http://") || s.StartsWith("http://")){
+        setter(Texture.Load(s));
+        //}
+		return;
 	}
 }
