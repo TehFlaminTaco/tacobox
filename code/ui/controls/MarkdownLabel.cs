@@ -6,9 +6,9 @@ using Sandbox.UI.Construct;
 
 public class MarkdownLabel : Panel {
     public static Regex markdownRegex = new Regex(@"
-(?<bold>\*\*(?<body>.*?)\*\*|__(?<body>.*?)__|\[b](?<body>.*?)\[\/b])|
-(?<italic>\*(?<body>.*?)\*|_(?<body>.*?)_|\[i](?<body>.*?)\[\/i])|
-(?<strike>~~(?<body>.*?)~~|\[s](?<body>.*?)\[\/s])|
+(?<bold>\b\*\*(?<body>.*?)\*\*\b|\b__(?<body>.*?)__\b|\[b](?<body>.*?)\[\/b])|
+(?<italic>\b\*(?<body>.*?)\*\b|\b_(?<body>.*?)_\b|\[i](?<body>.*?)\[\/i])|
+(?<strike>\b~~(?<body>.*?)~~\b|\[s](?<body>.*?)\[\/s])|
 (?<color>\[colou?r=(?<colorcode>\#[0-9A-F]{3}|\#[0-9A-F]{6}|\w+)](?<body>.*?)\[\/colou?r])|
 (?<noformat>.)", RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
