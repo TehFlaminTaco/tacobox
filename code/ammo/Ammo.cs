@@ -71,6 +71,8 @@ partial class Weapon {
     public virtual AmmoType Clip2Type => AmmoType.None;
     public virtual int Clip1Size => 0;
     public virtual int Clip2Size => 0;
+    public virtual bool Clip1Pocket => false;
+    public virtual bool Clip2Pocket => false;
     [Net, Predicted]
     public int Clip1 {get; set;} = 0;
     [Net, Predicted]
@@ -83,7 +85,11 @@ partial class Weapon {
     public override bool CanPrimaryAttack()
     {
         if ( !Owner.IsValid() || !Input.Down( InputButton.Attack1 ) ) return false;
-        if ( Clip1 <= 0 ) return false;
+        if(Clip1Pocket){
+            if(!((Owner as SandboxPlayer)?.HasAmmo(Clip1Type)??false)) return false;
+        }else{
+            if ( Clip1 <= 0 ) return false;
+        }
 
         var rate = PrimaryRate;
         if ( rate <= 0 ) return true;
@@ -94,7 +100,11 @@ partial class Weapon {
     public override bool CanSecondaryAttack()
     {
         if ( !Owner.IsValid() || !Input.Down( InputButton.Attack2 ) ) return false;
-        if ( Clip2 <= 0 ) return false;
+        if(Clip2Pocket){
+            if(!((Owner as SandboxPlayer)?.HasAmmo(Clip2Type)??false)) return false;
+        }else{
+            if ( Clip2 <= 0 ) return false;
+        }
 
         var rate = SecondaryRate;
         if ( rate <= 0 ) return true;

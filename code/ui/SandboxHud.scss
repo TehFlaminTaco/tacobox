@@ -31,26 +31,59 @@ AmmoHud
 {
 	//background-color: rgba( black, 0.5 );
 	position: absolute;
-	bottom: 0;
-	right: 0;
+	bottom: 64px;
+	right: 64;
 	font-weight: bold;
-	height: 80px;
+	flex-direction: column;
 	padding: 0 20px;
 	align-items: center;
+	font-size: 40px;
+	opacity:1;
 	label {
-		position: absolute;
+		//position: absolute;
 		color: #FA3;
 		text-shadow: 0 0 16px #F80, 0 0 2px #F80, 0 0 2px #F80, 0 0 4px #F80;
-		transition: all 0.2s ease-in-out;
 	}
-
+	.clippanel {
+		position: absolute;
+		bottom: 0;
+		right:60px;
+		transition: all 0.2s ease-in-out;
+		opacity:1;
+		&.hidden {
+			opacity: 0;
+		}
+	}
 	.clip {
 		font-size: 80px;
-		right: 170px;
-		text-align: right;
 	}
 
-	.held {
+	.clipsize {
+		transition: all 0.2s ease-in-out;
+		opacity:1;
+		&.hidden {
+			opacity: 0;
+		}
+	}
+
+	.ammopanel {
+		transition: all 0.2s ease-in-out;
+		opacity:1;
+		&.hidden {
+			opacity: 0;
+		}
+	}
+
+	.pocket{
+		margin-top:40px;
+		font-size: 40px;
+		transition: all 0.2s ease-in-out;
+		&.pocketonly{
+			font-size: 80px;
+		}
+	}
+
+	/*.held {
 		font-size: 40px;
 		//left: calc(100%-60px);
 		right: 100px;
@@ -67,7 +100,7 @@ AmmoHud
 
 	.hidden {
 		opacity: 0;
-	}
+	}*/
 }
 
 CurrentTool

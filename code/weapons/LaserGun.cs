@@ -10,14 +10,12 @@ partial class LaserGun : Weapon
 	public override float ReloadTime => 5.0f;
 
 	public override AmmoType Clip1Type => AmmoType.Bullet;
-    public override int Clip1Size => 50;
+    public override bool Clip1Pocket => true;
 	public override int HoldSlot => 4;
 
 	public override void Spawn()
 	{
 		base.Spawn();
-
-		Clip1 = 50;
 
 		SetModel( "weapons/rust_smg/rust_smg.vmdl" );
 	}
@@ -34,7 +32,7 @@ partial class LaserGun : Weapon
 		//
 		ShootEffects();
 		PlaySound( "lasergun.pew" );
-		Clip1--;
+		(Owner as SandboxPlayer)?.RemoveAmmo(Clip1Type, 1);
 		//
 		// Shoot the bullets
 		//
@@ -65,6 +63,7 @@ partial class LaserGun : Weapon
 			.UseHitboxes()
 			.Ignore( Owner )
 			.Run();
+	
 		Beam ??= Particles.Create( "particles/physgun_beam.vpcf", tr.EndPos );
 		Beam.SetPosition( 1, tr.EndPos );
 		Beam.SetEntityAttachment(0, EffectEntity, "muzzle", true );
@@ -72,7 +71,7 @@ partial class LaserGun : Weapon
 
 		if ( Owner == Local.Pawn )
 		{
-			//new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 1.0f, 0.5f );
+			new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 1.0f, 0.5f );
 		}
 
 		//ViewModelEntity?.SetAnimBool( "fire", true );
