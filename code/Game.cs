@@ -9,6 +9,8 @@ partial class SandboxGame : Game
 		{
 			// Create the HUD
 			_ = new SandboxHud();
+		}else{
+			Sandbox.ConsoleSystem.Run("bind z undo");
 		}
 
 		Gate.ResetGates();
