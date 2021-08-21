@@ -44,7 +44,8 @@ public static class AdminCore{
                 Flags = new(new[]{
                     new Rank.Permission{flag_or_command = "allCommands"},
                     new Rank.Permission{flag_or_command = "allAuthority"},
-                    new Rank.Permission{flag_or_command = "editRanks"}
+                    new Rank.Permission{flag_or_command = "editRanks"},
+                    new Rank.Permission{flag_or_command = "seeSilent"}
                 })
             });
             FileSystem.Data.WriteJson("admin/ranks.json", ranks);
@@ -72,11 +73,23 @@ public static class AdminCore{
         return c.GetRank().CanTouch(other.GetRank().Name);
     }
 
+    public static string ColorName(this Client c){
+        return $"[color={c.GetRank().NameColor}]{c.Name}[/color]";
+    }
+
+    public static To SeeSilent(Client listener, bool isSilent){
+        return isSilent ? To.Multiple(Client.All.Where(c=>c==listener||c.HasFlag("seeSilent"))) : To.Everyone;
+    }
+    public static To SeeSilent(Player listener, bool isSilent){
+        return SeeSilent(listener.GetClientOwner(), isSilent);
+    }
+
     public static string[] AllFlags(){
         return new[]{
             "allCommands",
             "allAuthority",
             "editRanks",
+            "seeSilent",
         };
     }
 

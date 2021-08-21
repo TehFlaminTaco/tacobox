@@ -55,6 +55,10 @@ tacochatentry
 	transform: scale( 1 );
 	backdrop-filter: blur( 10px );
 
+	&.noavatar{
+		padding-left: 12px;
+	}
+
 	&:intro
 	{
 		max-height: 0px;
@@ -88,7 +92,7 @@ tacochatentry
 		font-weight: 600;
 		font-size: 14px;
 		color: #c0fb2e;
-		//	background-color: green;
+		// background-color: green;
 		flex-shrink: 0;
 	}
 
@@ -96,7 +100,7 @@ tacochatentry
 	{
 		color: #ccc;
 		font-size: 14px;
-		//	background-color: red;
+		// background-color: red;
 		flex-grow: 1;
 	}
 

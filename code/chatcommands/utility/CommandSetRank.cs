@@ -7,25 +7,23 @@ public class CommandSetRank : Command {
     public override string Name => "SetRank";
     public override string Category => "Fun";
 
-    public override bool Run(Player executor, IEnumerable<string> args){
+    public override bool Run(Player executor, IEnumerable<string> args, bool silent){
         var target = args.ElementAtOrDefault(0)??"";
         var rank = args.ElementAtOrDefault(1)??"";
         if(target.Length == 0){
-            ChatBox.AddChatEntry(To.Single(executor), "", $"⚠️ Need to specify target!");
+            ChatBox.AddChatEntry(To.Single(executor), "white", "", $"⚠️ Need to specify target!");
             return false;
         }
         if(rank.Length == 0){
-            ChatBox.AddChatEntry(To.Single(executor), "", $"⚠️ Need to specify rank!");
+            ChatBox.AddChatEntry(To.Single(executor), "white", "", $"⚠️ Need to specify rank!");
             return false;
         }
-        Client c = Client.All.FirstOrDefault(c=>c.Name.ToLower().IndexOf(target.ToLower())>-1);
-        if(c is null){
-            ChatBox.AddChatEntry(To.Single(executor), "", $"⚠️ Player not found!");
+        Client c = GetTarget(target, executor);
+        if(c is null)
             return false;
-        }
         Rank r = AdminCore.ranks.FirstOrDefault(c=>c.Name.ToLower().IndexOf(rank.ToLower())>-1);
         if(c is null){
-            ChatBox.AddChatEntry(To.Single(executor), "", $"⚠️ Rank not found!");
+            ChatBox.AddChatEntry(To.Single(executor), "white", "", $"⚠️ Rank not found!");
             return false;
         }
         AdminCore.admins.RemoveAll(x=>x.steamid == c.SteamId);
@@ -33,7 +31,7 @@ public class CommandSetRank : Command {
             steamid = c.SteamId,
             rankkey = r.Name
         });
-        ChatBox.AddChatEntry(To.Everyone, "", $"⚠️ {executor.GetClientOwner().Name} set the rank of {c.Name} to {r.Name}"); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} set the rank of {c.ColorName()} to {r.Name}"); //avatar:{executor.GetClientOwner().SteamId}
         return true;
     }
 }

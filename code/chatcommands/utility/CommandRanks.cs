@@ -8,9 +8,7 @@ public partial class CommandRanks : Command {
     public override string Name => "Ranks";
     public override string Category => "Utility";
 
-    public override bool Run(Player executor, IEnumerable<string> args){
-        //executor.TakeDamage(DamageInfo.Generic(900000f));
-        //ChatBox.AddChatEntry(To.Everyone, "", $"⚠️ {executor.GetClientOwner().Name} killed themself."); //avatar:{executor.GetClientOwner().SteamId}
+    public override bool Run(Player executor, IEnumerable<string> args, bool silent){
         ShowRankPanel(To.Single(executor));
         return true;
     }

@@ -9,7 +9,7 @@ public class MarkdownLabel : Panel {
 (?<bold>\*\*(?<body>.*?)\*\*|\b__(?<body>.*?)__\b|\[b](?<body>.*?)\[\/b])|
 (?<italic>\*(?<body>.*?)\*|\b_(?<body>.*?)_\b|\[i](?<body>.*?)\[\/i])|
 (?<strike>~~(?<body>.*?)~~|\[s](?<body>.*?)\[\/s])|
-(?<color>\[colou?r=(?<colorcode>\#[0-9A-F]{3}|\#[0-9A-F]{6}|\w+)](?<body>.*?)\[\/colou?r])|
+(?<color>\[colou?r=(?<colorcode>\#[0-9A-F]{3,4}|\#[0-9A-F]{6}|\#[0-9A-F]{8}|\w+)](?<body>.*?)\[\/colou?r])|
 (?<noformat>.)", RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
     private string _text = "";

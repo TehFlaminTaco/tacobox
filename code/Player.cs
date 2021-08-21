@@ -102,7 +102,7 @@ partial class SandboxPlayer : Player
 		}
 
 		lastDamage = info;
-
+		Velocity += info.Force;
 		TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
 
 		base.TakeDamage( info );

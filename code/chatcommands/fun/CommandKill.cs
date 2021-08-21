@@ -6,9 +6,10 @@ public class CommandKill : Command {
     public override string Name => "Kill";
     public override string Category => "Fun";
 
-    public override bool Run(Player executor, IEnumerable<string> args){
+    public override bool Run(Player executor, IEnumerable<string> args, bool silent){
+        executor.Health = 1;
         executor.TakeDamage(DamageInfo.Generic(900000f));
-        ChatBox.AddChatEntry(To.Everyone, "", $"⚠️ {executor.GetClientOwner().Name} killed themself."); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().Name} killed themself."); //avatar:{executor.GetClientOwner().SteamId}
         return true;
     }
 }
