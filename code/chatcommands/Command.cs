@@ -5,6 +5,7 @@ using Sandbox;
 
 public abstract partial class Command {
     public abstract string Name {get;}
+    public abstract string Category {get;}
 
     public abstract bool Run(Player executor, IEnumerable<string> arguments);
 

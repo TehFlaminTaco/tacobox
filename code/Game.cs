@@ -12,6 +12,8 @@ partial class SandboxGame : Game
 		}
 
 		Gate.ResetGates();
+		AdminCore.OnReload();
+		Command.SetupCommands();
 	}
 
 	public override void ClientJoined( Client cl )

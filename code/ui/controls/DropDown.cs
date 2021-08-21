@@ -42,6 +42,7 @@ namespace Sandbox.UI
 		{
 			Popup = new Popup( this, Popup.PositionMode.BelowStretch, 4.0f );
 			Popup.AddClass( "flat-top" );
+			Popup.StyleSheet.Load("styles/mainmenu.scss");
 
 			foreach( var option in Options )
 			{

@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Sandbox;
 
@@ -35,12 +36,14 @@ public partial class NpcTest {
 		ent.EnableAllCollisions = true;
 		ent.SurroundingBoundsMode = SurroundingBoundsType.Physics;
 		ent.RenderColorAndAlpha = RenderColorAndAlpha;
-		ent.PhysicsGroup.Velocity = PhysicsBody.Velocity;
-		var bone = ent.GetBonePhysicsBody(info.BoneIndex);
-		if(bone is null || !bone.IsValid())
-			bone = ent.PhysicsBody;
-		if(bone is not null && bone.IsValid())
-        	bone.ApplyImpulse(info.Force * 50f);
+		try{
+			ent.PhysicsGroup.Velocity = PhysicsBody.Velocity;
+			var bone = ent.GetBonePhysicsBody(info.BoneIndex);
+			if(bone is null || !bone.IsValid())
+				bone = ent.PhysicsBody;
+			if(bone is not null && bone.IsValid())
+				bone.ApplyImpulse(info.Force * 50f);
+		}catch(Exception){}
 		ent.PhysicsGroup.RebuildMass();
         
         ent.PhysicsGroup.SetSurface("flesh");

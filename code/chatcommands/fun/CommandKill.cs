@@ -4,6 +4,7 @@ using Sandbox.UI;
 
 public class CommandKill : Command {
     public override string Name => "Kill";
+    public override string Category => "Fun";
 
     public override bool Run(Player executor, IEnumerable<string> args){
         executor.TakeDamage(DamageInfo.Generic(900000f));

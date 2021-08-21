@@ -2,8 +2,11 @@
 using Sandbox;
 using Sandbox.UI;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 public class CommandIntercept {
+    public static Regex argMatch = new Regex(@"""(?<body>(.|\\\""))*?""|(?<body>\S+)");
+
     [ServerCmd( "say" )]
     public static void Say( string message )
     {
@@ -14,17 +17,19 @@ public class CommandIntercept {
         if ( message.Contains( '\n' ) || message.Contains( '\r' ) )
             return;
 
-        if(message[0] == '!'){
+        if(message[0] == '/'){
             // TODO: better split arguments
-            var cmdargs = message.Substring(1).Split(' ');
+            var cmdargs = argMatch.Matches(message.Substring(1)).Select(c=>c.Groups["body"].Value).ToArray();
             if(Command.commands.ContainsKey(cmdargs[0].ToLower())){
-                Command.commands[cmdargs[0]].Run(ConsoleSystem.Caller.Pawn as Player, cmdargs.Skip(1));
+                var cmd = Command.commands[cmdargs[0].ToLower()];
+                if(ConsoleSystem.Caller.HasCommand(cmd.Name))
+                    cmd.Run(ConsoleSystem.Caller.Pawn as Player, cmdargs.Skip(1));
+                else
+                    TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You don't have permission to run that!", "debug/particleerror.vtex");
             }
         }
 
         //message = message.Replace("a", "B");
-
-        Log.Info( $"{ConsoleSystem.Caller}: {message}" );
-        ChatBox.AddChatEntry( To.Everyone, ConsoleSystem.Caller.Name, message, $"avatar:{ConsoleSystem.Caller.SteamId}" );
+        TacoChatBox.AddChatEntry( To.Everyone, ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name}", message, $"avatar:{ConsoleSystem.Caller.SteamId}" );
     }
 }

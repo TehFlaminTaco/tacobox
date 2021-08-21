@@ -57,12 +57,14 @@ namespace Sandbox.UI
 			CommandIntercept.Say( msg );
 		}
 
-		public void AddEntry( string name, string message, string avatar )
+		public void AddEntry( Color nameColor, string name, string message, string avatar )
 		{
 			var e = Canvas.AddChild<TacoChatEntry>();
 			//e.SetFirstSibling();
 			e.Message.Text = message;
 			e.NameLabel.Text = name;
+			e.NameLabel.Style.FontColor = nameColor;
+			e.NameLabel.Style.Dirty();
 			e.Avatar.SetTexture( avatar );
 
 			e.SetClass( "noname", string.IsNullOrEmpty( name ) );
@@ -71,21 +73,21 @@ namespace Sandbox.UI
 
 
 		[ClientCmd( "chat_add", CanBeCalledFromServer = true )]
-		public static void AddChatEntry( string name, string message, string avatar = null )
+		public static void AddChatEntry( string nameColor, string name, string message, string avatar = null )
 		{
-			Current?.AddEntry( name, message, avatar );
+			Current?.AddEntry( Color.Parse(nameColor)??Color.White, name, message, avatar );
 
 			// Only log clientside if we're not the listen server host
-			if ( !Global.IsListenServer )
-			{
-				Log.Info( $"{name}: {message}" ); 
-			}
+			//if ( !Global.IsListenServer )
+			//{
+				Log.Info( $"CHAT:: {name}: {message}" ); 
+			//}
 		}
 
 		[ClientCmd( "chat_addinfo", CanBeCalledFromServer = true )]
 		public static void AddInformation( string message, string avatar = null )
 		{
-			Current?.AddEntry( null, message, avatar );
+			Current?.AddEntry( Color.White, null, message, avatar );
 		}
 
 	}

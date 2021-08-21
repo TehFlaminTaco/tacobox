@@ -17,7 +17,7 @@ class UndoQueue {
             if(!lastAction.IsValid())
                 continue;
             lastAction.DoUndo();
-            ChatBox.AddChatEntry(To.Single(Owner), "", lastAction.undoText(), "debug/particleerror.vtex");
+            TacoChatBox.AddChatEntry(To.Single(Owner), "white", "", lastAction.undoText(), "debug/particleerror.vtex");
 
             return true;
         }

@@ -10,6 +10,8 @@ partial class SandboxPlayer{
     public int bulletAmmo {get; set;} = 0;
     [Net]
     public int shellAmmo {get; set;} = 0;
+    [Net]
+    public int rocketAmmo {get; set;} = 0;
 
     public int AmmoCount(AmmoType typ){
         switch(typ){
@@ -19,6 +21,8 @@ partial class SandboxPlayer{
                 return bulletAmmo;
             case AmmoType.Shell:
                 return shellAmmo;
+            case AmmoType.Rocket:
+                return rocketAmmo;
         }
         return 0;
     }
@@ -32,6 +36,9 @@ partial class SandboxPlayer{
                 return;
             case AmmoType.Shell:
                 shellAmmo += amount;
+                return;
+            case AmmoType.Rocket:
+                rocketAmmo += amount;
                 return;
         }
         return;
@@ -56,6 +63,14 @@ partial class SandboxPlayer{
                 }
                 t = shellAmmo;
                 shellAmmo = 0;
+                return t;
+            case AmmoType.Rocket:
+                if(rocketAmmo >= amount){
+                    rocketAmmo -= amount;
+                    return amount;
+                }
+                t = rocketAmmo;
+                rocketAmmo = 0;
                 return t;
         }
         return 0;

@@ -38,3 +38,11 @@ public partial class ShotgunAmmo : AmmoBox
 
 	public override int PickupAmount => 100;
 }
+
+[Library( "ent_rocketammo", Title = "Rocket Ammo", Spawnable = true )]
+public partial class RocketAmmo : AmmoBox
+{
+	public override AmmoType PickupType => AmmoType.Rocket;
+
+	public override int PickupAmount => 20;
+}
