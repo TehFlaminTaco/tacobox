@@ -10,5 +10,6 @@ public partial class Command {
 
         new CommandRanks().Register();
         new CommandSetRank().Register();
+        new CommandNoclip().Register();
     }
 }

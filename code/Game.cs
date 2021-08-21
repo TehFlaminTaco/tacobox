@@ -91,9 +91,13 @@ partial class SandboxGame : Game
 			Sound.FromEntity("balloon_pop_cute", owner);
 		}
 	}
+	public override void DoPlayerNoclip(Client player){
+		DoPlayerNoclip(player, false);
+	}
 
-	public override void DoPlayerNoclip( Client player )
+	public void DoPlayerNoclip( Client player, bool force = false  )
 	{
+		if(!player.HasCommand("noclip")) return;
 		if ( player.Pawn is Player basePlayer )
 		{
 			if ( basePlayer.DevController is NoclipController )
