@@ -5,6 +5,8 @@ public partial class Command {
         new CommandSlay().Register();
         new CommandHP().Register();
 
+        new CommandGoto().Register();
+
         new CommandRanks().Register();
         new CommandSetRank().Register();
     }

@@ -23,7 +23,11 @@ public abstract partial class Command {
     }
 
     public static Client GetTarget(string name, Player executor, bool useTouch = true, bool informError = true){
-        Client c = Client.All.FirstOrDefault(c=>c.Name.ToLower().IndexOf(name.ToLower())>-1);
+        Client c;
+        if(name == "^")
+            c = executor.GetClientOwner();
+        else
+            c = Client.All.FirstOrDefault(c=>c.Name.ToLower().IndexOf(name.ToLower())>-1);
         if(c is null && informError){
             ChatBox.AddChatEntry(To.Single(executor), "white", "", $"⚠️ Player not found!");
         }
