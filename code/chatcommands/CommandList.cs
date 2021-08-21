@@ -4,6 +4,7 @@ public partial class Command {
         new CommandSlap().Register();
         new CommandSlay().Register();
         new CommandHP().Register();
+        new CommandGod().Register();
 
         new CommandGoto().Register();
 

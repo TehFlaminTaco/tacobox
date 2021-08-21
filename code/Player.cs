@@ -13,6 +13,8 @@ partial class SandboxPlayer : Player
 	[Net, Predicted] public Entity Vehicle { get; set; }
 	[Net, Predicted] public ICamera MainCamera { get; set; }
 
+	[Net] public bool GodMode {get; set;}
+
 	public UndoQueue undoQueue;
 
 	public ICamera LastCamera { get; set; }
@@ -96,6 +98,8 @@ partial class SandboxPlayer : Player
 
 	public override void TakeDamage( DamageInfo info )
 	{
+		if(GodMode)return;
+
 		if ( GetHitboxGroup( info.HitboxIndex ) == 1 )
 		{
 			info.Damage *= 10.0f;

@@ -8,7 +8,8 @@ public class CommandKill : Command {
 
     public override bool Run(Player executor, IEnumerable<string> args, bool silent){
         executor.Health = 1;
-        executor.TakeDamage(DamageInfo.Generic(900000f));
+        (executor as SandboxPlayer).GodMode = false;
+        executor.TakeDamage(DamageInfo.Generic(9000000f));
         ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().Name} killed themself."); //avatar:{executor.GetClientOwner().SteamId}
         return true;
     }
