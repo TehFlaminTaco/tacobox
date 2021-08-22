@@ -200,7 +200,7 @@ Window {
             }
         }
 
-        Permissions {
+        .perms {
             height:100%;
             width:100%;
             .form {
@@ -222,19 +222,17 @@ Window {
             }
         }
 
-        PermissionList {
+        .permsList {
             flex-grow:1;
             background-color: #000f;
             border-radius:4px;
             overflow:scroll;
             flex-direction: column;
-            padding-top:4px;
+            padding-top:10px;
             .groupHeader{
                 padding-left: 10px;
-                margin-top:4px;
-
             }
-            .permissionButton {
+            .permsButton {
                 width:100%;
                 justify-content: space-between;
                 flex-direction: row;
@@ -245,7 +243,7 @@ Window {
                     color:green;
                 }
                 button{
-                    min-width:10px;
+                    min-width:24px;
                     min-height:0px;
                     width:0px;
                     height:24px;

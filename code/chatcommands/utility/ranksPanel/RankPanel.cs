@@ -119,7 +119,7 @@ public class RankPanel : Panel {
             }
             deleteButton.Text = "DELETE";
             deleteButton.RemoveClass("yousure");
-            permissionsSettings.UpdateChildren();
+            if(CurrentPage == permissionsSettings.Name)permissionsSettings.UpdateChildren();
         }
 
         public void RankChanged(){
