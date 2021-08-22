@@ -32,6 +32,8 @@ public class CommandSetRank : Command {
             rankkey = r.Name
         });
         ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} set the rank of {c.ColorName()} to {r.Name}"); //avatar:{executor.GetClientOwner().SteamId}
+        AdminCore.SaveData();
+        AdminCore.ReinformClients();
         return true;
     }
 }

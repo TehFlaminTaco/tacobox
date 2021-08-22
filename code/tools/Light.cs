@@ -51,7 +51,7 @@
 				if ( !tr.Hit || !tr.Entity.IsValid() )
 					return;
 
-				if(useRope && !Owner.GetClientOwner().CanTouch(tr.Entity))
+				if(useRope && !tr.Entity.IsWorld && !Owner.GetClientOwner().CanTouch(tr.Entity))
 					return;
 
 				CreateHitEffects( tr.EndPos );

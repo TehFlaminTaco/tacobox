@@ -75,7 +75,7 @@ public static class AdminCore{
         return c.GetRank().CanTouch(other.GetRank().Name);
     }
     public static bool CanTouch(this Client c, Entity other){
-        return other.GetClientOwner() is null ? c.GetRank().HasFlag("touchWorldspawn") : c.GetRank().CanTouch(other.GetClientOwner().GetRank().Name);
+        return other.IsWorld || other.GetClientOwner() is null ? c.GetRank().HasFlag("touchWorldspawn") : (other.GetClientOwner()==c) || c.GetRank().CanTouch(other.GetClientOwner().GetRank().Name);
     }
     public static bool HasTool(this Client c, string name){
         return c.GetRank().HasTool(name);
