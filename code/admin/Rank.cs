@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
+using Sandbox.Tools;
 using Sandbox.UI;
 
 public partial class Rank{
@@ -11,6 +12,7 @@ public partial class Rank{
     public List<Permission> Commands {get; set;} = new();
     public List<Permission> Flags {get; set;} = new();
     public List<Permission> AuthorityOver {get; set;} = new();
+    public List<Permission> Tools {get; set;} = new();
 
     public static Rank FromName(string name){
         return AdminCore.ranks.FirstOrDefault(r => r.Name.ToLower() == name.ToLower());
@@ -35,6 +37,12 @@ public partial class Rank{
         if(permission is not null)return permission.access==Permission.Access.Allow;
         if(HasFlag("allAuthority"))return true;
         return GetParent()?.CanTouch(rankTarget)??false;
+    }
+    public bool HasTool(string tool){
+        var permission = Tools.Where(c=>c.flag_or_command.ToLower() == tool.ToLower()).FirstOrDefault();
+        if(permission is not null)return permission.access==Permission.Access.Allow;
+        if(HasFlag("allTools"))return true;
+        return GetParent()?.HasTool(tool)??false;
     }
     public bool WouldLoop(string target){
         if(Name.ToLower() == target.ToLower())return true;
@@ -204,6 +212,37 @@ public partial class Rank{
         if(setting != 0)
             targetRank.Commands.Add(new Permission{
                 flag_or_command = commandTarget.ToLower(),
+                access = setting == -1 ? Rank.Permission.Access.Deny : Rank.Permission.Access.Allow
+            });
+        AdminCore.ReinformClients();
+        AdminCore.SaveData();
+    }
+
+    [ServerCmd]
+    public static void SetRankHasTool(string target, string toolTarget, int setting){
+        Assert.NotNull(ConsoleSystem.Caller);
+        if(!ConsoleSystem.Caller.HasFlag("editRanks")){
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasTool ${target} ${toolTarget} ${setting}, but was not allowed!");
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
+            return;
+        }
+        var targetRank = AdminCore.ranks.FirstOrDefault(c=>c.Name.ToLower()==target.ToLower());
+        if(targetRank is null){
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Could not find rank to edit!", "debug/particleerror.vtex");
+            return;
+        }
+        if(Library.Get<BaseTool>(toolTarget) is null){
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Tool not found!", "debug/particleerror.vtex");
+            return;
+        }
+        if(setting < -1 || setting > 1){
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Invalid state! (-1: Disallow, 0: Inherit, 1: Allow)", "debug/particleerror.vtex");
+            return;
+        }
+        targetRank.Tools.RemoveAll(c=>c.flag_or_command.ToLower() == toolTarget.ToLower());
+        if(setting != 0)
+            targetRank.Tools.Add(new Permission{
+                flag_or_command = toolTarget.ToLower(),
                 access = setting == -1 ? Rank.Permission.Access.Deny : Rank.Permission.Access.Allow
             });
         AdminCore.ReinformClients();

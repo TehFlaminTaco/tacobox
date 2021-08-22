@@ -76,6 +76,7 @@ public class RankPanel : Panel {
         public ColorEditorRgba colorEditorRgba;
         public Button deleteButton;
         public Permissions permissionsSettings;
+        public SpawnPage spawnSettings;
 
         public RankSettings(RankPanel parent){
             this.parent = parent;
@@ -94,10 +95,15 @@ public class RankPanel : Panel {
             pageButtons.Add((pageButtonRow.Add.Button(generalSettings.Name, "pageButton"), generalSettings));
             pageHolder.AddChild(generalSettings);
 
-            permissionsSettings = new Permissions(this);
+            permissionsSettings = new(this);
             pages.Add(permissionsSettings);
             pageButtons.Add((pageButtonRow.Add.Button(permissionsSettings.Name, "pageButton"), permissionsSettings));
             pageHolder.AddChild(permissionsSettings);
+
+            spawnSettings = new(this);
+            pages.Add(spawnSettings);
+            pageButtons.Add((pageButtonRow.Add.Button(spawnSettings.Name, "pageButton"), spawnSettings));
+            pageHolder.AddChild(spawnSettings);
 
 
             foreach(var pb in pageButtons){
@@ -120,6 +126,7 @@ public class RankPanel : Panel {
             deleteButton.Text = "DELETE";
             deleteButton.RemoveClass("yousure");
             if(CurrentPage == permissionsSettings.Name)permissionsSettings.UpdateChildren();
+            if(CurrentPage == spawnSettings.Name)spawnSettings.UpdateChildren();
         }
 
         public void RankChanged(){
@@ -147,6 +154,7 @@ public class RankPanel : Panel {
             deleteButton.Text = "DELETE";
             deleteButton.RemoveClass("yousure");
             permissionsSettings.UpdateChildren();
+            spawnSettings.UpdateChildren();
         }
     }
 

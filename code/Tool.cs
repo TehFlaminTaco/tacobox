@@ -31,8 +31,17 @@ partial class Tool : Carriable
 	private void UpdateCurrentTool( Client owner )
 	{
 		var toolName = owner.GetUserString( "tool_current", "tool_boxgun" );
-		if ( toolName == null )
+		if ( (toolName??"none") == "none" )
 			return;
+		
+		if(!owner.HasTool(toolName)){
+			if(IsClient){
+				TacoChatBox.AddChatEntry("red", "", $"You don't have permission to use {toolName}", "debug/particleerror.vtex");
+				ConsoleSystem.Run("tool_current none");
+			}
+
+			return;
+		}
 
 		// Already the right tool
 		if ( CurrentTool != null && CurrentTool.Parent == this && CurrentTool.Owner == owner.Pawn && CurrentTool.ClassInfo.IsNamed( toolName ) )

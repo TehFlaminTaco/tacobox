@@ -230,6 +230,7 @@ Window {
             flex-direction: column;
             padding-top:10px;
             .groupHeader{
+                text-transform: capitalize;
                 padding-left: 10px;
             }
             .permsButton {
@@ -240,7 +241,7 @@ Window {
                 padding-left:14px;
                 color:red;
                 &.allowed{
-                    color:green;
+                    color:#08f;
                 }
                 button{
                     min-width:24px;

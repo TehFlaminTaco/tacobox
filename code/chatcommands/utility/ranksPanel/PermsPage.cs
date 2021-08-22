@@ -15,12 +15,12 @@ public abstract class Perms : RankPanel.Page {
         public PermList list;
         public abstract string Name {get;}
         public abstract void Make();
-        public abstract bool Has(string rankName, string cmd);
+        public abstract int Value(string rankName, string cmd);
         public abstract bool Inherited(string rankName, string cmd);
         public abstract void Set(string rankName, string cmd, int setting);
 
         public void Add(string name){
-            list.AddChild(new PermButton(list.page, name, this.Has, this.Set, this.Inherited));
+            list.AddChild(new PermButton(list.page, name, this.Value, this.Set, this.Inherited));
         }
     }
 
@@ -43,7 +43,7 @@ public abstract class Perms : RankPanel.Page {
         if(List2 is not null)allLists = allLists.Union(List2.list.ChildrenOfType<PermButton>());
         if(List3 is not null)allLists = allLists.Union(List3.list.ChildrenOfType<PermButton>());
         foreach(var btn in allLists){
-            btn.SetClass("allowed", btn.getHas(parent.parent.currentRank, btn.cmd));
+            btn.SetClass("allowed", btn.getValue(parent.parent.currentRank, btn.cmd)!=0);
             btn.UpdateButtons();
         }
         
@@ -78,11 +78,11 @@ public abstract class Perms : RankPanel.Page {
         Perms page;
 
         public Action<string, string, int> setHas;
-        public Func<string, string, bool> getHas;
+        public Func<string, string, int> getValue;
         public Func<string, string, bool> isInherited;
 
-        public PermButton(Perms page, string cmd, Func<string, string, bool> getHas, Action<string, string, int> setHas, Func<string, string, bool> isInherited){
-            this.getHas = getHas;
+        public PermButton(Perms page, string cmd, Func<string, string, int> getValue, Action<string, string, int> setHas, Func<string, string, bool> isInherited){
+            this.getValue = getValue;
             this.setHas = setHas;
             this.isInherited = isInherited;
             this.cmd = cmd;
@@ -90,7 +90,7 @@ public abstract class Perms : RankPanel.Page {
             this.page = page;
             var rank = page.parent.parent.currentRank;
             AddClass("permsButton");
-            SetClass("allowed", getHas(rank, cmd));
+            SetClass("allowed", getValue(rank, cmd)>0);
             name = new Label{Text = cmd, Classes = "name"};
             denied = new("❌", "", ()=>{
                 setHas(rank, cmd, -1);
@@ -115,9 +115,9 @@ public abstract class Perms : RankPanel.Page {
 
         public void UpdateButtons(){
             var rank = page.parent.parent.currentRank;
-            denied.SetClass("active", !isInherited(rank,cmd)&&!getHas(rank,cmd));
+            denied.SetClass("active", !isInherited(rank,cmd)&&getValue(rank,cmd)<=0);
             inherited.SetClass("active", isInherited(rank,cmd));
-            allowed.SetClass("active", !isInherited(rank,cmd)&&getHas(rank,cmd));
+            allowed.SetClass("active", !isInherited(rank,cmd)&&getValue(rank,cmd)>0);
         }
     }
 }

@@ -21,8 +21,8 @@ public class Permissions : Perms
 class CommandsList : Perms.ListType{
     public override string Name => "Commands";
 
-    public override bool Has( string rank, string cmd ){
-        return Rank.FromName(rank).HasCommand(cmd.ToLower());
+    public override int Value( string rank, string cmd ){
+        return Rank.FromName(rank).HasCommand(cmd.ToLower())?1:0;
     }
 
     public override bool Inherited( string rank, string cmd ){
@@ -51,8 +51,8 @@ class CommandsList : Perms.ListType{
 class FlagsList : Perms.ListType{
     public override string Name => "Flags";
 
-    public override bool Has( string rank, string cmd ){
-        return Rank.FromName(rank).HasFlag(cmd.ToLower());
+    public override int Value( string rank, string cmd ){
+        return Rank.FromName(rank).HasFlag(cmd.ToLower())?1:0;
     }
 
     public override bool Inherited( string rank, string cmd ){
@@ -78,8 +78,8 @@ class FlagsList : Perms.ListType{
 class AuthorityList : Perms.ListType{
     public override string Name => "Authority Over";
 
-    public override bool Has( string rank, string cmd ){
-        return Rank.FromName(rank).CanTouch(cmd.ToLower());
+    public override int Value( string rank, string cmd ){
+        return Rank.FromName(rank).CanTouch(cmd.ToLower())?1:0;
     }
 
     public override bool Inherited( string rank, string cmd ){

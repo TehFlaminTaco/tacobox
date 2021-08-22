@@ -6,6 +6,7 @@ using Sandbox;
 public static class AdminCore{
     public static List<Admin> admins = new();
     public static List<Rank> ranks = new();
+    public static bool Setup = false;
 
     public static void CheckDirectory(){
         Assert.True(Local.Pawn is null);
@@ -72,6 +73,9 @@ public static class AdminCore{
     public static bool CanTouch(this Client c, Client other){
         return c.GetRank().CanTouch(other.GetRank().Name);
     }
+    public static bool HasTool(this Client c, string name){
+        return c.GetRank().HasTool(name);
+    }
 
     public static string ColorName(this Client c){
         return $"[color={c.GetRank().NameColor}]{c.Name}[/color]";
@@ -88,8 +92,10 @@ public static class AdminCore{
         return new[]{
             "allCommands",
             "allAuthority",
+            "allTools",
             "editRanks",
             "seeSilent",
+            "showDeniedTools",
         };
     }
 
@@ -101,6 +107,7 @@ public static class AdminCore{
         LoadOrMakeRanks();
 
         ReinformClients();
+        Setup = true;
     }
 
     public static void SaveData(){
@@ -124,10 +131,14 @@ public partial class AdminCoreUpdate{
     [ClientRpc]
     public static void UpdateAdmins(string admins){
         AdminCore.admins = JsonSerializer.Deserialize<List<AdminCore.Admin>>(admins);
+        SpawnMenu.Instance?.UpdateToolsVisible();
+        AdminCore.Setup = AdminCore.ranks is not null;
     }
 
     [ClientRpc]
     public static void UpdateRanks(string ranks){
         AdminCore.ranks = JsonSerializer.Deserialize<List<Rank>>(ranks);
+        SpawnMenu.Instance?.UpdateToolsVisible();
+        AdminCore.Setup = AdminCore.admins is not null;
     }
 }

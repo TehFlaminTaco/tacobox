@@ -92,6 +92,14 @@
                     transition: all 0.2s ease-out;
                     cursor: pointer;
 
+                    &.denied{
+                        pointer-events:none;
+                        color:#555;
+                    }
+                    &.hidden{
+                        display:none;
+                    }
+
                     &:hover {
                         //border-left: 3px solid #3273eb;
                         color: white;

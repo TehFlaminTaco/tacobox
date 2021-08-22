@@ -9,6 +9,7 @@ using System;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 [Library]
 public partial class SpawnMenu : Panel
@@ -74,11 +75,23 @@ public partial class SpawnMenu : Panel
 		return tool?.CurrentTool;
 	}
 
+	List<(Button button, string tool)> toolButtons = new();
+	public void UpdateToolsVisible(){
+		try{
+			var hideInvalidTools = !Local.Client.HasFlag("showDeniedTools");
+			foreach((var button, var tool) in toolButtons){
+				button.SetClass("denied", !Local.Client.HasTool(tool));
+				button.SetClass("hidden", hideInvalidTools&&!Local.Client.HasTool(tool));
+			}
+		}catch(Exception){}
+	}
+
 	void RebuildToolList()
 	{
 		toollist.DeleteChildren( true );
 		inspector.DeleteChildren( true );
 		ents.Reload();
+		toolButtons.Clear();
 
 		foreach ( var kv in Library.GetAllAttributes<Sandbox.Tools.BaseTool>().GroupBy(x=>x.Group) )
 		{
@@ -90,6 +103,7 @@ public partial class SpawnMenu : Panel
 				continue;
 
 				var button = toollist.Add.Button( entry.Title );
+				toolButtons.Add((button, entry.Name));
 				button.SetClass( "active", entry.Name == ConsoleSystem.GetValue( "tool_current" ) );
 
 				button.AddEventListener( "onclick", () =>
@@ -109,6 +123,7 @@ public partial class SpawnMenu : Panel
 			}
 		}
 
+		if(AdminCore.Setup) UpdateToolsVisible();
 		GetCurrentTool()?.GenerateControls(inspector);
 	}
 
