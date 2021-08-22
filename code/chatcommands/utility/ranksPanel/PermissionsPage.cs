@@ -97,7 +97,7 @@ class AuthorityList : Perms.ListType{
         Rank.SetRankHasAuthority(r, cmd, setting);
     }
     public override void Make(){
-        foreach(var command in AdminCore.ranks)
+        foreach(var command in AdminCore.ranks.OrderBy(c=>-c.Authority))
             Add(command.Name);
     }
 }
