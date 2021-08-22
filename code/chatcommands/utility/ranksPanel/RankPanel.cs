@@ -75,10 +75,7 @@ public class RankPanel : Panel {
         public ColorEditor colorEditor;
         public ColorEditorRgba colorEditorRgba;
         public Button deleteButton;
-
-        public Commands commandsSettings;
-        public Flags flagsSettings;
-        public Authoritys authoritysSettings;
+        public Permissions permissionsSettings;
 
         public RankSettings(RankPanel parent){
             this.parent = parent;
@@ -97,20 +94,10 @@ public class RankPanel : Panel {
             pageButtons.Add((pageButtonRow.Add.Button(generalSettings.Name, "pageButton"), generalSettings));
             pageHolder.AddChild(generalSettings);
 
-            commandsSettings = new Commands(this);
-            pages.Add(commandsSettings);
-            pageButtons.Add((pageButtonRow.Add.Button(commandsSettings.Name, "pageButton"), commandsSettings));
-            pageHolder.AddChild(commandsSettings);
-
-            flagsSettings = new Flags(this);
-            pages.Add(flagsSettings);
-            pageButtons.Add((pageButtonRow.Add.Button(flagsSettings.Name, "pageButton"), flagsSettings));
-            pageHolder.AddChild(flagsSettings);
-
-            authoritysSettings = new Authoritys(this);
-            pages.Add(authoritysSettings);
-            pageButtons.Add((pageButtonRow.Add.Button(authoritysSettings.Name, "pageButton"), authoritysSettings));
-            pageHolder.AddChild(authoritysSettings);
+            permissionsSettings = new Permissions(this);
+            pages.Add(permissionsSettings);
+            pageButtons.Add((pageButtonRow.Add.Button(permissionsSettings.Name, "pageButton"), permissionsSettings));
+            pageHolder.AddChild(permissionsSettings);
 
 
             foreach(var pb in pageButtons){
@@ -132,9 +119,7 @@ public class RankPanel : Panel {
             }
             deleteButton.Text = "DELETE";
             deleteButton.RemoveClass("yousure");
-            flagsSettings.UpdateChildren();
-            commandsSettings.UpdateChildren();
-            authoritysSettings.UpdateChildren();
+            permissionsSettings.UpdateChildren();
         }
 
         public void RankChanged(){
@@ -161,9 +146,7 @@ public class RankPanel : Panel {
 
             deleteButton.Text = "DELETE";
             deleteButton.RemoveClass("yousure");
-            flagsSettings.UpdateChildren();
-            commandsSettings.UpdateChildren();
-            authoritysSettings.UpdateChildren();
+            permissionsSettings.UpdateChildren();
         }
     }
 

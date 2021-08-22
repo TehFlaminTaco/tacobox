@@ -69,6 +69,7 @@ class General : RankPanel.Page {
                 AdminCore.ranks.RemoveAll(c=>c.Name.ToLower() == parent.parent.currentRank.ToLower());
                 parent.parent.currentRanksPanel.Regenerate();
                 parent.SetClass("inactive", true);
+                Rank.RemoveRank(parent.parent.currentRank);
             }else{
                 parent.deleteButton.AddClass("yousure");
                 parent.deleteButton.Text = "DELETE: CAN'T UNDELETE";

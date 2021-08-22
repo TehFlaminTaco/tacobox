@@ -200,7 +200,7 @@ Window {
             }
         }
 
-        Commands, Flags, Authoritys {
+        Permissions {
             height:100%;
             width:100%;
             .form {
@@ -222,18 +222,24 @@ Window {
             }
         }
 
-        CommandList, FlagList, AuthorityList {
+        PermissionList {
             flex-grow:1;
             background-color: #000f;
             border-radius:4px;
             overflow:scroll;
             flex-direction: column;
-            padding-top:10px;
-            .commandButton, .flagButton, .authorityButton {
+            padding-top:4px;
+            .groupHeader{
+                padding-left: 10px;
+                margin-top:4px;
+
+            }
+            .permissionButton {
                 width:100%;
                 justify-content: space-between;
                 flex-direction: row;
                 padding: 0 10px;
+                padding-left:14px;
                 color:red;
                 &.allowed{
                     color:green;
@@ -244,6 +250,9 @@ Window {
                     width:0px;
                     height:24px;
                     padding:0;
+                }
+                .name {
+                    text-align: left;
                 }
                 label {
                     text-align: center;
