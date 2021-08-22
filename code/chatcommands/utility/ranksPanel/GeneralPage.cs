@@ -38,6 +38,12 @@ class General : RankPanel.Page {
         };
         form.AddRow("Authority", parent.authority);
         parent.authority.AddEventListener("value.changed", e=>{
+            var currentRanks = parent.parent.currentRanksPanel;
+            currentRanks.SortChildren((a,b)=>{
+                var authA = Rank.FromName(currentRanks.buttons.FirstOrDefault(c=>c.button==a).rank??"")?.Authority??1000;
+                var authB = Rank.FromName(currentRanks.buttons.FirstOrDefault(c=>c.button==b).rank??"")?.Authority??1000;
+                return -authA.CompareTo(authB);
+            });
             Rank.SetRankAuthority(parent.parent.currentRank, (int)parent.authority.Value);
         });
 
