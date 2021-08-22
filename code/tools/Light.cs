@@ -15,6 +15,8 @@
 			if ( tr.Entity is LightEntity )
 				return false;
 
+			if(!this.CanTool())return false;
+
 			return true;
 		}
 
@@ -32,7 +34,7 @@
 		{
 			if ( !Host.IsServer )
 				return;
-
+			if(!this.CanTool())return;
 			using ( Prediction.Off() )
 			{
 				bool useRope = Input.Pressed( InputButton.Attack1 );
@@ -47,6 +49,9 @@
 					.Run();
 
 				if ( !tr.Hit || !tr.Entity.IsValid() )
+					return;
+
+				if(useRope && !Owner.GetClientOwner().CanTouch(tr.Entity))
 					return;
 
 				CreateHitEffects( tr.EndPos );
@@ -75,6 +80,7 @@
 				light.SetModel( Model );
 				light.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 				light.Position = tr.EndPos + -light.CollisionBounds.Center + tr.Normal * light.CollisionBounds.Size * 0.5f;
+				light.Owner = Owner;
 				(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(light));
 
 				if ( !useRope )

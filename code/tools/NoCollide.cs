@@ -9,7 +9,7 @@ namespace Sandbox.Tools
 		{
 			if ( !Host.IsServer )
 				return;
-
+			if(!this.CanTool())return;
 			using ( Prediction.Off() )
 			{
 				var startPos = Owner.EyePos;
@@ -26,6 +26,9 @@ namespace Sandbox.Tools
 					return;
 
 				if ( tr.Entity is not Prop prop )
+					return;
+
+				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
 					return;
 
 				if ( Input.Pressed( InputButton.Attack1 ) )

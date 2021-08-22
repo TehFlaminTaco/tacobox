@@ -15,6 +15,9 @@
 
 			using ( Prediction.Off() )
 			{
+				if(!this.CanTool())
+					return;
+				
 				if ( !Input.Pressed( InputButton.Attack1 ) )
 					return;
 
@@ -35,6 +38,9 @@
 					return;
 
 				if ( tr.Entity is not ModelEntity )
+					return;
+
+				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
 					return;
 
 				if ( !targetBody.IsValid() )

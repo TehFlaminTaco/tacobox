@@ -12,6 +12,7 @@
 
 			using ( Prediction.Off() )
 			{
+				if(!this.CanTool())return;
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
 
@@ -26,6 +27,9 @@
 					return;
 
 				if ( tr.Entity is not Prop prop )
+					return;
+
+				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
 					return;
 
 				if ( Input.Pressed( InputButton.Attack1 ) )

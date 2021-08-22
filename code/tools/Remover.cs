@@ -7,7 +7,7 @@
 		{
 			if ( !Host.IsServer )
 				return;
-
+			if(!this.CanTool())return;
 			using ( Prediction.Off() )
 			{
 				if ( !Input.Pressed( InputButton.Attack1 ) )
@@ -25,6 +25,9 @@
 					return;
 
 				if ( tr.Entity is Player )
+					return;
+
+				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
 					return;
 
 				CreateHitEffects( tr.EndPos );

@@ -163,6 +163,9 @@ public partial class PhysGun : Carriable
 
 		if ( !tr.Hit || !tr.Entity.IsValid() || !tr.Body.IsValid() || tr.Entity.IsWorld ) return;
 
+		if(!owner.GetClientOwner().CanTouch(tr.Entity))
+			return;
+
 		var rootEnt = tr.Entity.Root;
 		var body = tr.Body;
 

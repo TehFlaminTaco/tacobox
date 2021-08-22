@@ -64,52 +64,5 @@ public partial class WireGun : Carriable {
 			}
 		}
 
-		/*var startPos = Owner.EyePos;
-        var dir = Owner.EyeRot * Vector3.Forward;
-        var tr = Trace.Ray( startPos, startPos + dir * 300 )
-					.Ignore( Owner )
-					.Run();
-
-		if(!IsClient){
-			if(Int32.TryParse(owner.GetClientOwner().GetUserString("wire_selection", "0"), out int j)){
-				wire_selection = j;
-			}
-		}
-
-		if(tr.Entity is IWireEntity)
-			wireTarget = tr.Entity;
-		else{
-			wire_selection = 0;
-			if(IsClient){
-				wire_select = "0";
-				ConsoleSystem.Run("wire_selection 0");
-			}
-			wireTarget = null;
-		}
-
-		using ( Prediction.Off() )
-		{
-			if(Input.Pressed(InputButton.Reload)){
-				selectedEntity = null;
-			}
-			if (!Input.Pressed( InputButton.Attack1 ) )
-				return;
-			
-			if(wireTarget is null)return;
-			if(selectedEntity is null){
-				selectedEntity = wireTarget;
-				var imputs = (wireTarget as IWireEntity)?.Values().Where(x=>x.direction==WireVal.Direction.Input).ToList();
-				if(imputs.Count <= 0) return;
-				selectedID = imputs[wire_selection].id;
-			}else{
-				Log.Info($"Current Index: {wire_selection} {wireTarget} {IsClient}");
-				var opputs = (wireTarget as IWireEntity)?.Values().Where(x=>x.direction==WireVal.Direction.Output).ToList();
-				if(opputs.Count <= 0) return;
-				var targetID = opputs[wire_selection].id;
-				WireConnection.MakeConnection(selectedEntity, selectedID, wireTarget, targetID);
-				selectedEntity = null;
-			}
-		}*/
-
 	}
 }

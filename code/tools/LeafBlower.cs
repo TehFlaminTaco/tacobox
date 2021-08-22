@@ -17,6 +17,8 @@
 				bool push = Input.Down( InputButton.Attack1 );
 				if ( !push && !Input.Down( InputButton.Attack2 ) )
 					return;
+				
+				if(!this.CanTool())return;
 
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
@@ -33,6 +35,9 @@
 					return;
 
 				if ( tr.Entity.IsWorld )
+					return;
+
+				if(!Owner.GetClientOwner().CanTouch(tr.Entity))
 					return;
 
 				var body = tr.Body;

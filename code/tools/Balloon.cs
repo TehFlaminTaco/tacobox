@@ -20,6 +20,9 @@
 
 		protected override bool IsPreviewTraceValid( TraceResult tr )
 		{
+			if (!this.CanTool())
+				return false;
+
 			if ( !base.IsPreviewTraceValid( tr ) )
 				return false;
 
@@ -53,6 +56,9 @@
 				if ( !useRope && !Input.Pressed( InputButton.Attack2 ) )
 					return;
 
+				if (!this.CanTool())
+					return;
+
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
 
@@ -64,6 +70,9 @@
 					return;
 
 				if ( !tr.Entity.IsValid() )
+					return;
+
+				if(useRope && !tr.Entity.IsWorld && !Owner.GetClientOwner().CanTouch(tr.Entity))
 					return;
 
 				CreateHitEffects( tr.EndPos );
@@ -79,6 +88,7 @@
 				ent.SetModel( "models/citizen_props/balloonregular01.vmdl" );
 				ent.PhysicsBody.GravityScale = -0.2f;
 				ent.RenderColor = Tint;
+				ent.Owner = Owner;
 
 				(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(ent));
 

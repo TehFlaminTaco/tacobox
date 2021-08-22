@@ -11,9 +11,12 @@
 		{
 			if ( !base.IsPreviewTraceValid( tr ) )
 				return false;
+			
+			if(!this.CanTool())return false;
 
 			if ( tr.Entity is LampEntity )
 				return false;
+
 
 			return true;
 		}
@@ -35,6 +38,8 @@
 
 			using ( Prediction.Off() )
 			{
+				if(!this.CanTool())return;
+
 				if ( !Input.Pressed( InputButton.Attack1 ) )
 					return;
 
@@ -74,7 +79,7 @@
 					Rotation = Rotation.Identity,
 					LightCookie = Texture.Load( "materials/effects/lightcookie.vtex" )
 				};
-
+				lamp.Owner = Owner;
 				lamp.SetModel( Model );
 				lamp.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 				lamp.Position = tr.EndPos + -lamp.CollisionBounds.Center + tr.Normal * lamp.CollisionBounds.Size * 0.5f;

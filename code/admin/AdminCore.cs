@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using Sandbox;
+using Sandbox.Tools;
 
 public static class AdminCore{
     public static List<Admin> admins = new();
@@ -73,6 +74,9 @@ public static class AdminCore{
     public static bool CanTouch(this Client c, Client other){
         return c.GetRank().CanTouch(other.GetRank().Name);
     }
+    public static bool CanTouch(this Client c, Entity other){
+        return other.GetClientOwner() is null ? c.GetRank().HasFlag("touchWorldspawn") : c.GetRank().CanTouch(other.GetClientOwner().GetRank().Name);
+    }
     public static bool HasTool(this Client c, string name){
         return c.GetRank().HasTool(name);
     }
@@ -88,6 +92,10 @@ public static class AdminCore{
         return SeeSilent(listener.GetClientOwner(), isSilent);
     }
 
+    public static bool CanTool(this BaseTool tool){
+        return tool.Owner.GetClientOwner().HasTool(tool.ClassInfo.Name);
+    }
+
     public static string[] AllFlags(){
         return new[]{
             "allCommands",
@@ -96,6 +104,7 @@ public static class AdminCore{
             "editRanks",
             "seeSilent",
             "showDeniedTools",
+            "touchWorldspawn",
         };
     }
 

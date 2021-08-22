@@ -12,6 +12,7 @@ namespace Sandbox.Tools
 
 			using ( Prediction.Off() )
 			{
+				if(!this.CanTool()) return;
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
 				int resizeDir = 0;
@@ -35,6 +36,9 @@ namespace Sandbox.Tools
 				if ( tr.Entity is LightEntity || tr.Entity is LampEntity )
 					return;
 
+				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
+					return;
+
 				var scale = reset ? 1.0f : Math.Clamp( tr.Entity.Scale + ((0.5f * Time.Delta) * resizeDir), 0.4f, 4.0f );
 
 				if ( tr.Entity.Scale != scale )
@@ -48,8 +52,8 @@ namespace Sandbox.Tools
 						if ( !child.IsValid() )
 							continue;
 
-						child.PhysicsGroup.RebuildMass();
-						child.PhysicsGroup.Wake();
+						child.PhysicsGroup?.RebuildMass();
+						child.PhysicsGroup?.Wake();
 					}
 				}
 

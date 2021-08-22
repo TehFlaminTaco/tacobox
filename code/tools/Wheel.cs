@@ -37,6 +37,12 @@ namespace Sandbox.Tools
 			if ( tr.Entity is WheelEntity )
 				return false;
 
+			if ( !this.CanTool() )
+				return false;
+
+			if (!tr.Entity.IsWorld && !Owner.GetClientOwner().CanTouch(tr.Entity))
+				return false;
+
 			return true;
 		}
 
@@ -58,6 +64,9 @@ namespace Sandbox.Tools
 				if ( !Input.Pressed( InputButton.Attack1 ) )
 					return;
 
+				if( !this.CanTool() )
+					return;
+
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
 
@@ -74,6 +83,9 @@ namespace Sandbox.Tools
 				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.Entity.IsValid();
 
 				if ( attached && tr.Entity is not Prop )
+					return;
+
+				if(attached && !Owner.GetClientOwner().CanTouch(tr.Entity))
 					return;
 
 				CreateHitEffects( tr.EndPos );
@@ -95,6 +107,7 @@ namespace Sandbox.Tools
 					Position = tr.EndPos,
 					Rotation = Rotation.LookAt( tr.Normal ) * Rotation.From( new Angles( 0, 90, 0 ) ),
 				};
+				ent.Owner = Owner;
 
 				ent.SetModel( "models/citizen_props/wheel01.vmdl" );
 

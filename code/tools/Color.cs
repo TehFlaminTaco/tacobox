@@ -45,6 +45,8 @@ namespace Sandbox.Tools
 
 			using ( Prediction.Off() )
 			{
+				if(!this.CanTool())return;
+
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
 
@@ -60,6 +62,9 @@ namespace Sandbox.Tools
 					return;
 
 				if ( tr.Entity is not ModelEntity modelEnt )
+					return;
+				
+				if (!Owner.GetClientOwner().CanTouch(tr.Entity))
 					return;
 
 				modelEnt.RenderColor = new Color(ColorR.ToFloat(), ColorG.ToFloat(), ColorB.ToFloat(), ColorA.ToFloat());

@@ -9,6 +9,8 @@
 		{
 			if ( Host.IsServer )
 			{
+				if(!this.CanTool())return;
+
 				if ( Input.Pressed( InputButton.Attack1 ) )
 				{
 					ShootBox();
@@ -30,6 +32,7 @@
 				Rotation = Owner.EyeRot
 			};
 
+			ent.Owner = Owner;
 			ent.SetModel( "models/citizen_props/crate01.vmdl" );
 			ent.Velocity = Owner.EyeRot.Forward * 1000;
 			(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(ent));

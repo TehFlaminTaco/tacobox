@@ -109,6 +109,8 @@ public partial class GravGun : Carriable
 			var modelEnt = tr.Entity as ModelEntity;
 			if ( !modelEnt.IsValid() )
 				return;
+			if(!Owner.GetClientOwner().CanTouch(tr.Entity))
+				return;
 
 			var body = tr.Body;
 
