@@ -177,7 +177,27 @@ Window {
                 }
             }
 
-            
+            .deleteButton{
+                position:absolute;
+                bottom:8;
+                border-radius:8px;
+                border: 2px solid red;
+                background-color: #800;
+                color:black;
+                font-weight: bold;
+
+                &:hover{
+                    border: 2px solid #800F;
+                    background-color: red;
+                }
+                &:not(.yousure){
+                    right:8;
+                }
+
+                &.yousure{
+                    left:8;
+                }
+            }
         }
 
         Commands, Flags, Authoritys {

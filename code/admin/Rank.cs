@@ -260,6 +260,28 @@ public partial class Rank{
         AdminCore.SaveData();
     }
 
+    [ServerCmd]
+    public static void RemoveRank(string target){
+        Assert.NotNull(ConsoleSystem.Caller);
+        if(!ConsoleSystem.Caller.HasFlag("editRanks")){
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run RemoveRank ${target}, but was not allowed!");
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
+            return;
+        }
+        var targetRank = AdminCore.ranks.FirstOrDefault(c=>c.Name.ToLower()==target.ToLower());
+        if(targetRank is null){
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Could not find rank to remove!", "debug/particleerror.vtex");
+            return;
+        }
+        if(targetRank.Name.ToLower()=="guest"){
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Can't remove Guest! It'd break everything!", "debug/particleerror.vtex");
+            return;
+        }
+        AdminCore.ranks.Remove(targetRank);
+        AdminCore.ReinformClients();
+        AdminCore.SaveData();
+    }
+
     public class Permission {
         public Access access {get; set;} = Access.Allow;
         public string flag_or_command {get; set;} = "";
