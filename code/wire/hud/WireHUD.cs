@@ -42,7 +42,7 @@ class WirePanel : Panel {
             WireHUD.HoveredPairEntity = null;
         }
         WireHUD.DidHover = false;
-        var ents = Entity.All.OfType<IWireEntity>().Where(c=>Local.Client.CanTouch(c as Entity)).ToList();
+        var ents = Entity.All.OfType<IWireEntity>();//.Where(c=>Local.Client.CanTouch(c as Entity)).ToList();
 
         var newEnts = ents.Where(x=>!knownEnts.ContainsKey(x));
         var removeEnts = knownEnts.Where(x=>!(x.Key as Entity).IsValid()||!ents.Contains(x.Key)).Select(x=>x.Key);

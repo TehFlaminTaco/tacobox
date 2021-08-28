@@ -6,6 +6,7 @@ public partial class Command {
         new CommandHP().Register();
         new CommandGod().Register();
 
+        new CommandBring().Register();
         new CommandGoto().Register();
 
         new CommandRanks().Register();

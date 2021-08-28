@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text.Json;
 using Sandbox;
 using Sandbox.Tools;
+using Sandbox.UI;
 
 public static class AdminCore{
     public static List<Admin> admins = new();
@@ -44,10 +45,10 @@ public static class AdminCore{
                 Authority = 999.0f,
                 NameColor = Color.Red.Hex,
                 Flags = new(new[]{
-                    new Rank.Permission{flag_or_command = "allCommands"},
-                    new Rank.Permission{flag_or_command = "allAuthority"},
-                    new Rank.Permission{flag_or_command = "editRanks"},
-                    new Rank.Permission{flag_or_command = "seeSilent"}
+                    new Rank.Permission{name = "allCommands"},
+                    new Rank.Permission{name = "allAuthority"},
+                    new Rank.Permission{name = "editRanks"},
+                    new Rank.Permission{name = "seeSilent"}
                 })
             });
             FileSystem.Data.WriteJson("admin/ranks.json", ranks);
@@ -75,10 +76,20 @@ public static class AdminCore{
         return c.GetRank().CanTouch(other.GetRank().Name);
     }
     public static bool CanTouch(this Client c, Entity other){
-        return other.IsWorld || other.GetClientOwner() is null ? c.GetRank().HasFlag("touchWorldspawn") : (other.GetClientOwner()==c) || c.GetRank().CanTouch(other.GetClientOwner().GetRank().Name);
+        return other.IsWorld || other.GetSpawner() is null ? c.GetRank().HasFlag("touchWorldspawn") : (other.GetSpawner()==c) || c.GetRank().CanTouch(other.GetSpawner().GetRank().Name);
     }
     public static bool HasTool(this Client c, string name){
         return c.GetRank().HasTool(name);
+    }
+    public static bool CanSpawn(this Client c, PropType t){
+        return c.GetRank().SpawnLimit($"{t}")==-1||(c.EntsOfType(t).Count() < c.GetRank().SpawnLimit($"{t}"));
+    }
+    public static void HitLimit(this Client c, PropType t){
+        if(c.GetRank().SpawnLimit($"{t}")==0){
+            TacoChatBox.AddChatEntry(To.Single(c), "white", "", $"⚠️ You are not allowed to spawn {t}s!");
+        }else{
+            TacoChatBox.AddChatEntry(To.Single(c), "white", "", $"⚠️ You have hit the {t} limit!");
+        }
     }
 
     public static string ColorName(this Client c){

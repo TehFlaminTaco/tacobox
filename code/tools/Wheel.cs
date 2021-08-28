@@ -102,12 +102,17 @@ namespace Sandbox.Tools
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
+					Owner.GetClientOwner().HitLimit(PropType.Generic);
+					return;
+				}
+
 				var ent = new WheelEntity
 				{
 					Position = tr.EndPos,
 					Rotation = Rotation.LookAt( tr.Normal ) * Rotation.From( new Angles( 0, 90, 0 ) ),
 				};
-				ent.Owner = Owner;
+				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
 				ent.SetModel( "models/citizen_props/wheel01.vmdl" );
 

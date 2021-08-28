@@ -98,6 +98,7 @@ partial class SandboxPlayer : Player
 
 	public override void TakeDamage( DamageInfo info )
 	{
+		Velocity += info.Force;
 		if(GodMode)return;
 
 		if ( GetHitboxGroup( info.HitboxIndex ) == 1 )
@@ -106,7 +107,6 @@ partial class SandboxPlayer : Player
 		}
 
 		lastDamage = info;
-		Velocity += info.Force;
 		TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
 
 		base.TakeDamage( info );

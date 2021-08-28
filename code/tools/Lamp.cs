@@ -64,6 +64,11 @@
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
+					Owner.GetClientOwner().HitLimit(PropType.Generic);
+					return;
+				}
+
 				lamp = new LampEntity
 				{
 					Enabled = true,
@@ -79,7 +84,7 @@
 					Rotation = Rotation.Identity,
 					LightCookie = Texture.Load( "materials/effects/lightcookie.vtex" )
 				};
-				lamp.Owner = Owner;
+				lamp.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 				lamp.SetModel( Model );
 				lamp.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 				lamp.Position = tr.EndPos + -lamp.CollisionBounds.Center + tr.Normal * lamp.CollisionBounds.Size * 0.5f;

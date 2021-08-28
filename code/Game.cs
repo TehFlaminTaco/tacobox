@@ -45,12 +45,17 @@ partial class SandboxGame : Game
 			.Ignore( owner )
 			.Run();
 
+		if(!ConsoleSystem.Caller.CanSpawn(PropType.Prop)){
+			ConsoleSystem.Caller.HitLimit(PropType.Prop);
+			return;
+		}
+
 		var ent = new Prop();
 		ent.Position = tr.EndPos;
 		ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) ) * Rotation.FromAxis( Vector3.Up, 180 );
 		ent.SetModel( modelname );
 		ent.Position = tr.EndPos - Vector3.Up * ent.CollisionBounds.Mins.z;
-		ent.Owner = owner;
+		ent.SetSpawner(ConsoleSystem.Caller, PropType.Prop);
 		(owner as SandboxPlayer)?.undoQueue.Add( new UndoEnt(ent) );
 	}
 
@@ -73,6 +78,20 @@ partial class SandboxGame : Game
 			.Size( 2 )
 			.Run();
 
+		PropType toSpawn = PropType.Generic;
+		var spawnedType = Library.Get<Entity>( entName );
+		if(spawnedType.IsAssignableTo(typeof(BaseCarriable)))
+			toSpawn = PropType.Weapon;
+		if(spawnedType.IsAssignableTo(typeof(CarEntity))||spawnedType.IsAssignableTo(typeof(Chair))) //TODO: group these
+			toSpawn = PropType.Vehicle;
+		if(spawnedType.IsAssignableTo(typeof(NpcTest)))
+			toSpawn = PropType.NPC;
+
+		if(!ConsoleSystem.Caller.CanSpawn(toSpawn)){
+			ConsoleSystem.Caller.HitLimit(toSpawn);
+			return;
+		}
+
 		var ent = Library.Create<Entity>( entName );
 		if ( ent is BaseCarriable && owner.Inventory != null )
 		{
@@ -82,7 +101,7 @@ partial class SandboxGame : Game
 
 		ent.Position = tr.EndPos;
 		ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) );
-		ent.Owner = owner;
+		ent.SetSpawner(ConsoleSystem.Caller, toSpawn);
 		(owner as SandboxPlayer)?.undoQueue.Add( new UndoEnt(ent) );
 		//Log.Info( $"ent: {ent}" );
 	}

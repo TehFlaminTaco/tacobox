@@ -63,6 +63,11 @@
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
+					Owner.GetClientOwner().HitLimit(PropType.Generic);
+					return;
+				}
+
 				var light = new LightEntity
 				{
 					Enabled = true,
@@ -80,7 +85,7 @@
 				light.SetModel( Model );
 				light.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 				light.Position = tr.EndPos + -light.CollisionBounds.Center + tr.Normal * light.CollisionBounds.Size * 0.5f;
-				light.Owner = Owner;
+				light.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 				(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(light));
 
 				if ( !useRope )

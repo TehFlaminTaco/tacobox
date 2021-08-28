@@ -113,6 +113,11 @@ namespace Sandbox.Tools
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
+					Owner.GetClientOwner().HitLimit(PropType.Generic);
+					return;
+				}
+
 				var ent = new ThrusterEntity
 				{
 					Position = tr.EndPos,
@@ -125,7 +130,7 @@ namespace Sandbox.Tools
 
 				ent.SetModel(Model);
 				ent.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
-				ent.Owner = Owner;
+				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
 
 				if(float.TryParse(Owner.GetClientOwner().GetUserString("thruster_force"), out float force)){

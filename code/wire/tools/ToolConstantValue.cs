@@ -95,12 +95,18 @@ namespace Sandbox.Tools
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
+				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
+					Owner.GetClientOwner().HitLimit(PropType.Generic);
+					return;
+				}
+
 				var ent = new ConstantValue()
 				{
 					Position = tr.EndPos,
 					Rotation = targAngle,
                     value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetUserString("constantvalue_value").ToFloat()
 				};
+				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
 
 				if ( attached )

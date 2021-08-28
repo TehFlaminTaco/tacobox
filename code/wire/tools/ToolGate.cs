@@ -165,6 +165,11 @@ namespace Sandbox.Tools
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
+					Owner.GetClientOwner().HitLimit(PropType.Generic);
+					return;
+				}
+
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
 				var targetGate = Owner.IsClient ? gate_selected : Owner.GetClientOwner().GetUserString("gate_selected");
@@ -178,6 +183,7 @@ namespace Sandbox.Tools
 				//ent.values = Gate.gatesByKey[targetGate].GenerateValues(ent.GateSpawner, ent);
 				ent.SetModel(Model);
 				ent.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
+				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
 
 				if ( attached )

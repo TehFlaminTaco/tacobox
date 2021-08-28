@@ -112,6 +112,11 @@ namespace Sandbox.Tools
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
+				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
+					Owner.GetClientOwner().HitLimit(PropType.Generic);
+					return;
+				}
+
 				var ent = new WireButton()
 				{
 					Position = tr.EndPos,
@@ -120,6 +125,7 @@ namespace Sandbox.Tools
                     high_value = Owner.IsClient ? button_highvalue.ToFloat() : Owner.GetClientOwner().GetUserString("button_highvalue").ToFloat(),
 					toggleable = Owner.IsClient ? button_toggle.ToBool() : Owner.GetClientOwner().GetUserString("button_toggle").ToBool()
 				};
+				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
 
 				if ( attached )

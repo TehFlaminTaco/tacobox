@@ -80,6 +80,11 @@
 				if ( tr.Entity is BalloonEntity )
 					return;
 
+				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
+					Owner.GetClientOwner().HitLimit(PropType.Generic);
+					return;
+				}
+
 				var ent = new BalloonEntity
 				{
 					Position = tr.EndPos,
@@ -88,7 +93,7 @@
 				ent.SetModel( "models/citizen_props/balloonregular01.vmdl" );
 				ent.PhysicsBody.GravityScale = -0.2f;
 				ent.RenderColor = Tint;
-				ent.Owner = Owner;
+				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
 				(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(ent));
 

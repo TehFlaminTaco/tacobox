@@ -38,4 +38,13 @@ public abstract partial class Command {
         return c;
     }
 
+    public class Argument<T> {
+        public string asText;
+        public T value;
+
+        public Argument(string asText, T value){
+            this.asText = asText;
+            this.value = value;
+        }
+    }
 }

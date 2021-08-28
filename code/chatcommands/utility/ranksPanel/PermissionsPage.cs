@@ -26,15 +26,15 @@ class CommandsList : Perms.ListType{
     }
 
     public override bool Inherited( string rank, string cmd ){
-        return !Rank.FromName(rank).Commands.Any(c=>c.flag_or_command.ToLower()==cmd.ToLower());
+        return !Rank.FromName(rank).Commands.Any(c=>c.name.ToLower()==cmd.ToLower());
     }
 
     public override void Set( string r, string cmd, int setting ){
         var rank = Rank.FromName(r);
-        rank.Commands.RemoveAll(c=>c.flag_or_command.ToLower() == cmd.ToLower());
+        rank.Commands.RemoveAll(c=>c.name.ToLower() == cmd.ToLower());
         if(setting != 0)
             rank.Commands.Add(new Rank.Permission{
-                flag_or_command = cmd,
+                name = cmd,
                 access = setting == 1 ? Rank.Permission.Access.Allow : Rank.Permission.Access.Deny
             });
         Rank.SetRankHasCommand(r, cmd, setting);
@@ -56,15 +56,15 @@ class FlagsList : Perms.ListType{
     }
 
     public override bool Inherited( string rank, string cmd ){
-        return !Rank.FromName(rank).Flags.Any(c=>c.flag_or_command.ToLower()==cmd.ToLower());
+        return !Rank.FromName(rank).Flags.Any(c=>c.name.ToLower()==cmd.ToLower());
     }
 
     public override void Set( string r, string cmd, int setting ){
         var rank = Rank.FromName(r);
-        rank.Flags.RemoveAll(c=>c.flag_or_command.ToLower() == cmd.ToLower());
+        rank.Flags.RemoveAll(c=>c.name.ToLower() == cmd.ToLower());
         if(setting != 0)
             rank.Flags.Add(new Rank.Permission{
-                flag_or_command = cmd,
+                name = cmd,
                 access = setting == 1 ? Rank.Permission.Access.Allow : Rank.Permission.Access.Deny
             });
         Rank.SetRankHasFlag(r, cmd, setting);
@@ -83,15 +83,15 @@ class AuthorityList : Perms.ListType{
     }
 
     public override bool Inherited( string rank, string cmd ){
-        return !Rank.FromName(rank).AuthorityOver.Any(c=>c.flag_or_command.ToLower()==cmd.ToLower());
+        return !Rank.FromName(rank).AuthorityOver.Any(c=>c.name.ToLower()==cmd.ToLower());
     }
 
     public override void Set( string r, string cmd, int setting ){
         var rank = Rank.FromName(r);
-        rank.AuthorityOver.RemoveAll(c=>c.flag_or_command.ToLower() == cmd.ToLower());
+        rank.AuthorityOver.RemoveAll(c=>c.name.ToLower() == cmd.ToLower());
         if(setting != 0)
             rank.AuthorityOver.Add(new Rank.Permission{
-                flag_or_command = cmd,
+                name = cmd,
                 access = setting == 1 ? Rank.Permission.Access.Allow : Rank.Permission.Access.Deny
             });
         Rank.SetRankHasAuthority(r, cmd, setting);

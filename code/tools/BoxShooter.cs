@@ -26,13 +26,18 @@
 
 		void ShootBox()
 		{
+			if(!Owner.GetClientOwner().CanSpawn(PropType.Prop)){
+				Owner.GetClientOwner().HitLimit(PropType.Prop);
+				return;
+			}
+
 			var ent = new Prop
 			{
 				Position = Owner.EyePos + Owner.EyeRot.Forward * 50,
 				Rotation = Owner.EyeRot
 			};
 
-			ent.Owner = Owner;
+			ent.SetSpawner(Owner.GetClientOwner(), PropType.Prop);
 			ent.SetModel( "models/citizen_props/crate01.vmdl" );
 			ent.Velocity = Owner.EyeRot.Forward * 1000;
 			(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(ent));

@@ -12,6 +12,7 @@ public abstract class Perms : RankPanel.Page {
     public abstract void MakeLists();
 
     public abstract class ListType {
+        public virtual bool IsInt => false;
         public PermList list;
         public abstract string Name {get;}
         public abstract void Make();
@@ -20,7 +21,7 @@ public abstract class Perms : RankPanel.Page {
         public abstract void Set(string rankName, string cmd, int setting);
 
         public void Add(string name){
-            list.AddChild(new PermButton(list.page, name, this.Value, this.Set, this.Inherited));
+            list.AddChild(new PermButton(list.page, name, this));
         }
     }
 
@@ -70,10 +71,13 @@ public abstract class Perms : RankPanel.Page {
     }
 
     public class PermButton : Panel {
+        ListType list;
         public string cmd;
         public Button denied;
         public Button inherited;
         public Button allowed;
+        public Button unlimited;
+        public TextEntry count;
         public Label name;
         Perms page;
 
@@ -81,10 +85,12 @@ public abstract class Perms : RankPanel.Page {
         public Func<string, string, int> getValue;
         public Func<string, string, bool> isInherited;
 
-        public PermButton(Perms page, string cmd, Func<string, string, int> getValue, Action<string, string, int> setHas, Func<string, string, bool> isInherited){
-            this.getValue = getValue;
-            this.setHas = setHas;
-            this.isInherited = isInherited;
+        public PermButton(Perms page, string cmd, ListType list){
+            this.list = list;
+
+            this.getValue = list.Value;
+            this.setHas = list.Set;
+            this.isInherited = list.Inherited;
             this.cmd = cmd;
 
             this.page = page;
@@ -92,32 +98,62 @@ public abstract class Perms : RankPanel.Page {
             AddClass("permsButton");
             SetClass("allowed", getValue(rank, cmd)>0);
             name = new Label{Text = cmd, Classes = "name"};
-            denied = new("❌", "", ()=>{
-                setHas(rank, cmd, -1);
-                page.UpdateAllButtons();
-            });
-            inherited = new("👪", "", ()=>{
-                setHas(rank, cmd, 0);
-                page.UpdateAllButtons();
-            });
-            allowed = new("✔️", "", ()=>{
-                setHas(rank, cmd, 1);
-                page.UpdateAllButtons();
-            });
+            if(list.IsInt){
+                inherited = new("👪", "", ()=>{
+                    setHas(rank, cmd, -2);
+                    page.UpdateAllButtons();
+                });
+                unlimited = new("∞", "", ()=>{
+                    setHas(rank, cmd, -1);
+                    page.UpdateAllButtons();
+                });
+                count = new TextEntry{
+                    Text = ""+getValue(rank,cmd),
+                    Numeric = true
+                };
+                count.AddEventListener("value.changed", e=>{
+                    setHas(rank, cmd, count.Text.ToInt());
+                    page.UpdateAllButtons();
+                });
 
-            AddChild(name);
-            AddChild(denied);
-            AddChild(inherited);
-            AddChild(allowed);
+                AddChild(name);
+                AddChild(inherited);
+                AddChild(unlimited);
+                AddChild(count);
+
+            }else{
+                denied = new("❌", "", ()=>{
+                    setHas(rank, cmd, -1);
+                    page.UpdateAllButtons();
+                });
+                inherited = new("👪", "", ()=>{
+                    setHas(rank, cmd, 0);
+                    page.UpdateAllButtons();
+                });
+                allowed = new("✔️", "", ()=>{
+                    setHas(rank, cmd, 1);
+                    page.UpdateAllButtons();
+                });
+
+                AddChild(name);
+                AddChild(denied);
+                AddChild(inherited);
+                AddChild(allowed);
+            }
 
             UpdateButtons();
         }
 
         public void UpdateButtons(){
             var rank = page.parent.parent.currentRank;
-            denied.SetClass("active", !isInherited(rank,cmd)&&getValue(rank,cmd)<=0);
-            inherited.SetClass("active", isInherited(rank,cmd));
-            allowed.SetClass("active", !isInherited(rank,cmd)&&getValue(rank,cmd)>0);
+            if(list.IsInt){
+                inherited.SetClass("active", isInherited(rank,cmd));
+                unlimited.SetClass("active", !isInherited(rank,cmd)&&getValue(rank,cmd)==-1);
+            }else{
+                denied.SetClass("active", !isInherited(rank,cmd)&&getValue(rank,cmd)==0);
+                inherited.SetClass("active", isInherited(rank,cmd));
+                allowed.SetClass("active", !isInherited(rank,cmd)&&getValue(rank,cmd)>0);
+            }
         }
     }
 }

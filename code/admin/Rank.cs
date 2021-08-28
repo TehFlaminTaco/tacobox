@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sandbox;
@@ -13,6 +14,7 @@ public partial class Rank{
     public List<Permission> Flags {get; set;} = new();
     public List<Permission> AuthorityOver {get; set;} = new();
     public List<Permission> Tools {get; set;} = new();
+    public List<Permission.Int> SpawnLimits {get; set;} = new();
 
     public static Rank FromName(string name){
         return AdminCore.ranks.FirstOrDefault(r => r.Name.ToLower() == name.ToLower());
@@ -22,27 +24,33 @@ public partial class Rank{
         return AdminCore.ranks.FirstOrDefault(x => x.Name.ToLower() == (Inherit??"").ToLower());
     }
     public bool HasCommand(string name){
-        var permission = Commands.Where(c=>c.flag_or_command.ToLower() == name.ToLower()).FirstOrDefault();
+        var permission = Commands.Where(c=>c.name.ToLower() == name.ToLower()).FirstOrDefault();
         if(permission is not null)return permission.access==Permission.Access.Allow;
         if(HasFlag("allCommands"))return true;
         return GetParent()?.HasCommand(name)??false;
     }
     public bool HasFlag(string name){
-        var permission = Flags.Where(c=>c.flag_or_command.ToLower() == name.ToLower()).FirstOrDefault();
+        var permission = Flags.Where(c=>c.name.ToLower() == name.ToLower()).FirstOrDefault();
         if(permission is not null)return permission.access==Permission.Access.Allow;
         return GetParent()?.HasFlag(name)??false;
     }
     public bool CanTouch(string rankTarget){
-        var permission = AuthorityOver.Where(c=>c.flag_or_command.ToLower() == rankTarget.ToLower()).FirstOrDefault();
+        var permission = AuthorityOver.Where(c=>c.name.ToLower() == rankTarget.ToLower()).FirstOrDefault();
         if(permission is not null)return permission.access==Permission.Access.Allow;
         if(HasFlag("allAuthority"))return true;
         return GetParent()?.CanTouch(rankTarget)??false;
     }
     public bool HasTool(string tool){
-        var permission = Tools.Where(c=>c.flag_or_command.ToLower() == tool.ToLower()).FirstOrDefault();
+        var permission = Tools.Where(c=>c.name.ToLower() == tool.ToLower()).FirstOrDefault();
         if(permission is not null)return permission.access==Permission.Access.Allow;
         if(HasFlag("allTools"))return true;
         return GetParent()?.HasTool(tool)??false;
+    }
+    public int SpawnLimit(string type){
+        var permission = SpawnLimits.Where(c=>c.name.ToLower() == type.ToLower()).FirstOrDefault();
+        if(permission is not null)return permission.amount;
+        if(HasFlag("unlimitedSpawns"))return -1;
+        return GetParent()?.SpawnLimit(type)??0;
     }
     public bool WouldLoop(string target){
         if(Name.ToLower() == target.ToLower())return true;
@@ -62,7 +70,7 @@ public partial class Rank{
     public static void SetRankName(string target, string newName){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankName ${target} ${newName}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankName {target} {newName}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -96,7 +104,7 @@ public partial class Rank{
     public static void SetRankInheritor(string target, string newInheritor){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankInheritor ${target} ${newInheritor}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankInheritor {target} {newInheritor}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -118,7 +126,7 @@ public partial class Rank{
     public static void SetRankColor(string target, string newColor){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankColor ${target} ${newColor}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankColor {target} {newColor}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -141,7 +149,7 @@ public partial class Rank{
     public static void SetRankAuthority(string target, int newAuthority){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankAuthority ${target} ${newAuthority}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankAuthority {target} {newAuthority}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -160,7 +168,7 @@ public partial class Rank{
     public static void SetRankHasFlag(string target, string flagTarget, int setting){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasFlag ${target} ${flagTarget} ${setting}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasFlag {target} {flagTarget} {setting}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -177,10 +185,10 @@ public partial class Rank{
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Invalid state! (-1: Disallow, 0: Inherit, 1: Allow)", "debug/particleerror.vtex");
             return;
         }
-            targetRank.Flags.RemoveAll(c=>c.flag_or_command.ToLower() == flagTarget.ToLower());
+            targetRank.Flags.RemoveAll(c=>c.name.ToLower() == flagTarget.ToLower());
         if(setting != 0)
             targetRank.Flags.Add(new Permission{
-                flag_or_command = flagTarget,
+                name = flagTarget,
                 access = setting == -1 ? Rank.Permission.Access.Deny : Rank.Permission.Access.Allow
             });
         AdminCore.ReinformClients();
@@ -191,7 +199,7 @@ public partial class Rank{
     public static void SetRankHasCommand(string target, string commandTarget, int setting){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasCommand ${target} ${commandTarget} ${setting}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasCommand {target} {commandTarget} {setting}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -208,10 +216,10 @@ public partial class Rank{
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Invalid state! (-1: Disallow, 0: Inherit, 1: Allow)", "debug/particleerror.vtex");
             return;
         }
-        targetRank.Commands.RemoveAll(c=>c.flag_or_command.ToLower() == commandTarget.ToLower());
+        targetRank.Commands.RemoveAll(c=>c.name.ToLower() == commandTarget.ToLower());
         if(setting != 0)
             targetRank.Commands.Add(new Permission{
-                flag_or_command = commandTarget.ToLower(),
+                name = commandTarget.ToLower(),
                 access = setting == -1 ? Rank.Permission.Access.Deny : Rank.Permission.Access.Allow
             });
         AdminCore.ReinformClients();
@@ -222,7 +230,7 @@ public partial class Rank{
     public static void SetRankHasTool(string target, string toolTarget, int setting){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasTool ${target} ${toolTarget} ${setting}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasTool {target} {toolTarget} {setting}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -239,11 +247,42 @@ public partial class Rank{
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Invalid state! (-1: Disallow, 0: Inherit, 1: Allow)", "debug/particleerror.vtex");
             return;
         }
-        targetRank.Tools.RemoveAll(c=>c.flag_or_command.ToLower() == toolTarget.ToLower());
+        targetRank.Tools.RemoveAll(c=>c.name.ToLower() == toolTarget.ToLower());
         if(setting != 0)
             targetRank.Tools.Add(new Permission{
-                flag_or_command = toolTarget.ToLower(),
+                name = toolTarget.ToLower(),
                 access = setting == -1 ? Rank.Permission.Access.Deny : Rank.Permission.Access.Allow
+            });
+        AdminCore.ReinformClients();
+        AdminCore.SaveData();
+    }
+
+    [ServerCmd]
+    public static void SetRankSpawnLimit(string target, string type, int setting){
+        Assert.NotNull(ConsoleSystem.Caller);
+        if(!ConsoleSystem.Caller.HasFlag("editRanks")){
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankSpawnLimit {target} {type} {setting}, but was not allowed!");
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
+            return;
+        }
+        var targetRank = AdminCore.ranks.FirstOrDefault(c=>c.Name.ToLower()==target.ToLower());
+        if(targetRank is null){
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Could not find rank to edit!", "debug/particleerror.vtex");
+            return;
+        }
+        if(!Enum.GetNames<PropType>().Any(c=>c.ToLower()==type.ToLower())){
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Type not found!", "debug/particleerror.vtex");
+            return;
+        }
+        if(setting < -2){
+            TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Invalid state!", "debug/particleerror.vtex");
+            return;
+        }
+        targetRank.SpawnLimits.RemoveAll(c=>c.name.ToLower() == type.ToLower());
+        if(setting > -2)
+            targetRank.SpawnLimits.Add(new Permission.Int{
+                name = type.ToLower(),
+                amount = setting
             });
         AdminCore.ReinformClients();
         AdminCore.SaveData();
@@ -253,7 +292,7 @@ public partial class Rank{
     public static void SetRankHasAuthority(string target, string authorityTarget, int setting){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasAuthority ${target} ${authorityTarget} ${setting}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run SetRankHasAuthority {target} {authorityTarget} {setting}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -270,10 +309,10 @@ public partial class Rank{
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", $"Invalid state! (-1: Disallow, 0: Inherit, 1: Allow)", "debug/particleerror.vtex");
             return;
         }
-            targetRank.AuthorityOver.RemoveAll(c=>c.flag_or_command.ToLower() == authorityTarget.ToLower());
+            targetRank.AuthorityOver.RemoveAll(c=>c.name.ToLower() == authorityTarget.ToLower());
         if(setting != 0)
             targetRank.AuthorityOver.Add(new Permission{
-                flag_or_command = authorityTarget,
+                name = authorityTarget,
                 access = setting == -1 ? Rank.Permission.Access.Deny : Rank.Permission.Access.Allow
             });
         AdminCore.ReinformClients();
@@ -303,7 +342,7 @@ public partial class Rank{
     public static void RemoveRank(string target){
         Assert.NotNull(ConsoleSystem.Caller);
         if(!ConsoleSystem.Caller.HasFlag("editRanks")){
-            Log.Info($"{ConsoleSystem.Caller.Name} tried to run RemoveRank ${target}, but was not allowed!");
+            Log.Info($"{ConsoleSystem.Caller.Name} tried to run RemoveRank {target}, but was not allowed!");
             TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You aren't authorized to do that!", "debug/particleerror.vtex");
             return;
         }
@@ -323,11 +362,16 @@ public partial class Rank{
 
     public class Permission {
         public Access access {get; set;} = Access.Allow;
-        public string flag_or_command {get; set;} = "";
+        public string name {get; set;} = "";
         
         public enum Access {
             Deny,
             Allow
+        }
+
+        public class Int {
+            public int amount {get; set;} = 0;
+            public string name {get; set;}
         }
     }
 }

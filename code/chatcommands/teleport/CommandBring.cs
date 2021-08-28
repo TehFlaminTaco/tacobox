@@ -3,8 +3,8 @@ using System.Linq;
 using Sandbox;
 using Sandbox.UI;
 
-public class CommandGoto : Command {
-    public override string Name => "Goto";
+public class CommandBring : Command {
+    public override string Name => "Bring";
     public override string Category => "Teleport";
 
     public override bool Run(Player executor, IEnumerable<string> args, bool silent){
@@ -13,12 +13,12 @@ public class CommandGoto : Command {
             ChatBox.AddChatEntry(To.Single(executor), "white", "", $"⚠️ Need to specify target!");
             return false;
         }
-        Client c = GetTarget(target, executor, false);
+        Client c = GetTarget(target, executor);
         if(c is null)
             return false;
         
-        executor.Position = c.Pawn.Position + Vector3.Up * 100f;
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} teleported to {c.ColorName()}."); //avatar:{executor.GetClientOwner().SteamId}
+        c.Pawn.Position = executor.Position + Vector3.Up * 100f;
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} brought {c.ColorName()} to themself."); //avatar:{executor.GetClientOwner().SteamId}
         return true;
     }
 }
