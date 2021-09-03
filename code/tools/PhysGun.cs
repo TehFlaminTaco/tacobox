@@ -47,10 +47,10 @@ public partial class PhysGun : Carriable
 
 	public override void Simulate( Client client )
 	{
-		if ( Owner is not Player owner ) return;
+		if ( Owner is not SandboxPlayer owner ) return;
 
-		var eyePos = owner.EyePos;
-		var eyeDir = owner.EyeRot.Forward;
+		(var eyePos, var eyeR) = owner.CameraPosition();
+		var eyeDir = eyeR.Forward;
 		var eyeRot = Rotation.From( new Angles( 0.0f, owner.EyeRot.Angles().yaw, 0.0f ) );
 
 		if ( Input.Pressed( InputButton.Attack1 ) )
@@ -116,13 +116,9 @@ public partial class PhysGun : Carriable
 		return false;
 	}
 
-	private void TryUnfreezeAll( Player owner, Vector3 eyePos, Rotation eyeRot, Vector3 eyeDir )
+	private void TryUnfreezeAll( SandboxPlayer owner, Vector3 eyePos, Rotation eyeRot, Vector3 eyeDir )
 	{
-		var tr = Trace.Ray( eyePos, eyePos + eyeDir * MaxTargetDistance )
-			.UseHitboxes()
-			.Ignore( owner, false )
-			.HitLayer( CollisionLayer.Debris )
-			.Run();
+		var tr = owner.EyeTrace();
 
 		if ( !tr.Hit || !tr.Entity.IsValid() || tr.Entity.IsWorld ) return;
 
@@ -153,13 +149,9 @@ public partial class PhysGun : Carriable
 		}
 	}
 
-	private void TryStartGrab( Player owner, Vector3 eyePos, Rotation eyeRot, Vector3 eyeDir )
+	private void TryStartGrab( SandboxPlayer owner, Vector3 eyePos, Rotation eyeRot, Vector3 eyeDir )
 	{
-		var tr = Trace.Ray( eyePos, eyePos + eyeDir * MaxTargetDistance )
-			.UseHitboxes()
-			.Ignore( owner, false )
-			.HitLayer( CollisionLayer.Debris )
-			.Run();
+		var tr = owner.EyeTrace();
 
 		if ( !tr.Hit || !tr.Entity.IsValid() || !tr.Body.IsValid() || tr.Entity.IsWorld ) return;
 

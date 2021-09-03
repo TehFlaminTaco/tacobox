@@ -141,7 +141,9 @@ partial class SandboxPlayer : Player
 
 	public override void Simulate( Client cl )
 	{
+		lastEyeTrace = null;
 		base.Simulate( cl );
+		if(IsServer && MainCamera is ThirdPersonCameraTracked tr)tr.Update();
 
 		if ( Input.ActiveChild != null )
 		{
@@ -171,7 +173,7 @@ partial class SandboxPlayer : Player
 			}
 			else
 			{
-				MainCamera = new ThirdPersonCamera();
+				MainCamera = new ThirdPersonCameraTracked{Pawn = this};
 			}
 		}
 
@@ -237,14 +239,24 @@ partial class SandboxPlayer : Player
 		}
 	}
 
-	// TODO
+	public (Vector3 position, Rotation angle) CameraPosition(){
+		if(Camera is ThirdPersonCameraTracked tr){
+			return (tr.Pos, tr.Rot);
+		}else{
+			return (EyePos, EyeRot);
+		}
+	}
 
-	//public override bool HasPermission( string mode )
-	//{
-	//	if ( mode == "noclip" ) return true;
-	//	if ( mode == "devcam" ) return true;
-	//	if ( mode == "suicide" ) return true;
-	//
-	//	return base.HasPermission( mode );
-	//	}
+	TraceResult? lastEyeTrace = null;
+	public TraceResult EyeTrace(){
+		if(lastEyeTrace is not null){
+			return (TraceResult)lastEyeTrace;
+		}
+		(var pos, var ang) = CameraPosition();
+		return (lastEyeTrace=Trace.Ray( pos, pos + ang.Forward * 10000.0f )
+			.UseHitboxes()
+			.Ignore( this, false )
+			.HitLayer( CollisionLayer.Debris )
+			.Run()).Value;
+	}
 }

@@ -9,19 +9,15 @@ class SlowMoPistol : Pistol {
 
     public override void AttackPrimary()
 	{
-        try{
-            if(IsServer)
-                ConsoleSystem.Run("host_timescale 0.1");
-            base.AttackPrimary();
-            var dearSister = Sound.FromScreen("dear_sister");
-            dearSister.SetVolume(0.2f);
-            if(IsServer){
-                
-                Do.After(1.6f, ()=>ConsoleSystem.Run("host_timescale 1"));
-                
-            }
-        }catch(Exception){
-            TacoChatBox.AddChatEntry(To.Single(Owner), "white", "", $"⚠️ Garry broke timescale. No Time Gun for now.");
+        if(IsServer)
+            Global.TimeScale = 0.1f;
+        base.AttackPrimary();
+        var dearSister = Sound.FromScreen("dear_sister");
+        dearSister.SetVolume(0.2f);
+        if(IsServer){
+            
+            Do.After(1.6f, ()=>Global.TimeScale = 1f);
+            
         }
 	}
 }

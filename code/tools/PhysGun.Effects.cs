@@ -43,7 +43,7 @@ public partial class PhysGun
 
 	protected virtual void UpdateEffects()
 	{
-		var owner = Owner;
+		var owner = Owner as SandboxPlayer;
 
 		if ( owner == null || !BeamActive || !IsActiveChild() )
 		{
@@ -54,10 +54,7 @@ public partial class PhysGun
 		var startPos = owner.EyePos;
 		var dir = owner.EyeRot.Forward;
 
-		var tr = Trace.Ray( startPos, startPos + dir * MaxTargetDistance )
-			.UseHitboxes()
-			.Ignore( owner )
-			.Run();
+		var tr = owner.EyeTrace();
 
 		if ( Beam == null )
 		{
