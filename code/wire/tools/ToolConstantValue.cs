@@ -89,7 +89,7 @@ namespace Sandbox.Tools
 
 				if ( tr.Entity is ConstantValue gate )
 				{
-					gate.value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetUserString("constantvalue_value").ToFloat();
+					gate.value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetClientData("constantvalue_value").ToFloat();
 					return;
 				}
 
@@ -104,7 +104,7 @@ namespace Sandbox.Tools
 				{
 					Position = tr.EndPos,
 					Rotation = targAngle,
-                    value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetUserString("constantvalue_value").ToFloat()
+                    value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetClientData("constantvalue_value").ToFloat()
 				};
 				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 

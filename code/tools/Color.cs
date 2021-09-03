@@ -15,10 +15,10 @@ namespace Sandbox.Tools
 		[ConVar.ClientData("colortool_a")]
 		public static string colortool_a {get; set;} = "1.0f";
 
-		private string ColorR => Local.Pawn is null ? Owner.GetClientOwner().GetUserString("colortool_r") : colortool_r;
-		private string ColorG => Local.Pawn is null ? Owner.GetClientOwner().GetUserString("colortool_g") : colortool_g;
-		private string ColorB => Local.Pawn is null ? Owner.GetClientOwner().GetUserString("colortool_b") : colortool_b;
-		private string ColorA => Local.Pawn is null ? Owner.GetClientOwner().GetUserString("colortool_a") : colortool_a;
+		private string ColorR => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("colortool_r") : colortool_r;
+		private string ColorG => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("colortool_g") : colortool_g;
+		private string ColorB => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("colortool_b") : colortool_b;
+		private string ColorA => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("colortool_a") : colortool_a;
 
 
 		public override void GenerateControls(Form inspector){

@@ -16,7 +16,7 @@ namespace Sandbox.Tools
 		public static string thrusterForce {get; set;} = "5000.0";
 		[ConVar.ClientData("thruster_model")]
 		public static string thruster_model {get; set;} = "models/thruster/thrusterprojector.vmdl";
-		private string Model => Local.Pawn is null ? Owner.GetClientOwner().GetUserString("thruster_model") : thruster_model;
+		private string Model => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("thruster_model") : thruster_model;
 
 		PreviewEntity previewModel;
 		bool massless = true;
@@ -107,7 +107,7 @@ namespace Sandbox.Tools
 
 				if ( tr.Entity is ThrusterEntity te )
 				{
-					if(float.TryParse(Owner.GetClientOwner().GetUserString("thruster_force"), out float frc)){
+					if(float.TryParse(Owner.GetClientOwner().GetClientData("thruster_force"), out float frc)){
 						te.Force = frc;
 					}
 					return;
@@ -133,7 +133,7 @@ namespace Sandbox.Tools
 				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
 
-				if(float.TryParse(Owner.GetClientOwner().GetUserString("thruster_force"), out float force)){
+				if(float.TryParse(Owner.GetClientOwner().GetClientData("thruster_force"), out float force)){
 					ent.Force = force;
 				}
 

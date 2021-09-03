@@ -92,10 +92,10 @@ namespace Sandbox.Tools
 
 				if ( tr.Entity is WheelEntity we )
 				{
-					if(float.TryParse(Owner.GetClientOwner().GetUserString("wheel_torque"), out float trq)){
+					if(float.TryParse(Owner.GetClientOwner().GetClientData("wheel_torque"), out float trq)){
 						we.torque=trq;
 					}
-					if(float.TryParse(Owner.GetClientOwner().GetUserString("wheel_maxspeed"), out float mxspd)){
+					if(float.TryParse(Owner.GetClientOwner().GetClientData("wheel_maxspeed"), out float mxspd)){
 						we.max_speed=mxspd;
 					}
 
@@ -125,10 +125,10 @@ namespace Sandbox.Tools
 					.WithBasis( Rotation.LookAt( tr.Normal ) * Rotation.From( new Angles( 90, 0, 0 ) ) )
 					.Create();
 				
-				if(float.TryParse(Owner.GetClientOwner().GetUserString("wheel_torque"), out float torque)){
+				if(float.TryParse(Owner.GetClientOwner().GetClientData("wheel_torque"), out float torque)){
 					ent.torque=torque;
 				}
-				if(float.TryParse(Owner.GetClientOwner().GetUserString("wheel_maxspeed"), out float maxspeed)){
+				if(float.TryParse(Owner.GetClientOwner().GetClientData("wheel_maxspeed"), out float maxspeed)){
 					ent.max_speed=maxspeed;
 				}
 

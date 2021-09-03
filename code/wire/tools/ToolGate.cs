@@ -87,7 +87,7 @@ namespace Sandbox.Tools
 
         PreviewEntity previewModel;
 
-		private string Model => Local.Pawn is null ? Owner.GetClientOwner().GetUserString("gate_model") : gate_model;
+		private string Model => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("gate_model") : gate_model;
 
 		protected override bool IsPreviewTraceValid( TraceResult tr )
 		{
@@ -172,7 +172,7 @@ namespace Sandbox.Tools
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
-				var targetGate = Owner.IsClient ? gate_selected : Owner.GetClientOwner().GetUserString("gate_selected");
+				var targetGate = Owner.IsClient ? gate_selected : Owner.GetClientOwner().GetClientData("gate_selected");
 				var ent = new GateEntity()
 				{
 					Position = tr.EndPos,

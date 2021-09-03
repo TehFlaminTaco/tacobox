@@ -106,7 +106,7 @@ namespace Sandbox.Tools
 
 				if ( tr.Entity is WireButton gate )
 				{
-					//gate.value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetUserString("constantvalue_value").ToFloat();
+					//gate.value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetClientData("constantvalue_value").ToFloat();
 					return;
 				}
 
@@ -121,9 +121,9 @@ namespace Sandbox.Tools
 				{
 					Position = tr.EndPos,
 					Rotation = targAngle,
-                    low_value = Owner.IsClient ? button_lowvalue.ToFloat() : Owner.GetClientOwner().GetUserString("button_lowvalue").ToFloat(),
-                    high_value = Owner.IsClient ? button_highvalue.ToFloat() : Owner.GetClientOwner().GetUserString("button_highvalue").ToFloat(),
-					toggleable = Owner.IsClient ? button_toggle.ToBool() : Owner.GetClientOwner().GetUserString("button_toggle").ToBool()
+                    low_value = Owner.IsClient ? button_lowvalue.ToFloat() : Owner.GetClientOwner().GetClientData("button_lowvalue").ToFloat(),
+                    high_value = Owner.IsClient ? button_highvalue.ToFloat() : Owner.GetClientOwner().GetClientData("button_highvalue").ToFloat(),
+					toggleable = Owner.IsClient ? button_toggle.ToBool() : Owner.GetClientOwner().GetClientData("button_toggle").ToBool()
 				};
 				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
