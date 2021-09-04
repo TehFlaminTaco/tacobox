@@ -259,4 +259,9 @@ partial class SandboxPlayer : Player
 			.HitLayer( CollisionLayer.Debris )
 			.Run()).Value;
 	}
+
+	[Event.Frame]
+	public void ResetTraceOnFrame(){
+		lastEyeTrace = null;
+	}
 }
