@@ -13,8 +13,6 @@ namespace Sandbox.Tools
 			using ( Prediction.Off() )
 			{
 				if(!this.CanTool()) return;
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
 				int resizeDir = 0;
 				var reset = false;
 
@@ -23,11 +21,7 @@ namespace Sandbox.Tools
 				else if ( Input.Pressed( InputButton.Reload ) ) reset = true;
 				else return;
 
-				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
-				   .Ignore( Owner )
-				   .UseHitboxes()
-				   .HitLayer( CollisionLayer.Debris )
-				   .Run();
+				var tr = (Owner as SandboxPlayer).EyeTrace();
 
 				if ( !tr.Hit || !tr.Entity.IsValid() || tr.Entity.PhysicsGroup == null )
 					return;

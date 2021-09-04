@@ -51,9 +51,6 @@ public partial class PhysGun
 			return;
 		}
 
-		var startPos = owner.EyePos;
-		var dir = owner.EyeRot.Forward;
-
 		var tr = owner.EyeTrace();
 
 		if ( Beam == null )

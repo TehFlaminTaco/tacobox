@@ -12,12 +12,7 @@ namespace Sandbox.Tools
 			if(!this.CanTool())return;
 			using ( Prediction.Off() )
 			{
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
-
-				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
-					.Ignore( Owner )
-					.Run();
+				var tr = (Owner as SandboxPlayer).EyeTrace();
 
 				if ( !tr.Hit || !tr.Body.IsValid() || !tr.Entity.IsValid() || tr.Entity.IsWorld )
 					return;

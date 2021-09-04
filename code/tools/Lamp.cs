@@ -43,12 +43,7 @@
 				if ( !Input.Pressed( InputButton.Attack1 ) )
 					return;
 
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
-
-				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
-					.Ignore( Owner )
-					.Run();
+				var tr = (Owner as SandboxPlayer).EyeTrace();
 
 				if ( !tr.Hit || !tr.Entity.IsValid() )
 					return;

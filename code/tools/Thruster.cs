@@ -82,12 +82,7 @@ namespace Sandbox.Tools
 
 				if(!this.CanTool())return;
 
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
-
-				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
-					.Ignore( Owner )
-					.Run();
+				var tr = (Owner as SandboxPlayer).EyeTrace();
 
 				if ( !tr.Hit )
 					return;
@@ -122,6 +117,7 @@ namespace Sandbox.Tools
 					Owner.GetClientOwner().HitLimit(PropType.Generic);
 					return;
 				}
+				var dir = (Owner as SandboxPlayer).CameraPosition().angle.Forward;
 
 				var ent = new ThrusterEntity
 				{

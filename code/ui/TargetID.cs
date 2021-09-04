@@ -8,11 +8,7 @@ public class TargetID : Panel {
     }
 
     public override void Tick(){
-        var startPos = Local.Pawn.EyePos;
-		var dir = Local.Pawn.EyeRot.Forward;
-        var tr = Trace.Ray( startPos, startPos + dir * 300f )
-			.Ignore( Local.Pawn )
-			.Run();
+        var tr = (Local.Pawn as SandboxPlayer).EyeTrace();
         
         var curTarget = tr.Entity as ITargetID;
         SetClass("hidden", curTarget is null);

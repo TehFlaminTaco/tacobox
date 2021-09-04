@@ -93,12 +93,7 @@ public partial class GravGun : Carriable
 			if ( timeSinceDrop < DropCooldown )
 				return;
 
-			var tr = Trace.Ray( eyePos, eyePos + eyeDir * MaxPullDistance )
-				.UseHitboxes()
-				.Ignore( owner, false )
-				.Radius( 2.0f )
-				.HitLayer( CollisionLayer.Debris )
-				.Run();
+			var tr = (Owner as SandboxPlayer).EyeTrace();
 
 			if ( !tr.Hit || !tr.Body.IsValid() || !tr.Entity.IsValid() || tr.Entity.IsWorld )
 				return;

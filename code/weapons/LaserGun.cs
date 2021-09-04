@@ -57,8 +57,6 @@ partial class LaserGun : Weapon
 	protected override void ShootEffects()
 	{
 		Host.AssertClient();
-		var startPos = Owner.EyePos;
-		var dir = Owner.EyeRot.Forward;
 		var tr = (Owner as SandboxPlayer).EyeTrace();
 	
 		Beam ??= Particles.Create( "particles/physgun_beam.vpcf", tr.EndPos );

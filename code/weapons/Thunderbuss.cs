@@ -36,9 +36,6 @@ partial class Thunderbuss : Weapon
 			}else{
 				ShootEffects();
 			}
-			//if(Owner.Parent is not null && Owner.Parent.IsValid() && Owner.Root is not null && Owner.Root.IsValid() && Owner.Root.PhysicsGroup is not null)
-			//	if(IsServer){Owner.Root.PhysicsGroup.GetBody(0).ApplyImpulseAt(Owner.EyePos, Owner.EyeRot.Forward * -150f * Clip1);}
-			//else
 			Owner.Velocity += Owner.EyeRot.Forward * -150f * Clip1;
 			PlaySound( Clip1>1 ? "rust_pumpshotgun.shootdouble" : "rust_pumpshotgun.shoot" );
 			ShootBullets( Clip1*10, 0.1f + (0.05f * Clip1), 60.0f, 8.0f, 3.0f );
