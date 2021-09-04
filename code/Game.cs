@@ -45,11 +45,15 @@ partial class SandboxGame : Game
 			.Ignore( owner )
 			.Run();
 
+
+		if(!ConsoleSystem.Caller.CanSpawnProp(modelname.Substring(7))){
+			ConsoleSystem.Caller.BannedProp(modelname);
+			return;
+		}
 		if(!ConsoleSystem.Caller.CanSpawn(PropType.Prop)){
 			ConsoleSystem.Caller.HitLimit(PropType.Prop);
 			return;
 		}
-
 		var ent = new Prop();
 		ent.Position = tr.EndPos;
 		ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) ) * Rotation.FromAxis( Vector3.Up, 180 );

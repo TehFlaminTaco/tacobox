@@ -26,6 +26,10 @@
 
 		void ShootBox()
 		{
+			if(!Owner.GetClientOwner().CanSpawnProp("citizen_props/crate01.vmdl")){
+				Owner.GetClientOwner().BannedProp("models/citizen_props/crate01.vmdl");
+				return;
+			}
 			if(!Owner.GetClientOwner().CanSpawn(PropType.Prop)){
 				Owner.GetClientOwner().HitLimit(PropType.Prop);
 				return;

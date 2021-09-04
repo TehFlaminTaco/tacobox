@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using System.Collections.Generic;
+using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Tests;
 
@@ -6,6 +7,7 @@ using Sandbox.UI.Tests;
 public partial class SpawnList : Panel
 {
 	VirtualScrollPanel Canvas;
+	List<(Panel panel, string path)> icons = new();
 
 	public SpawnList()
 	{
@@ -17,6 +19,7 @@ public partial class SpawnList : Panel
 		Canvas.OnCreateCell = ( cell, data ) =>
 		{
 			var file = (string)data;
+			icons.Add((cell, file));
 			var panel = cell.Add.Panel( "icon" );
 			panel.AddEventListener( "onclick", () => ConsoleSystem.Run( "spawn", "models/" + file ) );
 			panel.Style.Background = new PanelBackground
@@ -32,6 +35,14 @@ public partial class SpawnList : Panel
 			if ( file.Contains( "clothes" ) ) continue;
 
 			Canvas.AddItem( file.Remove( file.Length - 6 ) );
+		}
+	}
+
+	public void UpdateVisible(){
+		var rank = Local.Client.GetRank();
+		if(rank is null)return;
+		foreach((var cell, var prop) in icons){
+			cell.SetClass("hidden", !rank.CanSpawnProp(prop));
 		}
 	}
 }

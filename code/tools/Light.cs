@@ -63,6 +63,10 @@
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawnProp("light/light_tubular.vmdl")){
+					Owner.GetClientOwner().BannedProp("models/light/light_tubular.vmdl");
+					return;
+				}
 				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
 					Owner.GetClientOwner().HitLimit(PropType.Generic);
 					return;

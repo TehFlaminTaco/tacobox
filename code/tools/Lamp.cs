@@ -64,6 +64,10 @@
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawnProp("torch/torch.vmdl")){
+					Owner.GetClientOwner().BannedProp("models/torch/torch.vmdl");
+					return;
+				}
 				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
 					Owner.GetClientOwner().HitLimit(PropType.Generic);
 					return;

@@ -19,6 +19,7 @@ public class ModelPicker : Panel {
         scrollPanel.AddClass("box");
         this.Models = Models;
         foreach(var model in Models){
+            if(!Local.Client.CanSpawnProp(model.Substring(7)))continue;
             var file = (string)model.Remove(model.Length - 5);
 			var panel = scrollPanel.Add.Panel( "icon" );
             icons.Add((panel, model));

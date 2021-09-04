@@ -113,6 +113,11 @@ namespace Sandbox.Tools
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawnProp(Model.Substring(7))){
+					Owner.GetClientOwner().BannedProp(Model);
+					return;
+				}
+
 				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
 					Owner.GetClientOwner().HitLimit(PropType.Generic);
 					return;

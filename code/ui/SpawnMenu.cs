@@ -18,6 +18,7 @@ public partial class SpawnMenu : Panel
 	readonly Panel toollist;
 	public readonly Form inspector;
 	readonly EntityList ents;
+	readonly SpawnList spawnList;
 
 	public SpawnMenu()
 	{
@@ -33,8 +34,8 @@ public partial class SpawnMenu : Panel
 			var body = left.Add.Panel( "body" );
 
 			{
-				var props = body.AddChild<SpawnList>();
-				tabs.SelectedButton = tabs.AddButtonActive( "Props", ( b ) => props.SetClass( "active", b ) );
+				spawnList = body.AddChild<SpawnList>();
+				tabs.SelectedButton = tabs.AddButtonActive( "Props", ( b ) => spawnList.SetClass( "active", b ) );
 
 				ents = body.AddChild<EntityList>();
 				tabs.AddButtonActive( "Entities", ( b ) => ents.SetClass( "active", b ) );
@@ -77,6 +78,9 @@ public partial class SpawnMenu : Panel
 
 	List<(Button button, string tool)> toolButtons = new();
 	public void UpdateToolsVisible(){
+		try{
+			spawnList.UpdateVisible();
+		}catch(Exception){}
 		try{
 			var hideInvalidTools = !Local.Client.HasFlag("showDeniedTools");
 			foreach((var button, var tool) in toolButtons){

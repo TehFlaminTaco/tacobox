@@ -200,6 +200,55 @@ Window {
             }
         }
 
+        PropsAllowed {
+            flex-direction: flex-start;
+            flex-wrap:wrap;
+            height:100%;
+            border-radius:8px;
+            overflow:scroll;
+            PropIcon {
+                flex-direction:column;
+                .allowState {
+                    flex-direction:row;
+                    width:76px;
+                    //border-left: 1px solid white;
+                    //border-right: 1px solid white;
+                    //border-radius: 0px 0px 8px 8px;b
+                    margin-bottom:8px;
+                    Button {
+                        min-height:0px;
+                        height:25px;
+                        padding:0px 0px;
+                        border-radius:0px 0px 8px 8px;
+                    }
+                }
+            }
+            .icon {
+                flex-shrink: 0;
+                border-radius: 8px 8px 0px 0px;
+                width: 76px;
+                height: 76px;
+                margin: 2px;
+                background-position: center;
+                background-size: cover;
+                background-color: rgba(black, 0.1);
+                background-image: url( /entity/spawnicon.png );
+
+                /*&:hover {
+                    cursor: pointer;
+                    border: 1px solid white;
+                }
+
+                &.selected {
+                    border: 1px solid #08F;
+                }*/
+                border: 1px solid #f00;
+                &.allowed{
+                    border: 1px solid #08f;
+                }
+            }
+        }
+
         .perms {
             height:100%;
             width:100%;

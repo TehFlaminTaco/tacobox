@@ -112,6 +112,11 @@ namespace Sandbox.Tools
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
+				if(!Owner.GetClientOwner().CanSpawnProp("wirebox/katlatze/button.vmdl")){
+					Owner.GetClientOwner().BannedProp("models/wirebox/katlatze/button.vmdl");
+					return;
+				}
+
 				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
 					Owner.GetClientOwner().HitLimit(PropType.Generic);
 					return;

@@ -95,6 +95,11 @@ namespace Sandbox.Tools
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
+				if(!Owner.GetClientOwner().CanSpawnProp("citizen_props/chippacket01.vmdl")){
+					Owner.GetClientOwner().BannedProp("models/citizen_props/chippacket01.vmdl");
+					return;
+				}
+
 				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
 					Owner.GetClientOwner().HitLimit(PropType.Generic);
 					return;

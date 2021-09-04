@@ -79,6 +79,11 @@
 
 				if ( tr.Entity is BalloonEntity )
 					return;
+				
+				if(!Owner.GetClientOwner().CanSpawnProp("citizen_props/balloonregular01.vmdl")){
+					Owner.GetClientOwner().BannedProp("models/citizen_props/balloonregular01.vmdl");
+					return;
+				}
 
 				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
 					Owner.GetClientOwner().HitLimit(PropType.Generic);

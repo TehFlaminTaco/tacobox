@@ -102,6 +102,11 @@ namespace Sandbox.Tools
 					return;
 				}
 
+				if(!Owner.GetClientOwner().CanSpawnProp("citizen_props/wheel01.vmdl")){
+					Owner.GetClientOwner().BannedProp("models/citizen_props/wheel01.vmdl");
+					return;
+				}
+
 				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
 					Owner.GetClientOwner().HitLimit(PropType.Generic);
 					return;

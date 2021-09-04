@@ -77,6 +77,7 @@ public class RankPanel : Panel {
         public Button deleteButton;
         public Permissions permissionsSettings;
         public SpawnPage spawnSettings;
+        public PropsAllowed propsAllowed;
 
         public RankSettings(RankPanel parent){
             this.parent = parent;
@@ -105,6 +106,11 @@ public class RankPanel : Panel {
             pageButtons.Add((pageButtonRow.Add.Button(spawnSettings.Name, "pageButton"), spawnSettings));
             pageHolder.AddChild(spawnSettings);
 
+            propsAllowed = new(this);
+            pages.Add(propsAllowed);
+            pageButtons.Add((pageButtonRow.Add.Button(propsAllowed.Name, "pageButton"), propsAllowed));
+            pageHolder.AddChild(propsAllowed);
+
 
             foreach(var pb in pageButtons){
                 pb.button.AddEventListener("onclick", e=>{
@@ -127,6 +133,7 @@ public class RankPanel : Panel {
             deleteButton.RemoveClass("yousure");
             if(CurrentPage == permissionsSettings.Name)permissionsSettings.UpdateChildren();
             if(CurrentPage == spawnSettings.Name)spawnSettings.UpdateChildren();
+            if(CurrentPage == propsAllowed.Name)propsAllowed.UpdateChildren();
         }
 
         public void RankChanged(){
@@ -155,6 +162,7 @@ public class RankPanel : Panel {
             deleteButton.RemoveClass("yousure");
             permissionsSettings.UpdateChildren();
             spawnSettings.UpdateChildren();
+            propsAllowed.UpdateChildren();
         }
     }
 
