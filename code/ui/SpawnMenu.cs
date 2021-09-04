@@ -80,6 +80,7 @@ public partial class SpawnMenu : Panel
 	public void UpdateToolsVisible(){
 		try{
 			spawnList.UpdateVisible();
+			ents.UpdateVisible();
 		}catch(Exception){}
 		try{
 			var hideInvalidTools = !Local.Client.HasFlag("showDeniedTools");
@@ -126,7 +127,7 @@ public partial class SpawnMenu : Panel
 				} );
 			}
 		}
-
+		
 		if(AdminCore.Setup) UpdateToolsVisible();
 		GetCurrentTool()?.GenerateControls(inspector);
 	}

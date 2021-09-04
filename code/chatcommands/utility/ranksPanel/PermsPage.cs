@@ -96,9 +96,9 @@ public abstract class Perms : RankPanel.Page {
             this.page = page;
             var rank = page.parent.parent.currentRank;
             AddClass("permsButton");
-            SetClass("allowed", getValue(rank, cmd)>0);
             name = new Label{Text = cmd, Classes = "name"};
             if(list.IsInt){
+                SetClass("allowed", getValue(rank, cmd)!=0);
                 inherited = new("👪", "", ()=>{
                     setHas(rank, cmd, -2);
                     page.UpdateAllButtons();
@@ -122,6 +122,7 @@ public abstract class Perms : RankPanel.Page {
                 AddChild(count);
 
             }else{
+                SetClass("allowed", getValue(rank, cmd)>0);
                 denied = new("❌", "", ()=>{
                     setHas(rank, cmd, -1);
                     page.UpdateAllButtons();

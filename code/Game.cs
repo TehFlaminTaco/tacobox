@@ -90,6 +90,11 @@ partial class SandboxGame : Game
 			toSpawn = PropType.Vehicle;
 		if(spawnedType.IsAssignableTo(typeof(NpcTest)))
 			toSpawn = PropType.NPC;
+		
+		if(!ConsoleSystem.Caller.CanSpawnEnt(entName)){
+			ConsoleSystem.Caller.BannedEnt(entName);
+			return;
+		}
 
 		if(!ConsoleSystem.Caller.CanSpawn(toSpawn)){
 			ConsoleSystem.Caller.HitLimit(toSpawn);

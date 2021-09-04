@@ -2,38 +2,16 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using Sandbox.UI.Tests;
+using System.Collections.Generic;
 using System.Linq;
 
 [Library]
 public partial class EntityList : Panel
 {
-	VirtualScrollPanel Canvas;
+	List<(Panel panel, string path)> icons = new();
 
 	public EntityList()
 	{
-		/*AddClass( "spawnpage" );
-		AddChild( out Canvas, "canvas" );
-
-		Canvas.Layout.AutoColumns = true;
-		Canvas.Layout.ItemSize = new Vector2( 100, 100 );
-		Canvas.OnCreateCell = ( cell, data ) =>
-		{
-			var entry = (LibraryAttribute)data;
-			var btn = cell.Add.Button( entry.Title );
-			btn.AddClass( "icon" );
-			btn.AddEventListener( "onclick", () => ConsoleSystem.Run( "spawn_entity", entry.Name ) );
-			btn.Style.Background = new PanelBackground
-			{
-				Texture = Texture.Load( $"/entity/{entry.Name}.png", false )
-			};
-		};
-
-		var ents = Library.GetAllAttributes<Entity>().Where( x => x.Spawnable ).OrderBy( x => x.Title ).ToArray();
-
-		foreach ( var entry in ents )
-		{
-			Canvas.AddItem( entry );
-		}*/
 		Reload();
 	}
 
@@ -58,7 +36,16 @@ public partial class EntityList : Panel
 				entry.AddEventListener("onclick", E=>{
 					ConsoleSystem.Run( "spawn_entity", ent.Name );
 				});
+				icons.Add((entry, ent.Name));
 			}
+		}
+	}
+
+	public void UpdateVisible(){
+		var rank = Local.Client.GetRank();
+		if(rank is null)return;
+		foreach((var cell, var prop) in icons){
+			cell.SetClass("hidden", !rank.CanSpawnEnt(prop));
 		}
 	}
 }

@@ -87,6 +87,9 @@ public static class AdminCore{
     public static bool CanSpawnProp(this Client c, string model){
         return c.GetRank().CanSpawnProp(model);
     }
+    public static bool CanSpawnEnt(this Client c, string name){
+        return c.GetRank().CanSpawnEnt(name);
+    }
     public static void HitLimit(this Client c, PropType t){
         if(c.GetRank().SpawnLimit($"{t}")==0){
             TacoChatBox.AddChatEntry(To.Single(c), "white", "", $"⚠️ You are not allowed to spawn {t}s!");
@@ -97,6 +100,9 @@ public static class AdminCore{
 
     public static void BannedProp(this Client c, string model){
         TacoChatBox.AddChatEntry(To.Single(c), "white", "", $"⚠️ You are not allowed to spawn {model}!");
+    }
+    public static void BannedEnt(this Client c, string ent){
+        TacoChatBox.AddChatEntry(To.Single(c), "white", "", $"⚠️ You are not allowed to spawn {ent}!");
     }
 
     public static string ColorName(this Client c){
@@ -119,12 +125,13 @@ public static class AdminCore{
             "allCommands",
             "allAuthority",
             "allTools",
+            "allProps",
+            "allEnts",
+            "unlimitedSpawns",
             "editRanks",
             "seeSilent",
             "showDeniedTools",
             "touchWorldspawn",
-            "unlimitedSpawns",
-            "allProps"
         };
     }
 

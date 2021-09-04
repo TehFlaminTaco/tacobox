@@ -12,6 +12,7 @@ public class SpawnPage : Perms
 	{
 		List1 = new ToolList();
 		List2 = new LimitList();
+        List3 = new EntList();
 	}
 }
 
@@ -76,5 +77,37 @@ public class LimitList : Perms.ListType
                 amount = setting
             });
         Rank.SetRankSpawnLimit(r, cmd, setting);
+    }
+}
+
+public class EntList : Perms.ListType
+{
+	public override string Name => "Entities";
+
+	public override void Make(){
+		foreach ( var kv in Library.GetAllAttributes<Sandbox.Entity>().Where(c=>c.Spawnable).GroupBy(x=>x.Group) ){
+            list.Add.Label(kv.Key ?? "Misc", "groupHeader");
+            foreach(var command in kv)
+                Add(command.Name);
+        }
+	}
+
+	public override int Value( string rank, string cmd ){
+        return Rank.FromName(rank).CanSpawnEnt(cmd.ToLower())?1:0;
+    }
+
+    public override bool Inherited( string rank, string cmd ){
+        return !Rank.FromName(rank).AllowedEnts.Any(c=>c.name.ToLower()==cmd.ToLower());
+    }
+
+    public override void Set( string r, string cmd, int setting ){
+        var rank = Rank.FromName(r);
+        rank.AllowedEnts.RemoveAll(c=>c.name.ToLower() == cmd.ToLower());
+        if(setting != 0)
+            rank.AllowedEnts.Add(new Rank.Permission{
+                name = cmd,
+                access = setting == 1 ? Rank.Permission.Access.Allow : Rank.Permission.Access.Deny
+            });
+        Rank.SetRankHasEnt(r, cmd, setting);
     }
 }

@@ -350,6 +350,11 @@ entitylist {
                 background-color: rgba(black, 0.4);
                 cursor: pointer;
             }
+
+            &.hidden {
+                opacity:0.03;
+                pointer-events:none;
+            }
         }
 
         .box {
