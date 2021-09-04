@@ -59,10 +59,7 @@ partial class LaserGun : Weapon
 		Host.AssertClient();
 		var startPos = Owner.EyePos;
 		var dir = Owner.EyeRot.Forward;
-		var tr = Trace.Ray( startPos, startPos + dir * 5000f )
-			.UseHitboxes()
-			.Ignore( Owner )
-			.Run();
+		var tr = (Owner as SandboxPlayer).EyeTrace();
 	
 		Beam ??= Particles.Create( "particles/physgun_beam.vpcf", tr.EndPos );
 		Beam.SetPosition( 1, tr.EndPos );

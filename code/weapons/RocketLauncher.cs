@@ -43,10 +43,12 @@ partial class RocketLauncher : Weapon, IWireEntity
 		PlaySound( "rust_pistol.shoot" );
 		//ShootBullet( 0.05f, Force, Damage, 3.0f );
 		if(IsServer){
+			var startPos = Owner.EyePos + Owner.EyeRot.Forward * 30f;
+			var dir = Rotation.LookAt(((Owner as SandboxPlayer).EyeTrace().EndPos - startPos).Normal);
 			var rocket = new Rocket();
-			rocket.Position = Owner.EyePos + Owner.EyeRot.Forward * 30f;
-			rocket.Rotation = Owner.EyeRot.RotateAroundAxis(Vector3.Right, 90f);
-			rocket.ApplyAbsoluteImpulse(Owner.EyeRot.Forward * 30000f);
+			rocket.Position = startPos;
+			rocket.Rotation = dir.RotateAroundAxis(Vector3.Right, 90f);
+			rocket.ApplyAbsoluteImpulse(dir.Forward * 30000f);
 		}
 		Clip1--;
 	}
