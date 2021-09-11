@@ -21,7 +21,7 @@ partial class SandboxGame : Game
 	public override void ClientJoined( Client cl )
 	{
 		base.ClientJoined( cl );
-		var player = new SandboxPlayer();
+		var player = new SandboxPlayer( cl );
 		player.Respawn();
 
 		cl.Pawn = player;
@@ -134,12 +134,10 @@ partial class SandboxGame : Game
 		{
 			if ( basePlayer.DevController is NoclipController )
 			{
-				Log.Info( "Noclip Mode Off" );
 				basePlayer.DevController = null;
 			}
 			else
 			{
-				Log.Info( "Noclip Mode On" );
 				basePlayer.DevController = new NoclipController();
 			}
 		}

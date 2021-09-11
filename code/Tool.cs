@@ -146,5 +146,9 @@ namespace Sandbox.Tools
 		{
 			return ClassInfo.Description;
 		}
+
+		public virtual bool EyeLock(){
+			return false;
+		}
 	}
 }

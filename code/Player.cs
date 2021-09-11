@@ -13,17 +13,27 @@ partial class SandboxPlayer : Player
 	[Net, Predicted] public Entity Vehicle { get; set; }
 	[Net, Predicted] public ICamera MainCamera { get; set; }
 
+	public Clothing.Container Clothing = new();
+
 	[Net] public bool GodMode {get; set;}
+	public SmartSnap smartSnap = new();
 
 	public UndoQueue undoQueue;
 
 	public ICamera LastCamera { get; set; }
 
+	public static SoundEvent FallDamage = new SoundEvent("sounds/physics/bullet_impacts/flesh_npc_04.vsnd");
 	public SandboxPlayer()
 	{
 		Inventory = new Inventory( this );
 		undoQueue = new UndoQueue( this );
 	}
+
+	public SandboxPlayer( Client cl ) : this()
+	{
+		Clothing.LoadFromClient( cl );
+	}
+
 
 	public override void Spawn()
 	{
@@ -37,7 +47,7 @@ partial class SandboxPlayer : Player
 	{
 		SetModel( "models/citizen/citizen.vmdl" );
 
-		Controller = new WalkController();
+		Controller = new TacoWalkController();
 		Animator = new StandardPlayerAnimator();
 
 		MainCamera = LastCamera;
@@ -53,7 +63,7 @@ partial class SandboxPlayer : Player
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
-		Dress();
+		Clothing.DressEntity( this );
 
 		if(IsClient)
 			InventoryBar.Instance.ReBuild();
@@ -63,6 +73,17 @@ partial class SandboxPlayer : Player
 		Inventory.Add( new Tool() );
 		Inventory.Add( new Pistol() );
 		Inventory.Add( new Flashlight() );
+
+		FallDamage.Sounds = new[]{
+			"sounds/physics/bullet_impacts/flesh_npc_01.vsnd",
+			"sounds/physics/bullet_impacts/flesh_npc_02.vsnd",
+			"sounds/physics/bullet_impacts/flesh_npc_03.vsnd",
+			"sounds/physics/bullet_impacts/flesh_npc_04.vsnd",
+			"sounds/physics/bullet_impacts/flesh_npc_05.vsnd",
+			"sounds/physics/bullet_impacts/flesh_npc_06.vsnd",
+			"sounds/physics/bullet_impacts/flesh_npc_07.vsnd",
+			"sounds/physics/bullet_impacts/flesh_npc_08.vsnd",
+		};
 
 		base.Respawn();
 	}
@@ -108,7 +129,6 @@ partial class SandboxPlayer : Player
 
 		lastDamage = info;
 		TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
-
 		base.TakeDamage( info );
 	}
 
@@ -139,8 +159,27 @@ partial class SandboxPlayer : Player
 		return MainCamera;
 	}
 
+	Rotation lastFreeRotation = Rotation.Identity;
+	public override void FrameSimulate(Client cl){
+		if(ActiveChild is Tool tool && (tool.CurrentTool?.EyeLock()??false)){
+			EyeRot = lastFreeRotation;
+			Input.Rotation = EyeRot;
+			Input.MouseDelta = Vector3.Zero;
+		}else{
+			lastFreeRotation = EyeRot;
+		}
+		base.FrameSimulate(cl);
+	}
+
 	public override void Simulate( Client cl )
 	{
+		if(ActiveChild is Tool tool && (tool.CurrentTool?.EyeLock()??false)){
+			EyeRot = lastFreeRotation;
+			Input.Rotation = EyeRot;
+			Input.MouseDelta = Vector3.Zero;
+		}else{
+			lastFreeRotation = EyeRot;
+		}
 		lastEyeTrace = null;
 		base.Simulate( cl );
 		if(IsServer && MainCamera is ThirdPersonCameraTracked tr)tr.Update();
@@ -253,11 +292,20 @@ partial class SandboxPlayer : Player
 			return (TraceResult)lastEyeTrace;
 		}
 		(var pos, var ang) = CameraPosition();
-		return (lastEyeTrace=Trace.Ray( pos, pos + ang.Forward * 10000.0f )
+		var trace = Trace.Ray( pos, pos + ang.Forward * 10000.0f )
 			.UseHitboxes()
 			.Ignore( this, false )
 			.HitLayer( CollisionLayer.Debris )
-			.Run()).Value;
+			.Run();
+
+		if(ActiveChild is Tool){
+			var snapTrace = SmartSnap.SnapSurface(trace);
+			if(Input.Down(InputButton.Use))
+				trace = snapTrace;
+		}
+
+		lastEyeTrace = trace;
+		return trace;
 	}
 
 	[Event.Frame]

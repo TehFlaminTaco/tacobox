@@ -45,11 +45,8 @@ partial class SandboxPlayer
 				clothing.SetModel( model );
 				clothing.SetParent( ent, true );
 				clothing.RenderColorAndAlpha = e.RenderColorAndAlpha;
-
-				if ( Local.Pawn == this )
-				{
-					//	clothing.EnableDrawing = false; wtf
-				}
+				clothing.CopyBodyGroups( e );
+				clothing.CopyMaterialGroup( e );
 			}
 		}
 
