@@ -35,7 +35,7 @@ public partial class NpcTest {
 		ent.EnableHitboxes = false;
 		ent.EnableAllCollisions = true;
 		ent.SurroundingBoundsMode = SurroundingBoundsType.Physics;
-		ent.RenderColorAndAlpha = RenderColorAndAlpha;
+		ent.RenderColor = RenderColor;
 		try{
 			ent.PhysicsGroup.Velocity = PhysicsBody.Velocity;
 			var bone = ent.GetBonePhysicsBody(info.BoneIndex);
@@ -71,7 +71,7 @@ public partial class NpcTest {
 				var clothing = new ModelEntity();
 				clothing.SetModel( model );
 				clothing.SetParent( ent, true );
-				clothing.RenderColorAndAlpha = e.RenderColorAndAlpha;
+				clothing.RenderColor = e.RenderColor;
                 clothing.PhysicsBody?.PhysicsGroup?.SetSurface("flesh");
 
 				if ( Local.Pawn == this )

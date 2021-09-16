@@ -44,7 +44,7 @@
 		{
 			if ( previewModel.IsValid() )
 			{
-				previewModel.RenderColor = Tint;
+				previewModel.RenderColor = Tint.ToColor();
 			}
 
 			if ( !Host.IsServer )
@@ -92,7 +92,7 @@
 
 				ent.SetModel( "models/citizen_props/balloonregular01.vmdl" );
 				ent.PhysicsBody.GravityScale = -0.2f;
-				ent.RenderColor = Tint;
+				ent.RenderColor = Tint.ToColor();
 				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
 
 				(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(ent));
