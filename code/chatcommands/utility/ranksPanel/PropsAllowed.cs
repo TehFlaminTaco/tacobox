@@ -40,9 +40,7 @@ public class PropsAllowed : RankPanel.Page
             this.path = path;
             this.page = page;
 			icon = Add.Panel( "icon" );
-			icon.Style.Background = new PanelBackground{
-				Texture = Texture.Load( $"/models/{path}_c.png", false )
-			};
+			icon.Style.BackgroundImage = Texture.Load( $"/models/{path}_c.png", false );
 
             denied = new("❌", "", ()=>{
                 setHas(path, -1);

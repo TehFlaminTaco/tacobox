@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Collections.Generic;
 
 partial class SandboxPlayer : Player
 {
@@ -74,7 +75,7 @@ partial class SandboxPlayer : Player
 		Inventory.Add( new Pistol() );
 		Inventory.Add( new Flashlight() );
 
-		FallDamage.Sounds = new[]{
+		FallDamage.Sounds = new List<string>(new[]{
 			"sounds/physics/bullet_impacts/flesh_npc_01.vsnd",
 			"sounds/physics/bullet_impacts/flesh_npc_02.vsnd",
 			"sounds/physics/bullet_impacts/flesh_npc_03.vsnd",
@@ -83,7 +84,7 @@ partial class SandboxPlayer : Player
 			"sounds/physics/bullet_impacts/flesh_npc_06.vsnd",
 			"sounds/physics/bullet_impacts/flesh_npc_07.vsnd",
 			"sounds/physics/bullet_impacts/flesh_npc_08.vsnd",
-		};
+		});
 
 		base.Respawn();
 	}

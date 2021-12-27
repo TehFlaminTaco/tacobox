@@ -25,10 +25,7 @@ class TextureScreen : Prop, IWireEntity{
 			drawPanel = new();
 		}
 		if(target is not null && target != old){
-			drawPanel.screenPanel.Style.Background = new PanelBackground
-			{
-				Texture = target
-			};
+			drawPanel.screenPanel.Style.BackgroundImage = target;
 			old = target;
 			drawPanel.screenPanel.Style.Dirty();
 		}

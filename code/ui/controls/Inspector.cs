@@ -1,6 +1,8 @@
 ﻿using Sandbox.UI.Construct;
 using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace Sandbox.UI
@@ -18,108 +20,175 @@ namespace Sandbox.UI
 		[Property]
 		public bool Recursive { get; set; } = true;		
 
-
-
 		public Inspector()
 		{
-
+			AddClass( "inspector" );
 		}
 
 		int lastHash;
 
 		public override void Tick()
 		{
-			base.Tick();
+			if ( Target is IValid valid && !valid.IsValid )
+				Target = null;
 
-			var hash = HashCode.Combine( Target, Recursive );
-
-			if ( hash != lastHash )
+			if ( HashCode.Combine( Target, Recursive ) != lastHash )
 			{
-				lastHash = hash;
 				Rebuild();
-			}			
+			}
+
+			base.Tick();
 		}
+
+
 
 		public virtual void Rebuild()
 		{
 			DeleteChildren( true );
+			lastHash = HashCode.Combine( Target, Recursive );
+
+			if ( Target == null )
+				return;
 
 			// Get the Class Info
-			var attr = Library.GetAttribute( Target.GetType() );
-			if ( attr == null ) throw new System.Exception( "Oops" );
-
-			var types = Library.GetAttributes<InspectorProvider>().ToArray(); // todo order by?
+			var properties = Reflection.GetProperties( Target );
+			if ( properties == null ) throw new System.Exception( "Oops" );
 
 			// Make a field for each property
-			foreach ( var prop in attr.Properties )
+			foreach ( var group in properties.GroupBy( x => GetCategory( x ) ).OrderBy( x => x.Key ) )
 			{
-				Panel control = default;
+				AddHeader( group.Key );
 
-				if ( !Recursive && prop.DeclaringType != Target.GetType() ) 
-					continue;
+				currentGroup = Add.Panel( "field-group" );
 
-				// Try to create an editor from the attributes
-				var handler = types.Where( x => x.TargetType == prop.PropertyType ).FirstOrDefault();
-				control = (Panel)handler?.InvokeStatic( Target, prop );
+				foreach ( var prop in group.OrderBy( x => x.Name ) )
+				{
+					if ( !Recursive && prop.DeclaringType != Target.GetType() )
+						continue;
+
+					if ( prop.GetGetMethod() == null )
+						continue;
+
+					CreateControlFor( Target, prop );
+				}
+
+				currentGroup = null;
+			}
+		}
+
+		private string GetCategory( MemberInfo prop )
+		{
+			var category = prop.GetCustomAttribute<CategoryAttribute>();
+			if ( category != null ) return category.Category;
+
+			return "Misc";
+		}
+
+
+		public virtual void CreateControlFor( object obj, PropertyInfo prop )
+		{
+			var browsable = prop.GetCustomAttribute<BrowsableAttribute>();
+			if ( !(browsable?.Browsable ?? true) ) return;
+
+			if ( EditorProvider.TryGetForType( prop.PropertyType, out var handler, property: prop ) )
+			{
+				var control = handler.CreateEditor( prop.GetValue( obj ), prop );
 				if ( control != null )
 				{
-					control.Parent = this;
+					if ( handler.PreferNoLabel )
+					{
+						(currentGroup ?? this).AddChild( control );
+					}
+					else
+					{
+						AddRow( prop, Target, control );
+					}
+					
+					return;
 				}
-				else
+			}
+
+			AddRow( prop, Target, new TextEntry() );
+		}
+
+
+		[EditorProvider( typeof( float ) )]
+		public static Panel CreateNumericControl( EditorProvider.Config config )
+		{
+			var range = config.Property?.GetCustomAttribute<RangeAttribute>();
+			if ( range != null )
+			{
+				var slider = new SliderEntry();
+				slider.MinValue = range.Min;
+				slider.MaxValue = range.Max;
+				slider.Step = range.Step;
+				return slider;
+			}
+
+			var te = new TextEntry();
+			te.Numeric = true;
+			te.NumberFormat = "0.###";
+			return te;
+		}
+
+		[EditorProvider( typeof( System.Enum ) )]
+		public static Panel CreateEnumControl( EditorProvider.Config config )
+		{
+			var control = new DropDown();
+
+			var names = config.Property?.PropertyType.GetEnumNames();
+			var values = config.Property?.PropertyType.GetEnumValues();
+
+			for ( int i = 0; i < names.Length; i++ )
+			{
+				control.Options.Add( new Option(){Title =names[i ], Value=values.GetValue( i ).ToString()} );
+			}
+
+			return control;
+		}
+
+		[EditorProvider( typeof( int ) )]
+		public static Panel CreateIntegerControl( EditorProvider.Config config )
+		{
+			var range = config.Property?.GetCustomAttribute<RangeAttribute>();
+			if ( range != null )
+			{
+				var slider = new SliderEntry();
+				slider.MinValue = range.Min;
+				slider.MaxValue = range.Max;
+				slider.Step = range.Step;
+
+				if ( config.Property.PropertyType == typeof( int ) || config.Property.PropertyType == typeof( uint ) )
 				{
-					// If we can't just do a textentry
-					control = AddChild<TextEntry>();
+					slider.TextEntry.NumberFormat = "0.";
+					slider.Slider.Step = 1;
 				}
-
-				// bind on value
-				control.Bind( "value", Target, prop.MemberName );
-				AddRow( prop.Title, control );
-			}
-		}
-
-
-		[InspectorProvider( typeof( float ) )]
-		public static Panel CreateNumericControl( object target, PropertyAttribute prop )
-		{
-			var range = prop.Attributes.OfType<RangeAttribute>().FirstOrDefault();
-			if ( range != null )
-			{
-				var slider = new SliderEntry();
-				slider.MinValue = range.Min;
-				slider.MaxValue = range.Max;
-				slider.Step = range.Step;
+	
 				return slider;
 			}
 
 			var te = new TextEntry();
 			te.Numeric = true;
-			te.Format = "0.###";
-			return te;
+			te.NumberFormat = "0";
+			return te ;
 		}
 
-		[InspectorProvider( typeof( int ) )]
-		public static Panel CreateIntegerControl( object target, PropertyAttribute prop )
-		{
-			var range = prop.Attributes.OfType<RangeAttribute>().FirstOrDefault();
-			if ( range != null )
-			{
-				var slider = new SliderEntry();
-				slider.MinValue = range.Min;
-				slider.MaxValue = range.Max;
-				slider.Step = range.Step;
-				return slider;
-			}
-
-			var te = new TextEntry();
-			te.Numeric = true;
-			te.Format = "0";
-			return te;
-		}
-
-		[InspectorProvider( typeof( bool ) )]
-		public static Panel CreateBooleanrControl( object target, PropertyAttribute prop )
+		[EditorProvider( typeof( bool ) )]
+		public static Panel CreateBooleanControl( EditorProvider.Config config )
 		{
 			return new Checkbox();
+		}
+
+		[EditorProvider( typeof( string ) )]
+		public static Panel CreateStringControl( EditorProvider.Config config )
+		{
+			return new TextEntry();
+		}
+
+		[EditorProvider( "default" )]
+		public static Panel CreateDefaultControl( EditorProvider.Config config )
+		{
+			return new TextEntry();
 		}
 
 		public override void OnHotloaded()

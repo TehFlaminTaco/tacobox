@@ -121,8 +121,8 @@ namespace Sandbox.UI
 			editor.Bind( "value", this, "Value" );
 		}
 
-		[InspectorProvider( typeof( Color ) )]
-		public static Panel InspectorProvider( object target, PropertyAttribute prop )
+		[EditorProvider( typeof( Color ) )]
+		public static Panel InspectorProvider( EditorProvider.Config config )
 		{
 			return new ColorProperty();
 		}

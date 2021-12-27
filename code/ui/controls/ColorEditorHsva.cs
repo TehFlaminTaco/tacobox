@@ -19,22 +19,22 @@ namespace Sandbox.UI
 			AddClass( "coloreditorhsva" );
 
 			HueSlider = Add.SliderWithEntry( 0, 359, 0.1f );
-			HueSlider.TextEntry.Format = "0";
+			HueSlider.TextEntry.NumberFormat = "0";
 			HueSlider.AddClass( "hue_slider" );
 			HueSlider.Bind( "value", this, "HueValue" );
 
 			SaturationSlider = Add.SliderWithEntry( 0, 1, 0.01f );
-			SaturationSlider.TextEntry.Format = "0.00";
+			SaturationSlider.TextEntry.NumberFormat = "0.00";
 			SaturationSlider.AddClass( "saturation_slider" );
 			SaturationSlider.Bind( "value", this, "SaturationValue" );
 
 			ValueSlider = Add.SliderWithEntry( 0, 1, 0.01f );
-			ValueSlider.TextEntry.Format = "0.00";
+			ValueSlider.TextEntry.NumberFormat = "0.00";
 			ValueSlider.AddClass( "value_slider" );
 			ValueSlider.Bind( "value", this, "ValueValue" );
 
 			AlphaSlider = Add.SliderWithEntry( 0, 1, 0.01f );
-			AlphaSlider.TextEntry.Format = "0.00";
+			AlphaSlider.TextEntry.NumberFormat = "0.00";
 			AlphaSlider.AddClass( "alpha_slider" );
 			AlphaSlider.Bind( "value", this, "AlphaValue" );
 		}

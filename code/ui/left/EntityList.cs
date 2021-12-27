@@ -27,10 +27,7 @@ public partial class EntityList : Panel
 			foreach(var ent in e){
 				var entry = entsBox.Add.Button("", "entry");
 				var icon = entry.Add.Panel("icon");
-				icon.Style.Background = new PanelBackground
-				{
-					Texture = Texture.Load( $"/entity/{ent.Name}.png", false )
-				};
+				icon.Style.BackgroundImage = Texture.Load( $"/entity/{ent.Name}.png", false );
 				entry.Add.Label(ent.Title);
 				
 				entry.AddEventListener("onclick", E=>{

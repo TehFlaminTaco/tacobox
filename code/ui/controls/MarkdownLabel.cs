@@ -34,8 +34,8 @@ public class MarkdownLabel : Panel {
             if((chunk.flavour&Flavour.Italic)!=Flavour.None)
                 txt.Style.FontSize=10;
             if((chunk.flavour&Flavour.Strikethrough)!=Flavour.None)
-                txt.Style.TextDecoration=TextDecoration.LineThrough;
-            txt.Style.FontColor = chunk.color;
+                txt.Style.Set("text-decoration", "line-through");
+            txt.Style.Set("color", chunk.color.Hex);
 
             txt.Style.Dirty();
         }

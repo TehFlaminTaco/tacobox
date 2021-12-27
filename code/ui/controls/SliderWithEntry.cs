@@ -15,13 +15,21 @@ namespace Sandbox.UI
 		public float MinValue
 		{
 			get => Slider.MinValue;
-			set => Slider.MinValue = value;
+			set
+			{
+				Slider.MinValue = value;
+				TextEntry.MinValue = value;
+			}
 		}
 
 		public float MaxValue
 		{
 			get => Slider.MaxValue;
-			set => Slider.MaxValue = value;
+			set
+			{
+				Slider.MaxValue = value;
+				TextEntry.MaxValue = value;
+			}
 		}
 
 		public float Step
@@ -32,8 +40,8 @@ namespace Sandbox.UI
 
 		public string Format
 		{
-			get => TextEntry.Format;
-			set => TextEntry.Format = value;
+			get => TextEntry.NumberFormat;
+			set => TextEntry.NumberFormat = value;
 		}
 
 
@@ -44,7 +52,7 @@ namespace Sandbox.UI
 			Slider = AddChild<Slider>();
 			TextEntry = AddChild<TextEntry>();
 			TextEntry.Numeric = true;
-			TextEntry.Format = "0.###";
+			TextEntry.NumberFormat = "0.###";
 
 			TextEntry.Bind( "value", Slider, "Value" );
 
@@ -76,7 +84,7 @@ namespace Sandbox.UI
 
 			if ( name == "format" )
 			{
-				TextEntry.Format = value;
+				TextEntry.NumberFormat = value;
 				return;
 			}
 

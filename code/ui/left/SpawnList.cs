@@ -22,10 +22,7 @@ public partial class SpawnList : Panel
 			icons.Add((cell, file));
 			var panel = cell.Add.Panel( "icon" );
 			panel.AddEventListener( "onclick", () => ConsoleSystem.Run( "spawn", "models/" + file ) );
-			panel.Style.Background = new PanelBackground
-			{
-				Texture = Texture.Load( $"/models/{file}_c.png", false )
-			};
+			panel.Style.BackgroundImage = Texture.Load( $"/models/{file}_c.png", false );
 		};
 
 		foreach ( var file in FileSystem.Mounted.FindFile( "models", "*.vmdl_c.png", true ) )

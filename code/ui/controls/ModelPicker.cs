@@ -24,10 +24,7 @@ public class ModelPicker : Panel {
 			var panel = scrollPanel.Add.Panel( "icon" );
             icons.Add((panel, model));
 			panel.AddEventListener( "onclick", () => SetSelectedModel(model) );
-			panel.Style.Background = new PanelBackground
-			{
-				Texture = Texture.Load( $"{file}.vmdl_c.png", false )
-			};
+			panel.Style.BackgroundImage = Texture.Load( $"{file}.vmdl_c.png", false );
         }
         AddChild(scrollPanel);
     }
