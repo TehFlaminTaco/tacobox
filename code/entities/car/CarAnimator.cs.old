@@ -10,11 +10,11 @@ namespace Sandbox
 			SetParam( "b_grounded", true );
 			SetParam( "b_sit", true );
 
-			var eyeAngles = (Pawn.Rotation.Inverse * Pawn.EyeRot).Angles();
+			var eyeAngles = (Pawn.Rotation.Inverse * Pawn.EyeRotation).Angles();
 			eyeAngles.pitch = eyeAngles.pitch.Clamp( -25, 70 );
 			eyeAngles.yaw = eyeAngles.yaw.Clamp( -90, 90 );
 
-			var aimPos = Pawn.EyePos + (Pawn.Rotation * Rotation.From( eyeAngles )).Forward * 200;
+			var aimPos = Pawn.EyePosition + (Pawn.Rotation * Rotation.From( eyeAngles )).Forward * 200;
 
 			SetLookAt( "aim_eyes", aimPos );
 			SetLookAt( "aim_head", aimPos );

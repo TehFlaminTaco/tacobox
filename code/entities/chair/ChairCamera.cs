@@ -1,7 +1,7 @@
 using Sandbox;
 using System;
 
-public class ChairCamera : Camera
+public class ChairCamera : CameraMode
 {
 	protected virtual float MinFov => 80.0f;
 	protected virtual float MaxFov => 100.0f;
@@ -126,19 +126,19 @@ public class ChairCamera : Camera
 		var pawn = Local.Pawn;
 		if ( pawn == null ) return;
 
-		Pos = pawn.EyePos;
-		Rot = pawn.Rotation * (orbitYawRot * orbitPitchRot);
+		Position = pawn.EyePosition;
+		Rotation = pawn.Rotation * (orbitYawRot * orbitPitchRot);
 
 		Viewer = pawn;
 	}
 
 	private void DoThirdPerson( Chair chair, PhysicsBody body )
 	{
-		Rot = orbitYawRot * orbitPitchRot;
+		Rotation = orbitYawRot * orbitPitchRot;
 
 		var chairPos = chair.Position + chair.Rotation * (body.LocalMassCenter * chair.Scale);
 		var startPos = chairPos;
-		var targetPos = startPos + Rot.Backward * (OrbitDistance * chair.Scale) + (Vector3.Up * (OrbitHeight * chair.Scale));
+		var targetPos = startPos + Rotation.Backward * (OrbitDistance * chair.Scale) + (Vector3.Up * (OrbitHeight * chair.Scale));
 
 		var tr = Trace.Ray( startPos, targetPos )
 			.Ignore( chair )
@@ -146,7 +146,7 @@ public class ChairCamera : Camera
 			.WorldOnly()
 			.Run();
 
-		Pos = tr.EndPos;
+		Position = tr.EndPosition;
 
 		Viewer = null;
 	}
@@ -215,9 +215,9 @@ public class ChairCamera : Camera
 		float x = Noise.Perlin( pos, 0, 0 ) * length;
 		float y = Noise.Perlin( pos, 5.0f, 0 ) * length;
 
-		Pos += Rot.Right * x + Rot.Up * y;
-		Rot *= Rotation.FromAxis( Vector3.Up, x );
-		Rot *= Rotation.FromAxis( Vector3.Right, y );
+		Position += Rotation.Right * x + Rotation.Up * y;
+		Rotation *= Rotation.FromAxis( Vector3.Up, x );
+		Rotation *= Rotation.FromAxis( Vector3.Right, y );
 	}
 }
 

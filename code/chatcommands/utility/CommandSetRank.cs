@@ -26,12 +26,12 @@ public class CommandSetRank : Command {
             ChatBox.AddChatEntry(To.Single(executor), "white", "", $"⚠️ Rank not found!");
             return false;
         }
-        AdminCore.admins.RemoveAll(x=>x.steamid == c.SteamId);
+        AdminCore.admins.RemoveAll(x=>x.steamid == c.PlayerId);
         AdminCore.admins.Add(new AdminCore.Admin{
-            steamid = c.SteamId,
+            steamid = c.PlayerId,
             rankkey = r.Name
         });
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} set the rank of {c.ColorName()} to {r.Name}"); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.ColorName()} set the rank of {c.ColorName()} to {r.Name}"); //avatar:{executor.Client.PlayerId}
         AdminCore.SaveData();
         AdminCore.ReinformClients();
         return true;

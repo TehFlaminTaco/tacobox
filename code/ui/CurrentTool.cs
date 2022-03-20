@@ -28,8 +28,7 @@ public class CurrentTool : Panel
 
 	BaseTool GetCurrentTool()
 	{
-		var player = Local.Pawn;
-		if ( player == null ) return null;
+		if (Local.Pawn is not SandboxPlayer player) return null;
 
 		var inventory = player.Inventory;
 		if ( inventory == null ) return null;

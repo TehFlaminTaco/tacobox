@@ -1,5 +1,13 @@
 {
-	"sharedassets": "*.*",
-	"type": "tacobox",
-	"ident": "ataco.tacobox"
+  "Title": "Tacobox",
+  "Type": "game",
+  "Org": "local",
+  "Ident": "tacobox",
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "ResourcePaths": null,
+  "HasCode": true,
+  "CodePath": "code",
+  "RootNamespace": "Sandbox"
 }

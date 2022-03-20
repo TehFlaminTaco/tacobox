@@ -15,10 +15,10 @@ namespace Sandbox.Tools
 		[ConVar.ClientData("colortool_a")]
 		public static string colortool_a {get; set;} = "1.0f";
 
-		private string ColorR => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("colortool_r") : colortool_r;
-		private string ColorG => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("colortool_g") : colortool_g;
-		private string ColorB => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("colortool_b") : colortool_b;
-		private string ColorA => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("colortool_a") : colortool_a;
+		private string ColorR => Local.Pawn is null ? Owner.Client.GetClientData("colortool_r") : colortool_r;
+		private string ColorG => Local.Pawn is null ? Owner.Client.GetClientData("colortool_g") : colortool_g;
+		private string ColorB => Local.Pawn is null ? Owner.Client.GetClientData("colortool_b") : colortool_b;
+		private string ColorA => Local.Pawn is null ? Owner.Client.GetClientData("colortool_a") : colortool_a;
 
 
 		public override void GenerateControls(Form inspector){
@@ -57,12 +57,12 @@ namespace Sandbox.Tools
 				if ( tr.Entity is not ModelEntity modelEnt )
 					return;
 				
-				if (!Owner.GetClientOwner().CanTouch(tr.Entity))
+				if (!Owner.Client.CanTouch(tr.Entity))
 					return;
 
 				modelEnt.RenderColor = new Color(ColorR.ToFloat(), ColorG.ToFloat(), ColorB.ToFloat(), ColorA.ToFloat());
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 			}
 		}
 	}

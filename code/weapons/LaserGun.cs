@@ -25,7 +25,7 @@ partial class LaserGun : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+		(Owner as AnimEntity)?.SetAnimParameter( "b_attack", true );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -59,8 +59,8 @@ partial class LaserGun : Weapon
 		Host.AssertClient();
 		var tr = (Owner as SandboxPlayer).EyeTrace();
 	
-		Beam ??= Particles.Create( "particles/physgun_beam.vpcf", tr.EndPos );
-		Beam.SetPosition( 1, tr.EndPos );
+		Beam ??= Particles.Create( "particles/physgun_beam.vpcf", tr.EndPosition );
+		Beam.SetPosition( 1, tr.EndPosition );
 		Beam.SetEntityAttachment(0, EffectEntity, "muzzle", true );
 		Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
 
@@ -69,14 +69,14 @@ partial class LaserGun : Weapon
 			new Sandbox.ScreenShake.Perlin( 0.5f, 4.0f, 1.0f, 0.5f );
 		}
 
-		//ViewModelEntity?.SetAnimBool( "fire", true );
+		//ViewModelEntity?.SetAnimParameter( "fire", true );
 		CrosshairPanel?.CreateEvent( "fire" );
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		anim.SetParam( "holdtype", 2 ); // TODO this is shit
-		anim.SetParam( "aimat_weight", 1.0f );
+		anim.SetAnimParameter( "holdtype", 2 ); // TODO this is shit
+		anim.SetAnimParameter( "aimat_weight", 1.0f );
 	}
 
 }

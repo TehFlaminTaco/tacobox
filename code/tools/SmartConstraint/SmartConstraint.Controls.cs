@@ -5,25 +5,25 @@ using Sandbox.UI;
 
 public partial class SmartConstraintTool {
     [ConVar.ClientData] public static string smartconstraint_dorotate {get; set;} = "1";
-    public bool DoRotation => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("smartconstraint_dorotate").ToBool() : smartconstraint_dorotate.ToBool();
+    public bool DoRotation => Local.Pawn is null ? Owner.Client.GetClientData("smartconstraint_dorotate").ToBool() : smartconstraint_dorotate.ToBool();
 
     [ConVar.ClientData] public static string smartconstraint_snaprotation {get; set;} = "1";
-    public bool SnapRotation => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("smartconstraint_snaprotation").ToBool() : smartconstraint_snaprotation.ToBool();
+    public bool SnapRotation => Local.Pawn is null ? Owner.Client.GetClientData("smartconstraint_snaprotation").ToBool() : smartconstraint_snaprotation.ToBool();
 
     [ConVar.ClientData] public static string smartconstraint_snapdegrees {get; set;} = "30";
-    public float SnapDegrees => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("smartconstraint_snapdegrees").ToFloat() : smartconstraint_snapdegrees.ToFloat();
+    public float SnapDegrees => Local.Pawn is null ? Owner.Client.GetClientData("smartconstraint_snapdegrees").ToFloat() : smartconstraint_snapdegrees.ToFloat();
 
     [ConVar.ClientData] public static string smartconstraint_offset {get; set;} = "0";
-    public float Offset => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("smartconstraint_offset").ToFloat() : smartconstraint_offset.ToFloat();
+    public float Offset => Local.Pawn is null ? Owner.Client.GetClientData("smartconstraint_offset").ToFloat() : smartconstraint_offset.ToFloat();
 
     [ConVar.ClientData] public static string smartconstraint_nudgepercent {get; set;} = "1";
-    public bool NudgePercent => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("smartconstraint_nudgepercent").ToBool() : smartconstraint_nudgepercent.ToBool();
+    public bool NudgePercent => Local.Pawn is null ? Owner.Client.GetClientData("smartconstraint_nudgepercent").ToBool() : smartconstraint_nudgepercent.ToBool();
 
     [ConVar.ClientData] public static string smartconstraint_nudgeamount {get; set;} = "100";
-    public float NudgeAmount => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("smartconstraint_nudgeamount").ToFloat() : smartconstraint_nudgeamount.ToFloat();
+    public float NudgeAmount => Local.Pawn is null ? Owner.Client.GetClientData("smartconstraint_nudgeamount").ToFloat() : smartconstraint_nudgeamount.ToFloat();
 
     [ConVar.ClientData] public static string smartconstraint_constraint {get; set;} = "Weld";
-    public string ConstraintTypeName => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("smartconstraint_constraint") : smartconstraint_constraint;
+    public string ConstraintTypeName => Local.Pawn is null ? Owner.Client.GetClientData("smartconstraint_constraint") : smartconstraint_constraint;
 
 
     public override void GenerateControls(Form inspector){

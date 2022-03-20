@@ -55,9 +55,7 @@ public partial class SpawnMenu : Panel
 				var insp = body.Add.Panel( "inspector" );
 				insp.StyleSheet.Load( "/styles/UITests.scss" );
 				insp.AddChild(inspector=new Form());
-				{
-					RebuildToolList();
-				}
+				RebuildToolList();
 			}
 		}
 
@@ -65,8 +63,7 @@ public partial class SpawnMenu : Panel
 
 	BaseTool GetCurrentTool()
 	{
-		var player = Local.Pawn;
-		if ( player == null ) return null;
+		if(Local.Pawn is not SandboxPlayer player)return null;
 
 		var inventory = player.Inventory;
 		if ( inventory == null ) return null;

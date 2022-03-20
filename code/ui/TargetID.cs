@@ -1,3 +1,4 @@
+using System.Reflection.Emit;
 using Sandbox;
 using Sandbox.UI;
 
@@ -8,7 +9,8 @@ public class TargetID : Panel {
     }
 
     public override void Tick(){
-        var tr = (Local.Pawn as SandboxPlayer).EyeTrace();
+        if (Local.Pawn is not SandboxPlayer sp)return;
+        var tr = sp.EyeTrace();
         
         var curTarget = tr.Entity as ITargetID;
         SetClass("hidden", curTarget is null);

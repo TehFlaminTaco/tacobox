@@ -28,7 +28,7 @@ namespace Sandbox.UI
 			Input.AcceptsFocus = true;
 			Input.AllowEmojiReplace = true;
 
-			Sandbox.Hooks.Chat.OnOpenChat += Open;
+			Sandbox.Hooks.TacoChat.OnOpenChat += Open;
 		}
 
 
@@ -95,7 +95,7 @@ namespace Sandbox.UI
 
 namespace Sandbox.Hooks
 {
-	public static partial class Chat
+	public static partial class TacoChat
 	{
 		public static event Action OnOpenChat;
 

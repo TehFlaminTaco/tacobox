@@ -27,8 +27,8 @@ public class CarController : PawnController
 			return;
 		}
 
-		EyeRot = Input.Rotation;
-		EyePosLocal = Vector3.Up * (64 - 10) * car.Scale;
+		EyeRotation = Input.Rotation;
+		EyePositionLocal = Vector3.Up * (64 - 10) * car.Scale;
 		Velocity = car.Velocity;
 
 		SetTag( "noclip" );

@@ -53,7 +53,7 @@ namespace Sandbox.Tools
 			if ( !this.CanTool() )
 				return false;
 
-			if (!tr.Entity.IsWorld && !Owner.GetClientOwner().CanTouch(tr.Entity))
+			if (!tr.Entity.IsWorld && !Owner.Client.CanTouch(tr.Entity))
 				return false;
 
 			return true;
@@ -89,48 +89,48 @@ namespace Sandbox.Tools
 				if ( !tr.Entity.IsValid() )
 					return;
 
-				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.Entity.IsValid();
+				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.GetEntity().IsValid();
 
 				if ( attached && tr.Entity is not Prop )
 					return;
 
-				if(attached && !Owner.GetClientOwner().CanTouch(tr.Entity))
+				if(attached && !Owner.Client.CanTouch(tr.Entity))
 					return;
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 
 				if ( tr.Entity is WireButton gate )
 				{
-					//gate.value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetClientData("constantvalue_value").ToFloat();
+					//gate.value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.Client.GetClientData("constantvalue_value").ToFloat();
 					return;
 				}
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
-				if(!Owner.GetClientOwner().CanSpawnProp("wirebox/katlatze/button.vmdl")){
-					Owner.GetClientOwner().BannedProp("models/wirebox/katlatze/button.vmdl");
+				if(!Owner.Client.CanSpawnProp("wirebox/katlatze/button.vmdl")){
+					Owner.Client.BannedProp("models/wirebox/katlatze/button.vmdl");
 					return;
 				}
 
-				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
-					Owner.GetClientOwner().HitLimit(PropType.Generic);
+				if(!Owner.Client.CanSpawn(PropType.Generic)){
+					Owner.Client.HitLimit(PropType.Generic);
 					return;
 				}
 
 				var ent = new WireButton()
 				{
-					Position = tr.EndPos,
+					Position = tr.EndPosition,
 					Rotation = targAngle,
-                    low_value = Owner.IsClient ? button_lowvalue.ToFloat() : Owner.GetClientOwner().GetClientData("button_lowvalue").ToFloat(),
-                    high_value = Owner.IsClient ? button_highvalue.ToFloat() : Owner.GetClientOwner().GetClientData("button_highvalue").ToFloat(),
-					toggleable = Owner.IsClient ? button_toggle.ToBool() : Owner.GetClientOwner().GetClientData("button_toggle").ToBool()
+                    low_value = Owner.IsClient ? button_lowvalue.ToFloat() : Owner.Client.GetClientData("button_lowvalue").ToFloat(),
+                    high_value = Owner.IsClient ? button_highvalue.ToFloat() : Owner.Client.GetClientData("button_highvalue").ToFloat(),
+					toggleable = Owner.IsClient ? button_toggle.ToBool() : Owner.Client.GetClientData("button_toggle").ToBool()
 				};
-				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
+				ent.SetSpawner(Owner.Client, PropType.Generic);
 
 
 				if ( attached )
 				{
-					ent.SetParent( tr.Body.Entity, tr.Body.PhysicsGroup.GetBodyBoneName( tr.Body ) );
+					ent.SetParent( tr.Body.GetEntity(), tr.Body.GroupName );
 				}else{
                     ent.PhysicsBody.BodyType = PhysicsBodyType.Static;
                 }

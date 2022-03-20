@@ -55,7 +55,7 @@ class WirePanel : Panel {
             AddChild(knownEnts[ent] = new(ent));
         }
 
-        foreach(var kv in knownEnts.OrderBy(x=>x.Value == WireHUD.HoveredPanel ? -1 : (x.Key as Entity).Position.Distance(Local.Pawn.EyePos))){
+        foreach(var kv in knownEnts.OrderBy(x=>x.Value == WireHUD.HoveredPanel ? -1 : (x.Key as Entity).Position.Distance(Local.Pawn.EyePosition))){
             kv.Value.Tick();
         }
 
@@ -69,7 +69,7 @@ class WireEntityPanel : Panel {
     List<WireIOPanel> ioDevices = new();
     public WireEntityPanel(IWireEntity target){
         this.target = target;
-        Name = Add.Label(target.Name(), "entname");
+        Name = Add.Label(target.WireName(), "entname");
         IO = Add.Panel( "io" );
         var inputs = IO.Add.Panel("value inputs");
         var outputs = IO.Add.Panel("value outputs");
@@ -96,7 +96,7 @@ class WireEntityPanel : Panel {
         }
 
         var pos = e.Position.ToScreen();
-        this.Style.ZIndex = (int)-e.Position.Distance(Local.Pawn.EyePos)*300;
+        this.Style.ZIndex = (int)-e.Position.Distance(Local.Pawn.EyePosition)*300;
 
         var panelSize = new Vector2(Box.Right - Box.Left, Box.Bottom - Box.Top);
 
@@ -167,13 +167,10 @@ class WireIOPanel : Panel {
         SetClass("hoverConnection", WireHUD.HoveredPair == val);
         SetClass("selected", WireHUD.gun.selectedEntity == ent && WireHUD.gun.selectedID == val.id);
 
-        Entity ConnTarget = null;
-        string ConnName = null;
-
         var conn = WireConnection.GetConnection(ent, val.id);
         if(conn.target is not null && conn.target.IsValid()){
             connectionBox.SetClass("hidden", false);
-            connectedEnt.Text = (conn.target as IWireEntity).Name();
+            connectedEnt.Text = (conn.target as IWireEntity).WireName();
             var targ = (conn.target as IWireEntity).Values().Where(x=>x.id==conn.id).First();
             if(hoveredOver){
                 WireHUD.DidHover = true;

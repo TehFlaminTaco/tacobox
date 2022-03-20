@@ -35,7 +35,7 @@ namespace Sandbox.Tools
 			if ( !this.CanTool() )
 				return false;
 
-			if (!tr.Entity.IsWorld && !Owner.GetClientOwner().CanTouch(tr.Entity))
+			if (!tr.Entity.IsWorld && !Owner.Client.CanTouch(tr.Entity))
 				return false;
 
 			return true;
@@ -72,46 +72,46 @@ namespace Sandbox.Tools
 				if ( !tr.Entity.IsValid() )
 					return;
 
-				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.Entity.IsValid();
+				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.GetEntity().IsValid();
 
 				if ( attached && tr.Entity is not Prop )
 					return;
 
-				if(attached && !Owner.GetClientOwner().CanTouch(tr.Entity))
+				if(attached && !Owner.Client.CanTouch(tr.Entity))
 					return;
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 
 				if ( tr.Entity is ConstantValue gate )
 				{
-					gate.value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetClientData("constantvalue_value").ToFloat();
+					gate.value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.Client.GetClientData("constantvalue_value").ToFloat();
 					return;
 				}
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
-				if(!Owner.GetClientOwner().CanSpawnProp("citizen_props/chippacket01.vmdl")){
-					Owner.GetClientOwner().BannedProp("models/citizen_props/chippacket01.vmdl");
+				if(!Owner.Client.CanSpawnProp("citizen_props/chippacket01.vmdl")){
+					Owner.Client.BannedProp("models/citizen_props/chippacket01.vmdl");
 					return;
 				}
 
-				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
-					Owner.GetClientOwner().HitLimit(PropType.Generic);
+				if(!Owner.Client.CanSpawn(PropType.Generic)){
+					Owner.Client.HitLimit(PropType.Generic);
 					return;
 				}
 
 				var ent = new ConstantValue()
 				{
-					Position = tr.EndPos,
+					Position = tr.EndPosition,
 					Rotation = targAngle,
-                    value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.GetClientOwner().GetClientData("constantvalue_value").ToFloat()
+                    value = Owner.IsClient ? constantvalue_value.ToFloat() : Owner.Client.GetClientData("constantvalue_value").ToFloat()
 				};
-				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
+				ent.SetSpawner(Owner.Client, PropType.Generic);
 
 
 				if ( attached )
 				{
-					ent.SetParent( tr.Body.Entity, tr.Body.PhysicsGroup.GetBodyBoneName( tr.Body ) );
+					ent.SetParent( tr.Body.GetEntity(), tr.Body.GroupName );
 				}else{
                     ent.PhysicsBody.BodyType = PhysicsBodyType.Static;
                 }

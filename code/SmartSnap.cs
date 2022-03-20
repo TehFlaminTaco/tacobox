@@ -17,7 +17,7 @@ public class SmartSnap {
 
     public static TraceResult SnapSurface(TraceResult eyeTrace){
         if(eyeTrace.Entity is ModelEntity m && !m.IsWorld){
-            var pos = PointOnBox(m, eyeTrace.StartPos, eyeTrace.Direction);
+            var pos = PointOnBox(m, eyeTrace.StartPosition, eyeTrace.Direction);
             if(pos is BoxFaceResult face){
                 var EdgeColor = Color.Red;
                 var MidColor = Color.Green;
@@ -48,11 +48,11 @@ public class SmartSnap {
                     DebugOverlay.Sphere(nearest, 1f, Color.Red);
                 return new TraceResult{
                     Bone = eyeTrace.Bone,
-                    EndPos = nearest,
+                    EndPosition = nearest,
                     Entity = m,
                     Hit = true,
                     Normal = m.Transform.NormalToWorld(face.normal),
-                    StartPos = eyeTrace.StartPos,
+                    StartPosition = eyeTrace.StartPosition,
 		            StartedSolid = eyeTrace.StartedSolid,
 		            Fraction = eyeTrace.Fraction,
 		            Body = eyeTrace.Body,
@@ -84,7 +84,7 @@ public class SmartSnap {
     }
 
     public static BoxFaceResult? PointOnBox(ModelEntity ent, Vector3 rayStart, Vector3 rayDir){
-        var bb = ent.GetModel().Bounds;
+        var bb = ent.Model.Bounds;
         var bbScale = bb.Maxs - bb.Mins;
         var rStart = ent.Transform.PointToLocal(rayStart);
         var rDir = ent.Transform.NormalToLocal(rayDir);

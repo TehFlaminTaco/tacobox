@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Sandbox;
 using Sandbox.UI;
+using Sandbox.UI.Construct;
 
 public class ModelPicker : Panel {
     public string[] Models;
+    private static readonly Regex fileShort = new(@".*/([^/.]*).*");
     
     public Func<string> GetSelectedModel;
     public Action<string> SetSelectedModel;
@@ -24,7 +27,8 @@ public class ModelPicker : Panel {
 			var panel = scrollPanel.Add.Panel( "icon" );
             icons.Add((panel, model));
 			panel.AddEventListener( "onclick", () => SetSelectedModel(model) );
-			panel.Style.BackgroundImage = Texture.Load( $"{file}.vmdl_c.png", false );
+            panel.Add.Label(fileShort.Replace(file, "$1"));
+			//panel.Style.BackgroundImage = Texture.Load( $"{file}.vmdl_c.png", false );
         }
         AddChild(scrollPanel);
     }

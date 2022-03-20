@@ -23,7 +23,7 @@ public class CommandSlap : Command {
         
         c.Pawn.TakeDamage(DamageInfo.Generic(damage.ToFloat()).WithForce(Vector3.Random * 30f * damage.ToFloat()));
         Sound.FromEntity("impact-bullet-flesh", c.Pawn);
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} slapped {c.ColorName()} for {damage.ToFloat()} damage."); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.ColorName()} slapped {c.ColorName()} for {damage.ToFloat()} damage."); //avatar:{executor.Client.PlayerId}
         return true;
     }
 }

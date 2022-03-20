@@ -40,7 +40,7 @@ namespace Sandbox.Tools
 			if ( !this.CanTool() )
 				return false;
 
-			if (!tr.Entity.IsWorld && !Owner.GetClientOwner().CanTouch(tr.Entity))
+			if (!tr.Entity.IsWorld && !Owner.Client.CanTouch(tr.Entity))
 				return false;
 
 			return true;
@@ -75,60 +75,55 @@ namespace Sandbox.Tools
 				if ( !tr.Entity.IsValid() )
 					return;
 
-				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.Entity.IsValid();
+				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.GetEntity().IsValid();
 
 				if ( attached && tr.Entity is not Prop )
 					return;
 
-				if(attached && !Owner.GetClientOwner().CanTouch(tr.Entity))
+				if(attached && !Owner.Client.CanTouch(tr.Entity))
 					return;
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 
 				if ( tr.Entity is WheelEntity we )
 				{
-					if(float.TryParse(Owner.GetClientOwner().GetClientData("wheel_torque"), out float trq)){
+					if(float.TryParse(Owner.Client.GetClientData("wheel_torque"), out float trq)){
 						we.torque=trq;
 					}
-					if(float.TryParse(Owner.GetClientOwner().GetClientData("wheel_maxspeed"), out float mxspd)){
+					if(float.TryParse(Owner.Client.GetClientData("wheel_maxspeed"), out float mxspd)){
 						we.max_speed=mxspd;
 					}
 
 					return;
 				}
 
-				if(!Owner.GetClientOwner().CanSpawnProp("citizen_props/wheel01.vmdl")){
-					Owner.GetClientOwner().BannedProp("models/citizen_props/wheel01.vmdl");
+				if(!Owner.Client.CanSpawnProp("citizen_props/wheel01.vmdl")){
+					Owner.Client.BannedProp("models/citizen_props/wheel01.vmdl");
 					return;
 				}
 
-				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
-					Owner.GetClientOwner().HitLimit(PropType.Generic);
+				if(!Owner.Client.CanSpawn(PropType.Generic)){
+					Owner.Client.HitLimit(PropType.Generic);
 					return;
 				}
 
 				var ent = new WheelEntity
 				{
-					Position = tr.EndPos,
+					Position = tr.EndPosition,
 					Rotation = Rotation.LookAt( tr.Normal ) * Rotation.From( new Angles( 0, 90, 0 ) ),
 				};
-				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
+				ent.SetSpawner(Owner.Client, PropType.Generic);
 
 				ent.SetModel( "models/citizen_props/wheel01.vmdl" );
 
 				ent.PhysicsBody.Mass = tr.Body.Mass;
 
-				ent.Joint = PhysicsJoint.Revolute
-					.From( ent.PhysicsBody )
-					.To( tr.Body )
-					.WithPivot( tr.EndPos )
-					.WithBasis( Rotation.LookAt( tr.Normal ) * Rotation.From( new Angles( 90, 0, 0 ) ) )
-					.Create();
+				ent.Joint = PhysicsJoint.CreateHinge( ent.PhysicsBody, tr.Body, tr.EndPosition, tr.Normal );
 				
-				if(float.TryParse(Owner.GetClientOwner().GetClientData("wheel_torque"), out float torque)){
+				if(float.TryParse(Owner.Client.GetClientData("wheel_torque"), out float torque)){
 					ent.torque=torque;
 				}
-				if(float.TryParse(Owner.GetClientOwner().GetClientData("wheel_maxspeed"), out float maxspeed)){
+				if(float.TryParse(Owner.Client.GetClientData("wheel_maxspeed"), out float maxspeed)){
 					ent.max_speed=maxspeed;
 				}
 

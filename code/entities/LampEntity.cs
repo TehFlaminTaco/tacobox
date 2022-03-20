@@ -25,7 +25,6 @@ public partial class LampEntity : SpotLightEntity, IWireEntity, IGlowing
 
 	public void Remove()
 	{
-		PhysicsGroup?.Wake();
 		Delete();
 	}
 

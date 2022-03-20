@@ -5,7 +5,7 @@ using Sandbox.UI;
 interface IWireEntity {
 	public List<WireVal> Values();
 
-	public string Name() {
+	public string WireName() {
 		return (this as Entity)?.ClassInfo.Title;
 	}
 }

@@ -25,7 +25,7 @@
 				if ( tr.Entity is not Prop prop )
 					return;
 
-				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
+				if ( !Owner.Client.CanTouch(tr.Entity) )
 					return;
 
 				if ( Input.Pressed( InputButton.Attack1 ) )
@@ -70,7 +70,7 @@
 					return;
 				}
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 			}
 		}
 

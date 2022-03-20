@@ -118,7 +118,7 @@
                 border-radius: 0 3px 3px 0;
                 padding: 10px 10px;
                 width:360px;
-                .form-row{
+                .field{
                     flex-direction: flex-column;
                     flex-wrap: wrap;
                 }
@@ -194,6 +194,16 @@
                         background-color: rgba(black, 0.1);
                         background-image: url( /entity/spawnicon.png );
 
+                        .label {
+                            color:black;
+                            font-size: 8px;
+                            position:absolute;
+                            left:0;
+                            right:0;
+                            top:30px;
+                            text-align: center;
+                        }
+
                         &:hover {
                             cursor: pointer;
                             border: 1px solid white;
@@ -263,10 +273,11 @@
             label {
                 font-size: 9px;
                 position: absolute;
-                bottom: -17px;
                 left: 0;
                 right: 0;
+                top:40;
                 pointer-events: none;
+                color:black;
             }
 
             &:hover {

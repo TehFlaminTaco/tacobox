@@ -52,7 +52,7 @@ public partial class GateEntity : Prop, IWireEntity, ITargetID, IGlowing
 		(gateValues[key] as StoredWireVal<T>).data = Value;
 	}
 
-	public string Name() {
+	public string WireName() {
 		return getGate().Name;
 	}
 
@@ -76,6 +76,6 @@ public partial class GateEntity : Prop, IWireEntity, ITargetID, IGlowing
 	}
 
 	public void TickTargetID(){
-		labelName.Text = Name();
+		labelName.Text = WireName();
 	}
 }

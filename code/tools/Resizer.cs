@@ -30,7 +30,7 @@ namespace Sandbox.Tools
 				if ( tr.Entity is LightEntity || tr.Entity is LampEntity )
 					return;
 
-				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
+				if ( !Owner.Client.CanTouch(tr.Entity) )
 					return;
 
 				var scale = reset ? 1.0f : Math.Clamp( tr.Entity.Scale + ((0.5f * Time.Delta) * resizeDir), 0.4f, 4.0f );
@@ -39,21 +39,23 @@ namespace Sandbox.Tools
 				{
 					tr.Entity.Scale = scale;
 					tr.Entity.PhysicsGroup.RebuildMass();
-					tr.Entity.PhysicsGroup.Wake();
+					tr.Entity.PhysicsGroup.Sleeping = false;
 
 					foreach ( var child in tr.Entity.Children )
 					{
 						if ( !child.IsValid() )
 							continue;
-
-						child.PhysicsGroup?.RebuildMass();
-						child.PhysicsGroup?.Wake();
+						if(child.PhysicsGroup is not null){
+							child.PhysicsGroup.RebuildMass();
+							child.PhysicsGroup.Sleeping = false;
+						}
+						
 					}
 				}
 
 				if ( Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 ) || reset )
 				{
-					CreateHitEffects( tr.EndPos );
+					CreateHitEffects( tr.EndPosition );
 				}
 			}
 		}

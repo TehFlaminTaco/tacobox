@@ -3,7 +3,7 @@ using System.IO;
 using Sandbox;
 using Sandbox.UI;
 
-[Library( "ent_rtcamera", Title = "RT Camera", Spawnable = true, Group = "Wire" )]
+[Library( "ent_rtcamera", Title = "RT CameraMode", Spawnable = true, Group = "Wire" )]
 class RTCamera : Prop, IWireEntity, IGlowing{
     public override void Spawn()
 	{
@@ -37,9 +37,9 @@ class RTCamera : Prop, IWireEntity, IGlowing{
     Texture depth;
     [Event.Frame]
 	public void OnFrame(){
-        RenderTargets.Render.Add(()=>{
+        /*RenderTargets.Render.Add(()=>{
             Render.DrawScene(rt, depth, new Vector2(1024, 1024), SceneWorld.Current, Position + Rotation.Forward*10f, Rotation.Angles(), 90, default, default, 0.2f, 9000);
-        });
+        });*/
 	}
 
     List<WireVal> values;

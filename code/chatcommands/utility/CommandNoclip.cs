@@ -17,7 +17,7 @@ public class CommandNoclip : Command {
             return false;
         
         (Game.Current as SandboxGame)?.DoPlayerNoclip(c, true);
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} {((c.Pawn as SandboxPlayer).DevController is NoclipController ? "enabled" : "disabled")} noclip on {(target=="^"?"themself":c.ColorName())}.");
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.ColorName()} {((c.Pawn as SandboxPlayer).DevController is NoclipController ? "enabled" : "disabled")} noclip on {(target=="^"?"themself":c.ColorName())}.");
         return true;
     }
 }

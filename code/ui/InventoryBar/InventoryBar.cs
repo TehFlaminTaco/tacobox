@@ -32,8 +32,7 @@ public class InventoryBar : Panel
 		Instance = this;
 		DeleteChildren( true );
 		groups = new();
-		var player = Local.Pawn;
-		if ( player is not SandboxPlayer ) return;
+		if (Local.Pawn is not SandboxPlayer player) return;
 		if ( player.Inventory is not Inventory inv ) return;
 
 		for (int i=0; i < 9; i++){
@@ -56,7 +55,7 @@ public class InventoryBar : Panel
 		
 		var player = Local.Pawn;
 		if ( player is not SandboxPlayer sp ) return;
-		if ( player.Inventory is not Inventory inv ) return;
+		if ( sp.Inventory is not Inventory inv ) return;
 		if(sp.ActiveChild == c){
 			activeGroup = slot;
 			subSlot = inv.All(activeGroup).TakeWhile(x=>x!=c).Count();
@@ -91,7 +90,7 @@ public class InventoryBar : Panel
 
 		var player = Local.Pawn;
 		if ( player is not SandboxPlayer sp ) return;
-		if ( player.Inventory is not Inventory inv ) return;
+		if ( sp.Inventory is not Inventory inv ) return;
 		SetClass("hidden", lastUpdate + 2f < Time.Now);
 
 		var currentHeld = inv.All().ToList();
@@ -204,9 +203,7 @@ public class InventoryBar : Panel
 	private static void SetActiveSlot( InputBuilder input, IBaseInventory inventory, int i )
 	{
 		lastUpdate = Time.Now;
-		var player = Local.Pawn;
-		if ( player == null )
-			return;
+		if (Local.Pawn is not SandboxPlayer player) return;
 
 		var ent = inventory.GetSlot( i );
 		if ( player.ActiveChild == ent )
@@ -221,9 +218,7 @@ public class InventoryBar : Panel
 	private static void SwitchActiveSlot( InputBuilder input, IBaseInventory inventory, int idelta )
 	{
 		lastUpdate = Time.Now;
-		var player = Local.Pawn;
-		if ( player == null )
-			return;
+		if (Local.Pawn is not SandboxPlayer player) return;
 		var count = inventory.Count();
 		if ( count == 0 ) return;
 		if((player.ActiveChild as Carriable)?.OnMouseWheel(idelta)??false)

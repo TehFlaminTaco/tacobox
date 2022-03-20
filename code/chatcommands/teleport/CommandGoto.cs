@@ -18,7 +18,7 @@ public class CommandGoto : Command {
             return false;
         
         executor.Position = c.Pawn.Position + Vector3.Up * 100f;
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} teleported to {c.ColorName()}."); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.ColorName()} teleported to {c.ColorName()}."); //avatar:{executor.Client.PlayerId}
         return true;
     }
 }

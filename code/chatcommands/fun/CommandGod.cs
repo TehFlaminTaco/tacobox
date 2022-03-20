@@ -17,7 +17,7 @@ public class CommandGod : Command {
             return false;
         
         (c.Pawn as SandboxPlayer).GodMode = !(c.Pawn as SandboxPlayer).GodMode;
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} {((c.Pawn as SandboxPlayer).GodMode ? "enabled" : "disabled")} godmode on {(target=="^"?"themself":c.ColorName())}."); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.ColorName()} {((c.Pawn as SandboxPlayer).GodMode ? "enabled" : "disabled")} godmode on {(target=="^"?"themself":c.ColorName())}."); //avatar:{executor.Client.PlayerId}
         return true;
     }
 }

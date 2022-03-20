@@ -26,7 +26,7 @@ public class CommandHP : Command {
         
 
         c.Pawn.Health = health.ToFloat();
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} set the health of {c.ColorName()} to {health.ToFloat()}."); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.ColorName()} set the health of {c.ColorName()} to {health.ToFloat()}."); //avatar:{executor.Client.PlayerId}
         return true;
     }
 }

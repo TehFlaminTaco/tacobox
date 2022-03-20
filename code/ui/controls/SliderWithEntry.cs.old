@@ -96,7 +96,7 @@ namespace Sandbox.UI
 	{
 		public static class SliderWithEntryConstructor
 		{
-			public static SliderEntry SliderWithEntry( this PanelCreator self, float min, float max, float step )
+			public static SliderEntry SliderWithEntry2( this PanelCreator self, float min, float max, float step )
 			{
 				var control = self.panel.AddChild<SliderEntry>();
 				control.MinValue = min;

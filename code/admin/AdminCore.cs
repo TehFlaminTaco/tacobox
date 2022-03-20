@@ -22,7 +22,7 @@ public static class AdminCore{
         admins = new();
         if(!FileSystem.Data.FileExists("admin/admins.json")){
             admins.Add(new Admin{
-                steamid = 76561198041670444ul,
+                steamid = 76561198041670444L,
                 rankkey = "host"
             });
             FileSystem.Data.WriteJson("admin/admins.json", admins);
@@ -58,7 +58,7 @@ public static class AdminCore{
     }
 
     public static Rank GetRank(this Client c){
-        string rankName = admins.Where(x=>x.steamid == c.SteamId).FirstOrDefault()?.rankkey??"Guest";
+        string rankName = admins.Where(x=>x.steamid == c.PlayerId).FirstOrDefault()?.rankkey??"Guest";
         return ranks.First(c=>c.Name.ToLower() == rankName.ToLower());
     }
 
@@ -113,11 +113,11 @@ public static class AdminCore{
         return isSilent ? To.Multiple(Client.All.Where(c=>c==listener||c.HasFlag("seeSilent"))) : To.Everyone;
     }
     public static To SeeSilent(Player listener, bool isSilent){
-        return SeeSilent(listener.GetClientOwner(), isSilent);
+        return SeeSilent(listener.Client, isSilent);
     }
 
     public static bool CanTool(this BaseTool tool){
-        return tool.Owner.GetClientOwner().HasTool(tool.ClassInfo.Name);
+        return tool.Owner.Client.HasTool(tool.ClassInfo.Name);
     }
 
     public static string[] AllFlags(){
@@ -158,7 +158,7 @@ public static class AdminCore{
         AdminCoreUpdate.UpdateRanks(JsonSerializer.Serialize(ranks));
     }
     public class Admin {
-        public ulong steamid {get; set;}
+        public long steamid {get; set;}
         public string rankkey {get; set;}
     }
 }

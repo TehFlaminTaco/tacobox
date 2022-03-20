@@ -96,16 +96,16 @@ namespace Sandbox
 		{
 			base.FrameSimulate();
 
-			EyeRot = Input.Rotation;
+			EyeRotation = Input.Rotation;
 		}
 
 		public override void Simulate()
 		{
-			EyePosLocal = Vector3.Up * (EyeHeight * Pawn.Scale);
+			this.EyeLocalPosition = Vector3.Up * (EyeHeight * Pawn.Scale);
 			UpdateBBox();
 
-			EyePosLocal += TraceOffset;
-			EyeRot = Input.Rotation;
+			EyeLocalPosition += TraceOffset;
+			EyeRotation = Input.Rotation;
             var InitialVelocity = Velocity;
 
 			RestoreGroundPos();
@@ -133,7 +133,7 @@ namespace Sandbox
 			// RunLadderMode
 
 			CheckLadder();
-			Swimming = Pawn.WaterLevel.Fraction > 0.6f;
+			Swimming = Pawn.WaterLevel > 0.6f;
 
 			//
 			// Start Gravity
@@ -316,7 +316,7 @@ namespace Sandbox
 
 				if ( pm.Fraction == 1 )
 				{
-					Position = pm.EndPos;
+					Position = pm.EndPosition;
 					StayOnGround();
 					return;
 				}
@@ -640,7 +640,7 @@ namespace Sandbox
 
 			if ( bMoveToEndPos && !pm.StartedSolid && pm.Fraction > 0.0f && pm.Fraction < 1.0f )
 			{
-				Position = pm.EndPos;
+				Position = pm.EndPosition;
 			}
 
 		}
@@ -715,7 +715,7 @@ namespace Sandbox
 
 			// See how far up we can go without getting stuck
 			var trace = TraceBBox( Position, start );
-			start = trace.EndPos;
+			start = trace.EndPosition;
 
 			// Now trace down from a known safe position
 			trace = TraceBBox( start, end );
@@ -729,7 +729,7 @@ namespace Sandbox
 			// float flDelta = fabs( mv->GetAbsOrigin().z - trace.m_vEndPos.z );
 			// if ( flDelta > 0.5f * DIST_EPSILON )
 
-			Position = trace.EndPos;
+			Position = trace.EndPosition;
 		}
 
 		void RestoreGroundPos()

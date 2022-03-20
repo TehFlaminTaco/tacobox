@@ -1,7 +1,7 @@
 
 namespace Sandbox
 {
-	public class ThirdPersonCameraTracked : Camera
+	public class ThirdPersonCameraTracked : CameraMode
 	{
 		[ConVar.Replicated]
 		public static bool thirdperson_orbit { get; set; } = false;
@@ -22,40 +22,40 @@ namespace Sandbox
 			if ( pawn == null )
 				return;
 
-			Pos = pawn.Position;
+			Position = pawn.Position;
 			Vector3 targetPos;
 
 			var center = pawn.Position + Vector3.Up * 64;
 
 			if ( thirdperson_orbit )
 			{
-				Pos += Vector3.Up * (pawn.CollisionBounds.Center.z * pawn.Scale);
-				Rot = Rotation.From( orbitAngles );
+				Position += Vector3.Up * (pawn.CollisionBounds.Center.z * pawn.Scale);
+				Rotation = Rotation.From( orbitAngles );
 
-				targetPos = Pos + Rot.Backward * orbitDistance;
+				targetPos = Position + Rotation.Backward * orbitDistance;
 			}
 			else
 			{
-				Pos = center;
-				Rot = Rotation.FromAxis( Vector3.Up, 4 ) * Input.Rotation;
+				Position = center;
+				Rotation = Rotation.FromAxis( Vector3.Up, 4 ) * Input.Rotation;
 
 				float distance = 130.0f * pawn.Scale;
-				targetPos = Pos + Input.Rotation.Right * ((pawn.CollisionBounds.Maxs.x + 15) * pawn.Scale);
+				targetPos = Position + Input.Rotation.Right * ((pawn.CollisionBounds.Maxs.x + 15) * pawn.Scale);
 				targetPos += Input.Rotation.Forward * -distance;
 			}
 
 			if ( thirdperson_collision )
 			{
-				var tr = Trace.Ray( Pos, targetPos )
+				var tr = Trace.Ray( Position, targetPos )
 					.Ignore( pawn )
 					.Radius( 8 )
 					.Run();
 
-				Pos = tr.EndPos;
+				Position = tr.EndPosition;
 			}
 			else
 			{
-				Pos = targetPos;
+				Position = targetPos;
 			}
 
 			FieldOfView = 70;

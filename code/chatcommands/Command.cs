@@ -25,13 +25,13 @@ public abstract partial class Command {
     public static Client GetTarget(string name, Player executor, bool useTouch = true, bool informError = true){
         Client c;
         if(name == "^")
-            c = executor.GetClientOwner();
+            c = executor.Client;
         else
             c = Client.All.FirstOrDefault(c=>c.Name.ToLower().IndexOf(name.ToLower())>-1);
         if(c is null && informError){
             ChatBox.AddChatEntry(To.Single(executor), "white", "", $"⚠️ Player not found!");
         }
-        if(useTouch && !executor.GetClientOwner().CanTouch(c)){
+        if(useTouch && !executor.Client.CanTouch(c)){
             if(informError) ChatBox.AddChatEntry(To.Single(executor), "white", "", $"⚠️ Cannot target {c.ColorName()}!");
             return null;
         }

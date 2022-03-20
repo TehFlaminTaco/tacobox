@@ -100,21 +100,21 @@ uitests
 		padding-top: $padding-head;
 		backdrop-filter: blur( 60px );
 
-		.form-row
+		.field
 		{
 			flex-direction: column;
 			border-radius: 0;
 			padding: 5px 20px;
 		}
 
-		.form-row .form-label
+		.field .form-label
 		{
 			font-weight: 500;
 			padding: 0px;
 			margin-bottom: 10px;
 		}
 
-		.form-row .form-value
+		.field .form-value
 		{
 			padding: 0px;
 

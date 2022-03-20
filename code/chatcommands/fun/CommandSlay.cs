@@ -21,7 +21,7 @@ public class CommandSlay : Command {
         (c.Pawn as SandboxPlayer).GodMode = false;
         c.Pawn.TakeDamage(DamageInfo.Generic(9000000f));
 
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} slayed {c.ColorName()}."); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.ColorName()} slayed {c.ColorName()}."); //avatar:{executor.Client.PlayerId}
         return true;
     }
 }

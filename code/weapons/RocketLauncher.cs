@@ -37,14 +37,14 @@ partial class RocketLauncher : Weapon, IWireEntity
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 		
-		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+		(Owner as AnimEntity)?.SetAnimParameter( "b_attack", true );
 
 		ShootEffects();
 		PlaySound( "rust_pistol.shoot" );
 		//ShootBullet( 0.05f, Force, Damage, 3.0f );
 		if(IsServer){
-			var startPos = Owner.EyePos + Owner.EyeRot.Forward * 30f;
-			var dir = Rotation.LookAt(((Owner as SandboxPlayer).EyeTrace().EndPos - startPos).Normal);
+			var startPos = Owner.EyePosition + Owner.EyeRotation.Forward * 30f;
+			var dir = Rotation.LookAt(((Owner as SandboxPlayer).EyeTrace().EndPosition - startPos).Normal);
 			var rocket = new Rocket();
 			rocket.Position = startPos;
 			rocket.Rotation = dir.RotateAroundAxis(Vector3.Right, 90f);

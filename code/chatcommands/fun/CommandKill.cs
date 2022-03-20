@@ -10,7 +10,7 @@ public class CommandKill : Command {
         executor.Health = 1;
         (executor as SandboxPlayer).GodMode = false;
         executor.TakeDamage(DamageInfo.Generic(9000000f));
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().Name} killed themself."); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.Name} killed themself."); //avatar:{executor.Client.PlayerId}
         return true;
     }
 }

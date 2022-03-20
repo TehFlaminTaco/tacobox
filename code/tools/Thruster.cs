@@ -16,7 +16,7 @@ namespace Sandbox.Tools
 		public static string thrusterForce {get; set;} = "5000.0";
 		[ConVar.ClientData("thruster_model")]
 		public static string thruster_model {get; set;} = "models/thruster/thrusterprojector.vmdl";
-		private string Model => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("thruster_model") : thruster_model;
+		private string Model => Local.Pawn is null ? Owner.Client.GetClientData("thruster_model") : thruster_model;
 
 		PreviewEntity previewModel;
 		bool massless = true;
@@ -56,7 +56,7 @@ namespace Sandbox.Tools
 			if ( !this.CanTool() )
 				return false;
 
-			if (!tr.Entity.IsWorld && !Owner.GetClientOwner().CanTouch(tr.Entity))
+			if (!tr.Entity.IsWorld && !Owner.Client.CanTouch(tr.Entity))
 				return false;
 
 			return true;
@@ -90,38 +90,38 @@ namespace Sandbox.Tools
 				if ( !tr.Entity.IsValid() )
 					return;
 
-				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.Entity.IsValid();
+				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.GetEntity().IsValid();
 
 				if ( attached && tr.Entity is not Prop )
 					return;
 
-				if(attached && !Owner.GetClientOwner().CanTouch(tr.Entity))
+				if(attached && !Owner.Client.CanTouch(tr.Entity))
 					return;
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 
 				if ( tr.Entity is ThrusterEntity te )
 				{
-					if(float.TryParse(Owner.GetClientOwner().GetClientData("thruster_force"), out float frc)){
+					if(float.TryParse(Owner.Client.GetClientData("thruster_force"), out float frc)){
 						te.Force = frc;
 					}
 					return;
 				}
 
-				if(!Owner.GetClientOwner().CanSpawnProp(Model.Substring(7))){
-					Owner.GetClientOwner().BannedProp(Model);
+				if(!Owner.Client.CanSpawnProp(Model.Substring(7))){
+					Owner.Client.BannedProp(Model);
 					return;
 				}
 
-				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
-					Owner.GetClientOwner().HitLimit(PropType.Generic);
+				if(!Owner.Client.CanSpawn(PropType.Generic)){
+					Owner.Client.HitLimit(PropType.Generic);
 					return;
 				}
 				var dir = (Owner as SandboxPlayer).CameraPosition().angle.Forward;
 
 				var ent = new ThrusterEntity
 				{
-					Position = tr.EndPos,
+					Position = tr.EndPosition,
 					Rotation = Rotation.LookAt( tr.Normal, dir ) * Rotation.From( new Angles( 90, 0, 0 ) ),
 					PhysicsEnabled = !attached,
 					EnableSolidCollisions = !attached,
@@ -131,16 +131,16 @@ namespace Sandbox.Tools
 
 				ent.SetModel(Model);
 				ent.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
-				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
+				ent.SetSpawner(Owner.Client, PropType.Generic);
 
 
-				if(float.TryParse(Owner.GetClientOwner().GetClientData("thruster_force"), out float force)){
+				if(float.TryParse(Owner.Client.GetClientData("thruster_force"), out float force)){
 					ent.Force = force;
 				}
 
 				if ( attached )
 				{
-					ent.SetParent( tr.Body.Entity, tr.Body.PhysicsGroup.GetBodyBoneName( tr.Body ) );
+					ent.SetParent( tr.Body.GetEntity(), tr.Body.GroupName );
 				}else{
                     ent.PhysicsBody.BodyType = PhysicsBodyType.Static;
                 }

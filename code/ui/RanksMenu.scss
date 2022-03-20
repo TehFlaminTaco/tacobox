@@ -159,7 +159,7 @@ Window {
                 min-height: 0px;
                 height:0px;
             }
-            .form-row{
+            .field{
                 flex-direction: flex-start;
                 margin:0;
             }
@@ -257,16 +257,14 @@ Window {
                 justify-content: space-around;
                 width:100%;
             }
-            .form-row{
+            .field{
                 flex-direction: column;
-                flex-grow: 1;
+                flex-grow:1;
                 justify-content: center;
             }
 
-            .form-label{
+            .form .field .label{
                 text-align: center;
-                min-height: 0px;
-                height:0px;
                 min-width:100%;
             }
         }

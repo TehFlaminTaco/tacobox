@@ -50,7 +50,7 @@ public partial class SmartConstraintTool : BaseTool {
     }
 
     public void Attack1(TraceResult tr){
-        CreateHitEffects( tr.EndPos );
+        CreateHitEffects( tr.EndPosition );
 
         var isBody = true;
         if ( !tr.Hit || !tr.Body.IsValid() || !tr.Entity.IsValid() || tr.Entity.IsWorld )
@@ -65,14 +65,14 @@ public partial class SmartConstraintTool : BaseTool {
     }
 
     public void Attack2(TraceResult tr){
-        CreateHitEffects( tr.EndPos );
+        CreateHitEffects( tr.EndPosition );
         if(targetBody is null){
             Nudge(tr, NudgeAmount);
         }
     }
 
     public void Reload(TraceResult tr){
-        CreateHitEffects( tr.EndPos );
+        CreateHitEffects( tr.EndPosition );
         if(targetBody is null){
             Nudge(tr, -NudgeAmount);
         }else{
@@ -86,7 +86,7 @@ public partial class SmartConstraintTool : BaseTool {
             var dir = -tr.Normal;
             if(NudgePercent){
                 var localDir = m.Transform.NormalToLocal(dir);
-                var size = m.GetModel().Bounds.Maxs - m.GetModel().Bounds.Mins;
+                var size = m.Model.Bounds.Maxs - m.Model.Bounds.Mins;
                 amount = Math.Abs(size.Dot(localDir)) * (amount/100f);
             }
             m.Position += dir * amount;
@@ -95,7 +95,7 @@ public partial class SmartConstraintTool : BaseTool {
 
     public void SetTarget(TraceResult tr){
         targetBody = tr.Body;
-        targetLocalPosition = tr.Body.Transform.PointToLocal(tr.EndPos);
+        targetLocalPosition = tr.Body.Transform.PointToLocal(tr.EndPosition);
         targetLocalNormal = tr.Body.Transform.NormalToLocal(tr.Normal);
         targetBodyType = tr.Body.BodyType;
     }
@@ -103,7 +103,7 @@ public partial class SmartConstraintTool : BaseTool {
     public void SetConnect(TraceResult tr){
         if(targetBody == tr.Body)return;
         connectBody = tr.Body;
-        connectLocalPosition = tr.Body.Transform.PointToLocal(tr.EndPos);
+        connectLocalPosition = tr.Body.Transform.PointToLocal(tr.EndPosition);
         connectLocalNormal = tr.Body.Transform.NormalToLocal(tr.Normal);
         oldPosition = targetBody.Position;
         oldRotation = targetBody.Rotation;
@@ -156,7 +156,7 @@ public partial class SmartConstraintTool : BaseTool {
     public override bool EyeLock(){
         if(DoEyeLock){
             if(Host.IsServer)
-                spinAmount=Rotation.Difference(Input.Rotation, Owner.EyeRot).Angles().yaw;
+                spinAmount=Rotation.Difference(Input.Rotation, Owner.EyeRotation).Angles().yaw;
             return true;
         }
         return false;

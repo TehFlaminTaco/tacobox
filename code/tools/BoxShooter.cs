@@ -26,24 +26,24 @@
 
 		void ShootBox()
 		{
-			if(!Owner.GetClientOwner().CanSpawnProp("citizen_props/crate01.vmdl")){
-				Owner.GetClientOwner().BannedProp("models/citizen_props/crate01.vmdl");
+			if(!Owner.Client.CanSpawnProp("citizen_props/crate01.vmdl")){
+				Owner.Client.BannedProp("models/citizen_props/crate01.vmdl");
 				return;
 			}
-			if(!Owner.GetClientOwner().CanSpawn(PropType.Prop)){
-				Owner.GetClientOwner().HitLimit(PropType.Prop);
+			if(!Owner.Client.CanSpawn(PropType.Prop)){
+				Owner.Client.HitLimit(PropType.Prop);
 				return;
 			}
 
 			var ent = new Prop
 			{
-				Position = Owner.EyePos + Owner.EyeRot.Forward * 50,
-				Rotation = Owner.EyeRot
+				Position = Owner.EyePosition + Owner.EyeRotation.Forward * 50,
+				Rotation = Owner.EyeRotation
 			};
 
-			ent.SetSpawner(Owner.GetClientOwner(), PropType.Prop);
+			ent.SetSpawner(Owner.Client, PropType.Prop);
 			ent.SetModel( "models/citizen_props/crate01.vmdl" );
-			ent.Velocity = Owner.EyeRot.Forward * 1000;
+			ent.Velocity = Owner.EyeRotation.Forward * 1000;
 			(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(ent));
 		}
 	}

@@ -23,7 +23,7 @@ namespace Sandbox.Tools
 				if ( tr.Entity is not Prop prop )
 					return;
 
-				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
+				if ( !Owner.Client.CanTouch(tr.Entity) )
 					return;
 
 				if ( Input.Pressed( InputButton.Attack1 ) )
@@ -42,12 +42,10 @@ namespace Sandbox.Tools
 					}
 					else
 					{
-                        var joint = PhysicsJoint.Generic.From(target.PhysicsBody)
-                                                        .To(rootProp.PhysicsBody)
-                                                        .Create();
-                        joint.EnableCollision = false;
+                        var joint = PhysicsJoint.CreateLength(target.PhysicsBody, rootProp.PhysicsBody, float.MaxValue);
+                        joint.Collisions = false;
                         (Owner as SandboxPlayer)?.undoQueue.Add(new UndoGeneric("Undid No Collide", ()=>{
-                            return joint.IsValid;
+                            return joint.IsValid();
                         }, ()=>{
                             joint.Remove();
                         }));
@@ -77,7 +75,7 @@ namespace Sandbox.Tools
 					return;
 				}
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 			}
 		}
 

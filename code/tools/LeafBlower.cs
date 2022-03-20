@@ -31,7 +31,7 @@
 				if ( tr.Entity.IsWorld )
 					return;
 
-				if(!Owner.GetClientOwner().CanTouch(tr.Entity))
+				if(!Owner.Client.CanTouch(tr.Entity))
 					return;
 
 				var body = tr.Body;
@@ -39,7 +39,7 @@
 				if ( !body.IsValid() )
 					return;
 
-				var direction = tr.EndPos - tr.StartPos;
+				var direction = tr.EndPosition - tr.StartPosition;
 				var distance = direction.Length;
 				var ratio = (1.0f - (distance / MaxDistance)).Clamp( 0, 1 ) * (push ? 1.0f : -1.0f);
 				var force = direction * (Force * ratio);
@@ -49,7 +49,7 @@
 					force *= body.Mass;
 				}
 
-				body.ApplyForceAt( tr.EndPos, force );
+				body.ApplyForceAt( tr.EndPosition, force );
 			}
 		}
 	}

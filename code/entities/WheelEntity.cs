@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sandbox;
-using Sandbox.Joints;
 
 [Library( "ent_wheel" )]
 public partial class WheelEntity : Prop, IWireEntity, IGlowing
 {
-	public RevoluteJoint Joint;
+	public HingeJoint Joint;
 	[Net]
 	public float torque {get; set;} = 1000.0f;
 	[Net]
@@ -40,7 +39,7 @@ public partial class WheelEntity : Prop, IWireEntity, IGlowing
 	{
 		base.OnDestroy();
 
-		if ( Joint.IsValid )
+		if ( Joint.IsValid() )
 		{
 			Joint.Remove();
 		}

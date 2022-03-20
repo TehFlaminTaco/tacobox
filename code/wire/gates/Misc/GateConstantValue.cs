@@ -27,11 +27,11 @@ public class GateConstantValue : Gate
 
     public override List<WireVal> GenerateValues(Player ply, GateEntity ent){
         List<WireVal> vals = new();
-        var typ = ply.IsClient ? gate_constantvalue_type : ply.GetClientOwner().GetClientData("gate_constantvalue_type");
+        var typ = ply.IsClient ? gate_constantvalue_type : ply.Client.GetClientData("gate_constantvalue_type");
         WireVal.Type t = WireVal.Type.String;
         Enum.TryParse(typ, true, out t);
         var storeVal = WireVal.FromType(t, "Out", "Out", WireVal.Direction.Output);
-        storeVal.val.ParseFromString(ply.IsClient ? gate_constantvalue_body : ply.GetClientOwner().GetClientData("gate_constantvalue_body"));
+        storeVal.val.ParseFromString(ply.IsClient ? gate_constantvalue_body : ply.Client.GetClientData("gate_constantvalue_body"));
         vals.Add(storeVal.val);
 
         return vals;

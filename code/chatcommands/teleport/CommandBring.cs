@@ -18,7 +18,7 @@ public class CommandBring : Command {
             return false;
         
         c.Pawn.Position = executor.Position + Vector3.Up * 100f;
-        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.GetClientOwner().ColorName()} brought {c.ColorName()} to themself."); //avatar:{executor.GetClientOwner().SteamId}
+        ChatBox.AddChatEntry(AdminCore.SeeSilent(executor, silent), "white", "", $"⚠️ {executor.Client.ColorName()} brought {c.ColorName()} to themself."); //avatar:{executor.Client.PlayerId}
         return true;
     }
 }

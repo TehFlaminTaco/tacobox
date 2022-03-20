@@ -21,10 +21,10 @@
 				if ( tr.Entity is Player )
 					return;
 
-				if ( !Owner.GetClientOwner().CanTouch(tr.Entity) )
+				if ( !Owner.Client.CanTouch(tr.Entity) )
 					return;
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 
 				if ( tr.Entity.IsWorld )
 					return;

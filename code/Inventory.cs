@@ -47,7 +47,9 @@ partial class Inventory : BaseInventory
 		if ( !Contains( ent ) )
 			return false;
 
-		ent.OnCarryDrop( Owner );
+		if (ent is BaseCarriable bc){
+			bc.OnCarryDrop( Owner );
+		}
 
 		return ent.Parent == null;
 	}

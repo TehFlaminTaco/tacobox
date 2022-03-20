@@ -48,7 +48,7 @@
 				if ( !tr.Hit || !tr.Entity.IsValid() )
 					return;
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 
 				if ( tr.Entity is LampEntity lamp )
 				{
@@ -59,12 +59,12 @@
 					return;
 				}
 
-				if(!Owner.GetClientOwner().CanSpawnProp("torch/torch.vmdl")){
-					Owner.GetClientOwner().BannedProp("models/torch/torch.vmdl");
+				if(!Owner.Client.CanSpawnProp("torch/torch.vmdl")){
+					Owner.Client.BannedProp("models/torch/torch.vmdl");
 					return;
 				}
-				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
-					Owner.GetClientOwner().HitLimit(PropType.Generic);
+				if(!Owner.Client.CanSpawn(PropType.Generic)){
+					Owner.Client.HitLimit(PropType.Generic);
 					return;
 				}
 
@@ -83,10 +83,10 @@
 					Rotation = Rotation.Identity,
 					LightCookie = Texture.Load( "materials/effects/lightcookie.vtex" )
 				};
-				lamp.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
+				lamp.SetSpawner(Owner.Client, PropType.Generic);
 				lamp.SetModel( Model );
 				lamp.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
-				lamp.Position = tr.EndPos + -lamp.CollisionBounds.Center + tr.Normal * lamp.CollisionBounds.Size * 0.5f;
+				lamp.Position = tr.EndPosition + -lamp.CollisionBounds.Center + tr.Normal * lamp.CollisionBounds.Size * 0.5f;
 				(Owner as SandboxPlayer)?.undoQueue.Add(new UndoEnt(lamp));
 			}
 		}

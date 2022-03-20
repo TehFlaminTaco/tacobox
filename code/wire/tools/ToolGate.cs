@@ -87,7 +87,7 @@ namespace Sandbox.Tools
 
         PreviewEntity previewModel;
 
-		private string Model => Local.Pawn is null ? Owner.GetClientOwner().GetClientData("gate_model") : gate_model;
+		private string Model => Local.Pawn is null ? Owner.Client.GetClientData("gate_model") : gate_model;
 
 		protected override bool IsPreviewTraceValid( TraceResult tr )
 		{
@@ -100,7 +100,7 @@ namespace Sandbox.Tools
 			if ( !this.CanTool() )
 				return false;
 
-			if (!tr.Entity.IsWorld && !Owner.GetClientOwner().CanTouch(tr.Entity))
+			if (!tr.Entity.IsWorld && !Owner.Client.CanTouch(tr.Entity))
 				return false;
 
 			return true;
@@ -144,15 +144,15 @@ namespace Sandbox.Tools
 				if ( !tr.Entity.IsValid() )
 					return;
 
-				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.Entity.IsValid();
+				var attached = !tr.Entity.IsWorld && tr.Body.IsValid() && tr.Body.PhysicsGroup != null && tr.Body.GetEntity().IsValid();
 
 				if ( attached && tr.Entity is not Prop )
 					return;
 
-				if(attached && !Owner.GetClientOwner().CanTouch(tr.Entity))
+				if(attached && !Owner.Client.CanTouch(tr.Entity))
 					return;
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 
 				if ( tr.Entity is GateEntity gate )
 				{
@@ -160,21 +160,21 @@ namespace Sandbox.Tools
 					return;
 				}
 
-				if(!Owner.GetClientOwner().CanSpawnProp(Model.Substring(7))){
-					Owner.GetClientOwner().BannedProp(Model);
+				if(!Owner.Client.CanSpawnProp(Model.Substring(7))){
+					Owner.Client.BannedProp(Model);
 					return;
 				}
-				if(!Owner.GetClientOwner().CanSpawn(PropType.Generic)){
-					Owner.GetClientOwner().HitLimit(PropType.Generic);
+				if(!Owner.Client.CanSpawn(PropType.Generic)){
+					Owner.Client.HitLimit(PropType.Generic);
 					return;
 				}
 
                 var targAngle = Rotation.LookAt( tr.Normal, tr.Direction ) * Rotation.FromAxis( Vector3.Right, -90 );
 
-				var targetGate = Owner.IsClient ? gate_selected : Owner.GetClientOwner().GetClientData("gate_selected");
+				var targetGate = Owner.IsClient ? gate_selected : Owner.Client.GetClientData("gate_selected");
 				var ent = new GateEntity()
 				{
-					Position = tr.EndPos,
+					Position = tr.EndPosition,
 					Rotation = targAngle,
                     gateType = targetGate
 				};
@@ -182,12 +182,12 @@ namespace Sandbox.Tools
 				//ent.values = Gate.gatesByKey[targetGate].GenerateValues(ent.GateSpawner, ent);
 				ent.SetModel(Model);
 				ent.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
-				ent.SetSpawner(Owner.GetClientOwner(), PropType.Generic);
+				ent.SetSpawner(Owner.Client, PropType.Generic);
 
 
 				if ( attached )
 				{
-					ent.SetParent( tr.Body.Entity, tr.Body.PhysicsGroup.GetBodyBoneName( tr.Body ) );
+					ent.SetParent( tr.Body.GetEntity(), tr.Body.GroupName );
 				}else{
                     ent.PhysicsBody.BodyType = PhysicsBodyType.Static;
                 }

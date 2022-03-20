@@ -20,9 +20,7 @@ public partial class SmartConstraintTool {
                 lockedAngle = (float)Math.Round(lockedAngle / SnapDegrees) * SnapDegrees;
             }
 
-            var weld = PhysicsJoint.Weld
-                .From(connectBody, connectLocalPosition, Rotation.LookAt(-connectLocalNormal + connectLocalNormal*Offset).RotateAroundAxis(Vector3.Forward, lockedAngle))
-                .To(targetBody, targetLocalPosition, Rotation.LookAt(targetLocalNormal)).Create();
+            var weld = PhysicsJoint.CreateFixed(connectBody, targetBody);
             (Owner as SandboxPlayer).undoQueue.Add(new UndoGeneric("Undid Weld",
                 ()=>true,
                 ()=>{
@@ -41,7 +39,7 @@ public partial class SmartConstraintTool {
             if(SnapRotation){
                 lockedAngle = (float)Math.Round(lockedAngle / SnapDegrees) * SnapDegrees;
             }
-            if(!(targetBody.Entity is Prop targetProp && connectBody.Entity is Prop connectProp)){
+            if(!(targetBody.GetEntity() is Prop targetProp && connectBody.GetEntity() is Prop connectProp)){
                 return;
             }
             targetProp.Weld(connectProp);

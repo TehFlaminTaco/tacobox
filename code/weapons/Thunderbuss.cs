@@ -36,7 +36,7 @@ partial class Thunderbuss : Weapon
 			}else{
 				ShootEffects();
 			}
-			Owner.Velocity += Owner.EyeRot.Forward * -150f * Clip1;
+			Owner.Velocity += Owner.EyeRotation.Forward * -150f * Clip1;
 			PlaySound( Clip1>1 ? "rust_pumpshotgun.shootdouble" : "rust_pumpshotgun.shoot" );
 			ShootBullets( Clip1*10, 0.1f + (0.05f * Clip1), 60.0f, 8.0f, 3.0f );
 			Clip1 = 0;
@@ -63,7 +63,7 @@ partial class Thunderbuss : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+		(Owner as AnimEntity)?.SetAnimParameter( "b_attack", true );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -87,7 +87,7 @@ partial class Thunderbuss : Weapon
 		TimeSincePrimaryAttack = -0.5f;
 		TimeSinceSecondaryAttack = -0.5f;
 
-		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+		(Owner as AnimEntity)?.SetAnimParameter( "b_attack", true );
 
 		//
 		// Tell the clients to play the shoot effects
@@ -110,7 +110,7 @@ partial class Thunderbuss : Weapon
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 		Particles.Create( "particles/pistol_ejectbrass.vpcf", EffectEntity, "ejection_point" );
 
-		ViewModelEntity?.SetAnimBool( "fire", true );
+		ViewModelEntity?.SetAnimParameter( "fire", true );
 
 		if ( IsLocalPawn )
 		{
@@ -127,7 +127,7 @@ partial class Thunderbuss : Weapon
 
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 
-		ViewModelEntity?.SetAnimBool( "fire_double", true );
+		ViewModelEntity?.SetAnimParameter( "fire_double", true );
 		CrosshairPanel?.CreateEvent( "fire" );
 
 		if ( IsLocalPawn )
@@ -153,12 +153,12 @@ partial class Thunderbuss : Weapon
 	[ClientRpc]
 	protected virtual void FinishReload()
 	{
-		ViewModelEntity?.SetAnimBool( "reload_finished", true );
+		ViewModelEntity?.SetAnimParameter( "reload_finished", true );
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		anim.SetParam( "holdtype", 3 ); // TODO this is shit
-		anim.SetParam( "aimat_weight", 1.0f );
+		anim.SetAnimParameter( "holdtype", 3 ); // TODO this is shit
+		anim.SetAnimParameter( "aimat_weight", 1.0f );
 	}
 }

@@ -4,7 +4,7 @@ using System.Linq;
 [Library]
 public partial class OwnerTag : Entity {
     [Net]
-    public ulong OwnerClient {get; set;} = 0;
+    public long OwnerClient {get; set;} = 0;
 
     [Net]
     public PropType PropType {get; set;} = 0;
@@ -24,7 +24,7 @@ public partial class OwnerTag : Entity {
         return e.Children.OfType<OwnerTag>().FirstOrDefault();
     }
 
-    public static void Set(Entity e, ulong val, PropType propType){
+    public static void Set(Entity e, long val, PropType propType){
         var tag = GetTag(e);
         if(tag is not null){
             tag.OwnerClient = val;
@@ -32,7 +32,7 @@ public partial class OwnerTag : Entity {
         }
     }
 
-    public static ulong Get(Entity e){
+    public static long Get(Entity e){
         var tag = GetTag(e);
         if(tag is not null){
             return tag.OwnerClient;
@@ -42,21 +42,21 @@ public partial class OwnerTag : Entity {
 }
 
 public static class EntityOwnerHelper {
-    public static ulong GetOwnerID(this Entity e){
+    public static long GetOwnerID(this Entity e){
         return OwnerTag.Get(e);
     }
-    public static void SetOwnerID(this Entity e, ulong id, PropType propType){
+    public static void SetOwnerID(this Entity e, long id, PropType propType){
         OwnerTag.Add(e).OwnerClient = id;
         OwnerTag.Add(e).PropType = propType;
     }
 
     public static Client GetSpawner(this Entity e){
-        return Client.All.FirstOrDefault(c=>c.SteamId == e.GetOwnerID());
+        return Client.All.FirstOrDefault(c=>c.PlayerId == e.GetOwnerID());
     }
     public static void SetSpawner(this Entity e, Client c, PropType propType){
-        SetOwnerID(e, c.SteamId, propType);
+        SetOwnerID(e, c.PlayerId, propType);
     }
     public static void SetSpawner(this Entity e, Entity c, PropType propType){
-        SetOwnerID(e, c.GetClientOwner().SteamId, propType);
+        SetOwnerID(e, c.Client.PlayerId, propType);
     }
 }

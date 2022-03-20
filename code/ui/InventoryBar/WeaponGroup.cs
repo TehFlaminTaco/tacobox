@@ -8,9 +8,7 @@ using Sandbox.UI.Construct;
 public class WeaponGroup : Panel {
     public List<(BaseCarriable weapon, WeaponSlot panel)> slots;
     public WeaponGroup(int index){
-        var player = Local.Pawn;
-		if ( player == null ) return;
-		if ( player.Inventory == null ) return;
+        if(Local.Pawn is not SandboxPlayer player)return;
         slots = new();
 
         AddClass("group");
@@ -41,8 +39,7 @@ public class WeaponGroup : Panel {
     }
 
     public void Update(){
-        var player = Local.Pawn;
-		if ( player == null ) return;
+        if (Local.Pawn is not SandboxPlayer player) return;
 		if ( player.Inventory == null ) return;
         foreach(var slot in slots){
             slot.panel.SetClass("active", slot.weapon == player.Inventory.Active);

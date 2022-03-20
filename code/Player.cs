@@ -10,9 +10,9 @@ partial class SandboxPlayer : Player
 
 	[Net] public PawnController VehicleController { get; set; }
 	[Net] public PawnAnimator VehicleAnimator { get; set; }
-	[Net, Predicted] public ICamera VehicleCamera { get; set; }
+	[Net, Predicted] public CameraMode VehicleCamera { get; set; }
 	[Net, Predicted] public Entity Vehicle { get; set; }
-	[Net, Predicted] public ICamera MainCamera { get; set; }
+	[Net, Predicted] public CameraMode MainCamera { get; set; }
 
 	public Clothing.Container Clothing = new();
 
@@ -21,7 +21,7 @@ partial class SandboxPlayer : Player
 
 	public UndoQueue undoQueue;
 
-	public ICamera LastCamera { get; set; }
+	public CameraMode LastCamera { get; set; }
 
 	public static SoundEvent FallDamage = new SoundEvent("sounds/physics/bullet_impacts/flesh_npc_04.vsnd");
 	public SandboxPlayer()
@@ -52,7 +52,7 @@ partial class SandboxPlayer : Player
 		Animator = new StandardPlayerAnimator();
 
 		MainCamera = LastCamera;
-		Camera = MainCamera;
+		CameraMode = MainCamera;
 
 		if ( DevController is NoclipController )
 		{
@@ -108,7 +108,7 @@ partial class SandboxPlayer : Player
 		BecomeRagdollOnClient( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
 		LastCamera = MainCamera;
 		MainCamera = new SpectateRagdollCamera();
-		Camera = MainCamera;
+		CameraMode = MainCamera;
 		Controller = null;
 
 		EnableAllCollisions = false;
@@ -153,7 +153,7 @@ partial class SandboxPlayer : Player
 		return base.GetActiveAnimator();
 	}
 
-	public ICamera GetActiveCamera()
+	public CameraMode GetActiveCamera()
 	{
 		if ( VehicleCamera != null ) return VehicleCamera;
 
@@ -163,11 +163,11 @@ partial class SandboxPlayer : Player
 	Rotation lastFreeRotation = Rotation.Identity;
 	public override void FrameSimulate(Client cl){
 		if(ActiveChild is Tool tool && (tool.CurrentTool?.EyeLock()??false)){
-			EyeRot = lastFreeRotation;
-			Input.Rotation = EyeRot;
+			EyeRotation = lastFreeRotation;
+			Input.Rotation = EyeRotation;
 			Input.MouseDelta = Vector3.Zero;
 		}else{
-			lastFreeRotation = EyeRot;
+			lastFreeRotation = EyeRotation;
 		}
 		base.FrameSimulate(cl);
 	}
@@ -175,11 +175,11 @@ partial class SandboxPlayer : Player
 	public override void Simulate( Client cl )
 	{
 		if(ActiveChild is Tool tool && (tool.CurrentTool?.EyeLock()??false)){
-			EyeRot = lastFreeRotation;
-			Input.Rotation = EyeRot;
+			EyeRotation = lastFreeRotation;
+			Input.Rotation = EyeRotation;
 			Input.MouseDelta = Vector3.Zero;
 		}else{
-			lastFreeRotation = EyeRot;
+			lastFreeRotation = EyeRotation;
 		}
 		lastEyeTrace = null;
 		base.Simulate( cl );
@@ -217,14 +217,14 @@ partial class SandboxPlayer : Player
 			}
 		}
 
-		Camera = GetActiveCamera();
+		//CameraMode = GetActiveCamera();
 
 		if ( Input.Pressed( InputButton.Drop ) )
 		{
 			var dropped = Inventory.DropActive();
 			if ( dropped != null )
 			{
-				dropped.PhysicsGroup.ApplyImpulse( Velocity + EyeRot.Forward * 500.0f + Vector3.Up * 100.0f, true );
+				dropped.PhysicsGroup.ApplyImpulse( Velocity + EyeRotation.Forward * 500.0f + Vector3.Up * 100.0f, true );
 				dropped.PhysicsGroup.ApplyAngularImpulse( Vector3.Random * 100.0f, true );
 
 				timeSinceDropped = 0;
@@ -257,7 +257,7 @@ partial class SandboxPlayer : Player
 	[ServerCmd( "inventory_current" )]
 	public static void SetInventoryCurrent( string entName )
 	{
-		var target = ConsoleSystem.Caller.Pawn;
+		var target = (Player)ConsoleSystem.Caller.Pawn;
 		if ( target == null ) return;
 
 		var inventory = target.Inventory;
@@ -280,10 +280,10 @@ partial class SandboxPlayer : Player
 	}
 
 	public (Vector3 position, Rotation angle) CameraPosition(){
-		if(Camera is ThirdPersonCameraTracked tr){
-			return (tr.Pos, tr.Rot);
+		if(CameraMode is ThirdPersonCameraTracked tr){
+			return (tr.Position, tr.Rotation);
 		}else{
-			return (EyePos, EyeRot);
+			return (EyePosition, EyeRotation);
 		}
 	}
 

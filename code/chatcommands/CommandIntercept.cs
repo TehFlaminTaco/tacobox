@@ -24,20 +24,20 @@ public class CommandIntercept {
                 var cmd = Command.commands[cmdargs[0].ToLower()];
                 if(ConsoleSystem.Caller.HasCommand(cmd.Name)){
                     if(message[0]!='@'){
-                        TacoChatBox.AddChatEntry( To.Everyone, ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name} ran {cmd.Name}", "", $"avatar:{ConsoleSystem.Caller.SteamId}" );
+                        TacoChatBox.AddChatEntry( To.Everyone, ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name} ran {cmd.Name}", "", $"avatar:{ConsoleSystem.Caller.PlayerId}" );
                     }else{
-                        TacoChatBox.AddChatEntry( AdminCore.SeeSilent(ConsoleSystem.Caller, true), ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name} ran {cmd.Name} silently", "", $"avatar:{ConsoleSystem.Caller.SteamId}" );
+                        TacoChatBox.AddChatEntry( AdminCore.SeeSilent(ConsoleSystem.Caller, true), ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name} ran {cmd.Name} silently", "", $"avatar:{ConsoleSystem.Caller.PlayerId}" );
                     }
                     cmd.Run(ConsoleSystem.Caller.Pawn as Player, cmdargs.Skip(1), message[0]=='@');
                 }else{
-                    TacoChatBox.AddChatEntry( AdminCore.SeeSilent(null as Client, true), ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name} ran {cmd.Name}, but lacked access.", "", $"avatar:{ConsoleSystem.Caller.SteamId}" );
+                    TacoChatBox.AddChatEntry( AdminCore.SeeSilent(null as Client, true), ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name} ran {cmd.Name}, but lacked access.", "", $"avatar:{ConsoleSystem.Caller.PlayerId}" );
                     TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "You don't have permission to run that!", "debug/particleerror.vtex");
                 }
             }else{
                 TacoChatBox.AddChatEntry(To.Single(ConsoleSystem.Caller), "red", "", "Command not found!", "debug/particleerror.vtex");
             }
         }else{
-            TacoChatBox.AddChatEntry( To.Everyone, ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name}", message, $"avatar:{ConsoleSystem.Caller.SteamId}" );
+            TacoChatBox.AddChatEntry( To.Everyone, ConsoleSystem.Caller.GetRank().NameColor, $"[{ConsoleSystem.Caller.GetRank().Name}] {ConsoleSystem.Caller.Name}", message, $"avatar:{ConsoleSystem.Caller.PlayerId}" );
         }
 
         //message = message.Replace("a", "B");

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Sandbox;
 using Sandbox.UI;
+using Sandbox.UI.Construct;
 using Sandbox.UI.Tests;
 
 [Library]
@@ -8,6 +10,7 @@ public partial class SpawnList : Panel
 {
 	VirtualScrollPanel Canvas;
 	List<(Panel panel, string path)> icons = new();
+	private static readonly Regex fileShort = new(@".*/([^/.]*).*");
 
 	public SpawnList()
 	{
@@ -15,14 +18,16 @@ public partial class SpawnList : Panel
 		AddChild( out Canvas, "canvas" );
 
 		Canvas.Layout.AutoColumns = true;
-		Canvas.Layout.ItemSize = new Vector2( 100, 100 );
+		Canvas.Layout.ItemWidth = 100;
+		Canvas.Layout.ItemHeight = 100;
 		Canvas.OnCreateCell = ( cell, data ) =>
 		{
 			var file = (string)data;
 			icons.Add((cell, file));
 			var panel = cell.Add.Panel( "icon" );
 			panel.AddEventListener( "onclick", () => ConsoleSystem.Run( "spawn", "models/" + file ) );
-			panel.Style.BackgroundImage = Texture.Load( $"/models/{file}_c.png", false );
+			panel.Add.Label(fileShort.Replace(file, "$1"));
+			//panel.Style.BackgroundImage = Texture.Load(FileSystem.Mounted, $"/models/{file}_c.png", true );
 		};
 
 		foreach ( var file in FileSystem.Mounted.FindFile( "models", "*.vmdl_c.png", true ) )
@@ -30,7 +35,6 @@ public partial class SpawnList : Panel
 			if ( string.IsNullOrWhiteSpace( file ) ) continue;
 			if ( file.Contains( "_lod0" ) ) continue;
 			if ( file.Contains( "clothes" ) ) continue;
-
 			Canvas.AddItem( file.Remove( file.Length - 6 ) );
 		}
 	}
