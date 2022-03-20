@@ -155,7 +155,7 @@ Window {
                 height:100%;
                 flex-grow:1;
             }
-            .form-label{
+            .field .label{
                 min-height: 0px;
                 height:0px;
             }
@@ -163,7 +163,7 @@ Window {
                 flex-direction: flex-start;
                 margin:0;
             }
-            .form-value{
+            .field-control{
                 flex-grow:0;
                 slider, textentry, dropdown {
                     min-width:0;

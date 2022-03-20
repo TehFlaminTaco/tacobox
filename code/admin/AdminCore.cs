@@ -127,6 +127,7 @@ public static class AdminCore{
             "allTools",
             "allProps",
             "allEnts",
+            "spawnSwerks",
             "unlimitedSpawns",
             "editRanks",
             "seeSilent",

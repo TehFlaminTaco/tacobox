@@ -19,6 +19,7 @@ public partial class SpawnMenu : Panel
 	public readonly Form inspector;
 	readonly EntityList ents;
 	readonly SpawnList spawnList;
+	readonly CloudModelList cloudList;
 
 	public SpawnMenu()
 	{
@@ -39,6 +40,9 @@ public partial class SpawnMenu : Panel
 
 				ents = body.AddChild<EntityList>();
 				tabs.AddButtonActive( "Entities", ( b ) => ents.SetClass( "active", b ) );
+
+				cloudList = body.AddChild<CloudModelList>();
+				tabs.AddButtonActive( "s&works", ( b ) => cloudList.SetClass( "active", b));
 			}
 		}
 

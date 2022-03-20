@@ -1,6 +1,6 @@
 .form .field
 {
-	.form-label
+	.label
 	{
 		flex-grow: 0;
 		font-weight: 600;
@@ -21,7 +21,7 @@
 		}
 	}
 
-	.form-value
+	.field-control
 	{
 		flex-shrink: 0;
 		font-weight: 600;

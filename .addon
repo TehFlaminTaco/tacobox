@@ -1,7 +1,7 @@
 {
   "Title": "Tacobox",
   "Type": "game",
-  "Org": "local",
+  "Org": "ataco",
   "Ident": "tacobox",
   "Schema": 1,
   "HasAssets": true,

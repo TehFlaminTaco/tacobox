@@ -1,4 +1,6 @@
-﻿using Sandbox;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Sandbox;
 
 [Library( "tacobox", Title = "TacoBox" )]
 partial class SandboxGame : Game
@@ -33,34 +35,79 @@ partial class SandboxGame : Game
 	}
 
 	[ServerCmd( "spawn" )]
-	public static void Spawn( string modelname )
+	public static async Task Spawn( string modelname )
 	{
 		var owner = ConsoleSystem.Caller?.Pawn;
+		var ownerClient = ConsoleSystem.Caller;
 
 		if ( ConsoleSystem.Caller == null )
 			return;
+
+		var modelRotation = Rotation.From( new Angles( 0, owner.EyeRotation.Angles().yaw, 0 ) ) * Rotation.FromAxis( Vector3.Up, 180 );
 
 		var tr = Trace.Ray( owner.EyePosition, owner.EyePosition + owner.EyeRotation.Forward * 500 )
 			.UseHitboxes()
 			.Ignore( owner )
 			.Run();
 
+		if ( modelname.Count( x => x == '.' ) == 1 && !modelname.EndsWith( ".vmdl", System.StringComparison.OrdinalIgnoreCase ) && !modelname.EndsWith( ".vmdl_c", System.StringComparison.OrdinalIgnoreCase ) )
+		{
+			if(!ownerClient.HasFlag("spawnSwerks")){
+				ownerClient.BannedProp("S&Werks Props");
+				return;
+			}
+			modelname = await SpawnPackageModel( modelname, tr.EndPosition, modelRotation, owner );
+			if ( modelname == null )
+				return;
+		}else{
+			if(!ownerClient.CanSpawnProp(modelname.Substring(7))){
+				ownerClient.BannedProp(modelname);
+				return;
+			}
+		}
 
-		if(!ConsoleSystem.Caller.CanSpawnProp(modelname.Substring(7))){
-			ConsoleSystem.Caller.BannedProp(modelname);
+		if(!ownerClient.CanSpawn(PropType.Prop)){
+			ownerClient.HitLimit(PropType.Prop);
 			return;
 		}
-		if(!ConsoleSystem.Caller.CanSpawn(PropType.Prop)){
-			ConsoleSystem.Caller.HitLimit(PropType.Prop);
+		var model = Model.Load( modelname );
+		if ( model == null || model.IsError )
 			return;
-		}
-		var ent = new Prop();
-		ent.Position = tr.EndPosition;
-		ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRotation.Angles().yaw, 0 ) ) * Rotation.FromAxis( Vector3.Up, 180 );
-		ent.SetModel( modelname );
-		ent.Position = tr.EndPosition - Vector3.Up * ent.CollisionBounds.Mins.z;
-		ent.SetSpawner(ConsoleSystem.Caller, PropType.Prop);
+		var ent = new Prop{
+			Model = model
+		};
 		(owner as SandboxPlayer)?.undoQueue.Add( new UndoEnt(ent) );
+		ent.Position = tr.EndPosition;
+		ent.Rotation = modelRotation;
+		//ent.SetModel( modelname );
+		ent.Position = tr.EndPosition - Vector3.Up * ent.CollisionBounds.Mins.z;
+		ent.SetSpawner(ownerClient, PropType.Prop);
+		ent.SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
+		if ( !ent.PhysicsBody.IsValid() )
+		{
+			ent.SetupPhysicsFromOBB( PhysicsMotionType.Dynamic, ent.CollisionBounds.Mins, ent.CollisionBounds.Maxs );
+		}
+	}
+
+	static async Task<string> SpawnPackageModel( string packageName, Vector3 pos, Rotation rotation, Entity source )
+	{
+		var package = await Package.Fetch( packageName, false );
+		if ( package == null || package.PackageType != Package.Type.Model || package.Revision == null )
+		{
+			// spawn error particles
+			return null;
+		}
+
+		if ( !source.IsValid ) return null; // source entity died or disconnected or something
+
+		var model = package.GetMeta( "PrimaryAsset", "models/dev/error.vmdl" );
+		var mins = package.GetMeta( "RenderMins", Vector3.Zero );
+		var maxs = package.GetMeta( "RenderMaxs", Vector3.Zero );
+
+		// downloads if not downloads, mounts if not mounted
+		await package.MountAsync();
+
+		return model;
 	}
 
 	[ServerCmd( "spawn_entity" )]
